@@ -1,5 +1,7 @@
 node_modules/
+svg-cache/
 .DS_Store
 Thumbs.db
 *.log
 .cursor/
+_sample.svg

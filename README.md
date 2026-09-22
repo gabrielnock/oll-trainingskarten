@@ -1,30 +1,50 @@
-# OLL Trainingskarten (DIN A6)
+# OLL Training Cards (A6)
 
-Standalone project: printable training cards for all **57 OLL cases**, based on CubeHead’s *How to Learn OLL in One Month*, with setup algs and diagrams.
+Interactive A6 flashcards for all **57 OLL cases** (CubeHead nicknames), with learning status, favorite algs, notes, and JSON progress export.
 
 ## Quick start
 
 ```bash
-npm run open    # open index.html in the browser
+npm run open
 # or
-npm start       # local server on http://localhost:4173
+npm start
 ```
 
-Then use **Drucken / PDF** (or `Ctrl+P`). Paper size: **A6** (105 × 148 mm). Images need internet (VisualCube).
+## Features
 
-## Each card
+- Sticky glass header with group anchors + status filters (red / yellow / green / unmarked)
+- Case thumbnails in each group submenu
+- Status checkboxes beside each card (not learned / learning / learned)
+- ★ favorite toggle per alg — favorite is bold and shown first (also in Print/PDF)
+- **+ Alg** button opens a modal to add your own algorithms
+- One note field per card (bottom)
+- **Export JSON** / **Import** for backup & migration (`oll-progress.json`)
+- Progress also auto-saved in `localStorage`
 
-- Name & group
-- Top-view diagram
-- **Setup** alg (create the case)
-- Main alg (+ alternative)
-- Tips from the CubeHead PDF
+## Progress file format
 
-## Rebuild after edits
+See `oll-progress.example.json`:
+
+```json
+{
+  "version": 1,
+  "updatedAt": "…",
+  "cases": {
+    "27": {
+      "status": "green",
+      "favorite": "custom-0",
+      "note": "…",
+      "custom": ["R U R' U R U2 R'"]
+    }
+  }
+}
+```
+
+## Rebuild
 
 ```bash
-npm run parse   # speedcubedb-oll.txt → oll-cases.json
-npm run build   # regenerate index.html
+npm run parse
+npm run build   # fetches VisualCube SVGs (cached in svg-cache/), recolors, writes index.html
 ```
 
-Edit `cubehead-notes.json` for nicknames and tips; non-empty `primary` / `secondary` there override the database algs.
+Cube diagrams are **inline SVGs**. Yellow `#FEFE00` → `#D4AE00`, grey `#404040` → `#5C6A78`.

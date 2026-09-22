@@ -1,61 +1,344 @@
 {
-  "1": { "name": "Nazi / Dot", "notes": "f (Sexy) f' U (T) — zweiter Alg in CubeHead-Guide", "primary": "f (R U R' U') f' U F (R U R' U') F'", "secondary": "f (sexy) f' U (T)" },
-  "2": { "name": "Zamboni", "notes": "F (Sexy) F' f (Sexy) f'", "primary": "F (R U R' U') F' f (R U R' U') f'", "secondary": "y (r U r') U2 R U2' R' U2 (r U' r')" },
-  "3": { "name": "Anti-Nazi", "notes": "f (sexy) f' U' (T)", "primary": "f (R U R' U') f' U' F (R U R' U') F'", "secondary": "" },
-  "4": { "name": "Crown (Dot)", "notes": "(Righty-Square) (Lefty-Square) kombiniert", "primary": "(r U R' U R U2 r') (r' U' R U' R' U2 r)", "secondary": "y R U2' (R2' F R F') U2' M' (U R U' r')" },
-  "5": { "name": "Righty-Square", "notes": "Anti-Sune-Anfang und -Ende mit wide moves", "primary": "r U2 R' U' R U' r'", "secondary": "" },
-  "6": { "name": "Lefty-Square", "notes": "Spiegel von Righty-Square", "primary": "r' U2' R U R' U r", "secondary": "" },
-  "7": { "name": "Lightning", "notes": "Wide Sune — easy right?", "primary": "r U R' U R U2' r'", "secondary": "" },
-  "8": { "name": "Reverse Lightning", "notes": "Spiegel von Lightning", "primary": "r' U' R U' R' U2 r", "secondary": "y2 l' U' L U' L' U2 l" },
-  "9": { "name": "Kite", "notes": "Startet wie T-Perm", "primary": "(R U R' U') R' F (R2 U R' U') F'", "secondary": "" },
-  "10": { "name": "Anti-Kite", "notes": "(Su)(sledge)(ne)", "primary": "(R U R' U) (R' F R F') (R U2' R')", "secondary": "" },
-  "11": { "name": "Downstairs", "notes": "M (Sune) U M'", "primary": "r' (R2 U R' U R U2 R') U M'", "secondary": "" },
-  "12": { "name": "Upstairs", "notes": "M' (Sune-mirror) U' M", "primary": "M' (R' U' R U' R' U2 R) U' M", "secondary": "" },
-  "13": { "name": "Gun", "notes": "Beide Algs etwa gleich gut — Fingertricks nachschauen", "primary": "F U R U' R2' F' R U (R U' R')", "secondary": "(r U' r') (U' r U r') (F' U F)" },
-  "14": { "name": "Anti-Gun", "notes": "Fingertricks lohnen sich", "primary": "(R' F R) (U R' F' R) (F U' F')", "secondary": "(r' U r) (U r' U' r) y (R U' R')" },
-  "15": { "name": "Squeegee", "notes": "Zweiter Alg für Linkshänder / andere Perspektive", "primary": "(r' U' r) (R' U' R U) (r' U r)", "secondary": "y2 l' U' l (L' U' L U) l' U l" },
-  "16": { "name": "Anti-Squeegee", "notes": "Spiegel von Squeegee", "primary": "(r U r') (R U R' U') (r U' r')", "secondary": "" },
-  "17": { "name": "Slash / Dot", "notes": "(R U R' U) (sledge) U2' (sledge)", "primary": "(R U R' U) (R' F R F') U2' (R' F R F')", "secondary": "" },
-  "18": { "name": "X / Super Lip", "notes": "M U (sexy) M2' (fat insert)", "primary": "M U (R U R' U') M2' (U R U' r')", "secondary": "" },
-  "19": { "name": "Bunny", "notes": "M U (sexy) M' (sledge)", "primary": "M U (R U R' U') M' (R' F R F')", "secondary": "" },
-  "20": { "name": "Blank", "notes": "(R U2' R') (Sledge) U2' (Sledge)", "primary": "(R U2') (R2' F R F') U2' (R' F R F')", "secondary": "" },
-  "21": { "name": "Cross", "notes": "Beginnt und endet wie (Anti-)Sune", "primary": "(R U2 R') (U' R U R') (U' R U' R')", "secondary": "y (R U R' U) (R U' R' U) (R U2' R')" },
-  "22": { "name": "Bruno", "notes": "Nie die R-Seite loslassen! U mit linker Hand", "primary": "R U2' R2' U' R2 U' R2' U2' R", "secondary": "" },
-  "23": { "name": "Headlights", "notes": "D' am Ringfinger drücken — wohl härtester der Gruppe", "primary": "R2 D (R' U2 R) D' (R' U2 R')", "secondary": "y2 R2' D' (R U2 R') D (R U2 R)" },
-  "24": { "name": "Bowtie", "notes": "Wie Chameleon, nur F' vorne", "primary": "F' (r U R' U') r' F R", "secondary": "Same as Chameleon with the last F' in front" },
-  "25": { "name": "Chameleon", "notes": "Sexy, dann Sledge — mit r statt R starten", "primary": "(r U R' U') (r' F R F')", "secondary": "" },
-  "26": { "name": "Anti-Sune", "notes": "Inverse vom „dopesten Alg“", "primary": "R U2 R' U' R U' R'", "secondary": "y' R' U' R U' R' U2 R" },
-  "27": { "name": "Sune", "notes": "Dopest alg of them all 😎", "primary": "R U R' U R U2' R'", "secondary": "y' R' U2' R U R' U R" },
-  "28": { "name": "Arrow", "notes": "(wide sexy) M (insert)", "primary": "(r U R' U') M (U R U' R')", "secondary": "" },
-  "29": { "name": "Awkward / Knight", "notes": "Knight-Move-Gruppe im Guide", "primary": "", "secondary": "" },
-  "30": { "name": "Anti-WTF", "notes": "Erstes U mit linkem Index schieben", "primary": "F U (R U2 R' U') (R U2 R' U') F'", "secondary": "" },
-  "31": { "name": "Couch", "notes": "Inverse von Big Lightning", "primary": "R' U' F (U R U' R') F' R", "secondary": "" },
-  "32": { "name": "Anti-Couch", "notes": "Fingertrick nachschauen — pretty dope", "primary": "R U B' (U' R' U) R B R'", "secondary": "S (R U R' U') (R' F R f')" },
-  "33": { "name": "Key", "notes": "(sexy) (sledge)", "primary": "(R U R' U') (R' F R F')", "secondary": "" },
-  "34": { "name": "C-Shape", "notes": "C-Form Fisch-Variante", "primary": "", "secondary": "" },
-  "36": { "name": "Wario", "notes": "Spiegel von Mario — #2 Linkshänder", "primary": "(R' U' R U') (R' U R U) l U' R' U x", "secondary": "y2 L' U' L U' L' U L U L F' L' F" },
-  "38": { "name": "Mario", "notes": "Sune mit Sledge-Insert", "primary": "(R U R' U) (R U' R' U') (R' F R F')", "secondary": "" },
-  "35": { "name": "Fish Salad", "notes": "(R U2' R') (sledge) (R U2' R')", "primary": "(R U2') (R2' F R F') (R U2' R')", "secondary": "" },
-  "36": { "name": "C-shape / Fish", "notes": "", "primary": "", "secondary": "" },
-  "37": { "name": "Mounted Fish", "notes": "Super schnell — einer der schnellsten Fälle", "primary": "F (R U' R' U') (R U R' F')", "secondary": "" },
-  "38": { "name": "W-Shape", "notes": "", "primary": "", "secondary": "" },
-  "39": { "name": "Lefty Big Lightning", "notes": "Spiegel von Big Lightning", "primary": "L F' (L' U' L U) F U' L'", "secondary": "y2 (R U R') (F' U' F) (U R U2 R')" },
-  "40": { "name": "Big Lightning", "notes": "⚡ Sehr einfach — früh lernen", "primary": "R' F (R U R' U') F' U R", "secondary": "R' F (Sexy) F' U R" },
-  "41": { "name": "Poodle", "notes": "(Sune) + (T-case) — lang aber schnell", "primary": "(R U R' U R U2' R') F (R U R' U') F'", "secondary": "" },
-  "42": { "name": "Anti-Poodle", "notes": "(Anti-Sune) + (T)", "primary": "(R' U' R U' R' U2 R) F (R U R' U') F'", "secondary": "" },
-  "43": { "name": "Inverse P", "notes": "Spiegel von P — zweiter Alg wenn du L-Moves hasst", "primary": "f' (L' U' L U) f", "secondary": "y R' U' F' U F R" },
-  "44": { "name": "P", "notes": "f (sexy) f' — sehr einfach", "primary": "f (R U R' U') f'", "secondary": "y2 F (U R U' R') F'" },
-  "45": { "name": "T", "notes": "F (sexy) F' — easy right?", "primary": "F (R U R' U') F'", "secondary": "" },
-  "46": { "name": "Seein' Headlights (C)", "notes": "C + Headlights", "primary": "R' U' (R' F R F') U R", "secondary": "" },
-  "47": { "name": "Anti-Breakneck", "notes": "R' U' (double Sledge) U R — #2 für Linkshänder", "primary": "R' U' (R' F R F') (R' F R F') U R", "secondary": "F' (L' U' L U) (L' U' L U) F" },
-  "48": { "name": "Breakneck", "notes": "F (double Sexy) F' — super easy", "primary": "F (R U R' U') (R U R' U') F'", "secondary": "F (double Sexy) F'" },
-  "49": { "name": "Back Squeezy", "notes": "Spiegel von Front Squeezy", "primary": "r U' r2' U r2 U r2' U' r", "secondary": "" },
-  "50": { "name": "Front Squeezy", "notes": "Nie r loslassen!", "primary": "r' U r2 U' r2' U' r2 U r'", "secondary": "" },
-  "51": { "name": "Ant", "notes": "f 2(sexy) f' — L-Form / Line", "primary": "f (R U R' U') (R U R' U') f'", "secondary": "y2 F (U R U' R') (U R U' R') F'" },
-  "52": { "name": "WTF", "notes": "#1 sehr schnell mit gutem D — #2 wenn D schwierig", "primary": "r2 D' (r U r') D r2 (U' r' U' r)", "secondary": "y (R U R' U') (R U' R') (F' U' F) (R U R')" },
-  "53": { "name": "L-Shape", "notes": "Aus CubeHead L-Formen-Block", "primary": "", "secondary": "" },
-  "54": { "name": "Frying Pan", "notes": "fat double Anti-Sune", "primary": "(r' U' R U') (R' U R U') R' U2 r", "secondary": "" },
-  "55": { "name": "Highway", "notes": "#1 kürzer — #2 länger aber fingertrickbar", "primary": "R U2 R2 (U' R U' R') U2 F R F'", "secondary": "y (R' F R U) (R U' R2' F') R2 U' R' (U R U R')" },
-  "56": { "name": "Streetlights", "notes": "#1 lang aber schnell — #2 Spiegel", "primary": "r U r' (U R U' R') (U R U' R') r U' r'", "secondary": "r' U' r (U' R' U R) (U' R' U R) r' U r" },
-  "57": { "name": "H (All oriented)", "notes": "Alle Ecken schon gelb — letzter Fall!", "primary": "(R U R' U') M' (U R U' r')", "secondary": "" }
+  "1": {
+    "name": "Blank",
+    "notes": "(R U2' R') (Sledge) U2' (Sledge)",
+    "primary": "(R U2') (R2' F R F') U2' (R' F R F')",
+    "secondary": ""
+  },
+  "2": {
+    "name": "Zamboni",
+    "notes": "F (Sexy) F' f (Sexy) f'",
+    "primary": "F (R U R' U') F' f (R U R' U') f'",
+    "secondary": "y (r U r') U2 R U2' R' U2 (r U' r')"
+  },
+  "3": {
+    "name": "Anti-Nazi",
+    "notes": "f (sexy) f' U' (T)",
+    "primary": "f (R U R' U') f' U' F (R U R' U') F'",
+    "secondary": ""
+  },
+  "4": {
+    "name": "Nazi",
+    "notes": "f (sexy) f' U (T)",
+    "primary": "f (R U R' U') f' U F (R U R' U') F'",
+    "secondary": ""
+  },
+  "5": {
+    "name": "Lefty Square",
+    "notes": "Mirror of Righty Square",
+    "primary": "r' U2' R U R' U r",
+    "secondary": ""
+  },
+  "6": {
+    "name": "Righty Square",
+    "notes": "Anti-Sune start/end with wide moves",
+    "primary": "r U2 R' U' R U' r'",
+    "secondary": ""
+  },
+  "7": {
+    "name": "Lightning",
+    "notes": "Wide Sune",
+    "primary": "r U R' U R U2' r'",
+    "secondary": ""
+  },
+  "8": {
+    "name": "Reverse Lightning",
+    "notes": "Mirror of Lightning",
+    "primary": "r' U' R U' R' U2 r",
+    "secondary": "y2 l' U' L U' L' U2 l"
+  },
+  "9": {
+    "name": "Kite",
+    "notes": "Starts like T-perm",
+    "primary": "(R U R' U') R' F (R2 U R' U') F'",
+    "secondary": ""
+  },
+  "10": {
+    "name": "Anti-Kite",
+    "notes": "(Su)(sledge)(ne)",
+    "primary": "(R U R' U) (R' F R F') (R U2' R')",
+    "secondary": ""
+  },
+  "11": {
+    "name": "Downstairs",
+    "notes": "M (Sune) U M'",
+    "primary": "r' (R2 U R' U R U2 R') U M'",
+    "secondary": ""
+  },
+  "12": {
+    "name": "Upstairs",
+    "notes": "M' (Sune-mirror) U' M",
+    "primary": "M' (R' U' R U' R' U2 R) U' M",
+    "secondary": ""
+  },
+  "13": {
+    "name": "Gun",
+    "notes": "Both algs roughly equal — look up fingertricks",
+    "primary": "F U R U' R2' F' R U (R U' R')",
+    "secondary": "(r U' r') (U' r U r') (F' U F)"
+  },
+  "14": {
+    "name": "Anti-Gun",
+    "notes": "Worth looking up fingertricks",
+    "primary": "(R' F R) (U R' F' R) (F U' F')",
+    "secondary": "(r' U r) (U r' U' r) y (R U' R')"
+  },
+  "15": {
+    "name": "Squeegee",
+    "notes": "Second alg for lefties / other angle",
+    "primary": "(r' U' r) (R' U' R U) (r' U r)",
+    "secondary": "y2 l' U' l (L' U' L U) l' U l"
+  },
+  "16": {
+    "name": "Anti-Squeegee",
+    "notes": "Mirror of Squeegee",
+    "primary": "(r U r') (R U R' U') (r U' r')",
+    "secondary": ""
+  },
+  "17": {
+    "name": "Slash",
+    "notes": "(R U R' U) (sledge) U2' (sledge)",
+    "primary": "(R U R' U) (R' F R F') U2' (R' F R F')",
+    "secondary": ""
+  },
+  "18": {
+    "name": "Crown",
+    "notes": "(Righty Square)(Lefty Square)",
+    "primary": "(r U R' U R U2 r') (r' U' R U' R' U2 r)",
+    "secondary": "y R U2' (R2' F R F') U2' M' (U R U' r')"
+  },
+  "19": {
+    "name": "Bunny",
+    "notes": "M U (sexy) M' (sledge)",
+    "primary": "M U (R U R' U') M' (R' F R F')",
+    "secondary": ""
+  },
+  "20": {
+    "name": "X / Super Lip",
+    "notes": "M U (sexy) M2' (fat insert)",
+    "primary": "M U (R U R' U') M2' (U R U' r')",
+    "secondary": ""
+  },
+  "21": {
+    "name": "Cross",
+    "notes": "Starts and ends like (anti-)sune",
+    "primary": "(R U2 R') (U' R U R') (U' R U' R')",
+    "secondary": "y (R U R' U) (R U' R' U) (R U2' R')"
+  },
+  "22": {
+    "name": "Bruno",
+    "notes": "Never release R; do U with left hand",
+    "primary": "R U2' R2' U' R2 U' R2' U2' R",
+    "secondary": ""
+  },
+  "23": {
+    "name": "Headlights",
+    "notes": "Push D' with ring finger — hardest of this group",
+    "primary": "R2 D (R' U2 R) D' (R' U2 R')",
+    "secondary": "y2 R2' D' (R U2 R') D (R U2 R)"
+  },
+  "24": {
+    "name": "Bowtie",
+    "notes": "Same as Chameleon with F' in front",
+    "primary": "F' (r U R' U') r' F R",
+    "secondary": ""
+  },
+  "25": {
+    "name": "Chameleon",
+    "notes": "Sexy then sledge, starting with r",
+    "primary": "(r U R' U') (r' F R F')",
+    "secondary": ""
+  },
+  "26": {
+    "name": "Anti-Sune",
+    "notes": "Inverse of Sune",
+    "primary": "R U2 R' U' R U' R'",
+    "secondary": "y' R' U' R U' R' U2 R"
+  },
+  "27": {
+    "name": "Sune",
+    "notes": "Dopest alg of them all",
+    "primary": "R U R' U R U2' R'",
+    "secondary": "y' R' U2' R U R' U R"
+  },
+  "28": {
+    "name": "Arrow",
+    "notes": "(wide sexy) M (insert)",
+    "primary": "(r U R' U') M (U R U' R')",
+    "secondary": ""
+  },
+  "29": {
+    "name": "WTF",
+    "notes": "#1 fast if D is solid; #2 if D is weak",
+    "primary": "r2 D' (r U r') D r2 (U' r' U' r)",
+    "secondary": "y (R U R' U') (R U' R') (F' U' F) (R U R')"
+  },
+  "30": {
+    "name": "Anti-WTF",
+    "notes": "First U with left index push",
+    "primary": "F U (R U2 R' U') (R U2 R' U') F'",
+    "secondary": ""
+  },
+  "31": {
+    "name": "Couch",
+    "notes": "Inverse of Big Lightning",
+    "primary": "R' U' F (U R U' R') F' R",
+    "secondary": ""
+  },
+  "32": {
+    "name": "Anti-Couch",
+    "notes": "Look up the fingertrick",
+    "primary": "R U B' (U' R' U) R B R'",
+    "secondary": "S (R U R' U') (R' F R f')"
+  },
+  "33": {
+    "name": "Key",
+    "notes": "(sexy) (sledge)",
+    "primary": "(R U R' U') (R' F R F')",
+    "secondary": ""
+  },
+  "34": {
+    "name": "City",
+    "notes": "C + T",
+    "primary": "(R U R' U') B' (R' F R F') B",
+    "secondary": "(R U R2' U') (R' F R U) R U' F'"
+  },
+  "35": {
+    "name": "Fish Salad",
+    "notes": "(R U2' R') (sledge) (R U2' R')",
+    "primary": "(R U2') (R2' F R F') (R U2' R')",
+    "secondary": ""
+  },
+  "36": {
+    "name": "Wario",
+    "notes": "Mirror of Mario; #2 is lefty",
+    "primary": "(R' U' R U') (R' U R U) l U' R' U x",
+    "secondary": "y2 L' U' L U' L' U L U L F' L' F"
+  },
+  "37": {
+    "name": "Mounted Fish",
+    "notes": "One of the fastest",
+    "primary": "F (R U' R' U') (R U R' F')",
+    "secondary": ""
+  },
+  "38": {
+    "name": "Mario",
+    "notes": "Sune with sledge insert",
+    "primary": "(R U R' U) (R U' R' U') (R' F R F')",
+    "secondary": ""
+  },
+  "39": {
+    "name": "Lefty Big Lightning",
+    "notes": "Mirror of Big Lightning",
+    "primary": "L F' (L' U' L U) F U' L'",
+    "secondary": "y2 (R U R') (F' U' F) (U R U2 R')"
+  },
+  "40": {
+    "name": "Big Lightning",
+    "notes": "Learn early — very easy",
+    "primary": "R' F (R U R' U') F' U R",
+    "secondary": "R' F (Sexy) F' U R"
+  },
+  "41": {
+    "name": "Poodle",
+    "notes": "(Sune) + (T) — long but fast",
+    "primary": "(R U R' U R U2' R') F (R U R' U') F'",
+    "secondary": ""
+  },
+  "42": {
+    "name": "Anti-Poodle",
+    "notes": "(Anti-Sune) + (T)",
+    "primary": "(R' U' R U' R' U2 R) F (R U R' U') F'",
+    "secondary": ""
+  },
+  "43": {
+    "name": "Inverse P",
+    "notes": "Mirror of P; second alg avoids L moves",
+    "primary": "f' (L' U' L U) f",
+    "secondary": "y R' U' F' U F R"
+  },
+  "44": {
+    "name": "P",
+    "notes": "f (sexy) f'",
+    "primary": "f (R U R' U') f'",
+    "secondary": "y2 F (U R U' R') F'"
+  },
+  "45": {
+    "name": "T",
+    "notes": "F (sexy) F'",
+    "primary": "F (R U R' U') F'",
+    "secondary": ""
+  },
+  "46": {
+    "name": "Seein' Headlights",
+    "notes": "C-shape with headlights",
+    "primary": "R' U' (R' F R F') U R",
+    "secondary": ""
+  },
+  "47": {
+    "name": "Anti-Breakneck",
+    "notes": "R' U' (double Sledge) U R; #2 for lefties",
+    "primary": "R' U' (R' F R F') (R' F R F') U R",
+    "secondary": "F' (L' U' L U) (L' U' L U) F"
+  },
+  "48": {
+    "name": "Breakneck",
+    "notes": "F (double Sexy) F'",
+    "primary": "F (R U R' U') (R U R' U') F'",
+    "secondary": ""
+  },
+  "49": {
+    "name": "Back Squeezy",
+    "notes": "Mirror of Front Squeezy",
+    "primary": "r U' r2' U r2 U r2' U' r",
+    "secondary": ""
+  },
+  "50": {
+    "name": "Front Squeezy",
+    "notes": "Never release r",
+    "primary": "r' U r2 U' r2' U' r2 U r'",
+    "secondary": ""
+  },
+  "51": {
+    "name": "Ant",
+    "notes": "f 2(sexy) f'",
+    "primary": "f (R U R' U') (R U R' U') f'",
+    "secondary": "y2 F (U R U' R') (U R U' R') F'"
+  },
+  "52": {
+    "name": "Rice Cooker",
+    "notes": "Starts like Sune with a different insert",
+    "primary": "(R U R' U R U') y (R U' R') F'",
+    "secondary": "(R' U' R U' R' U) y' (R' U R) B"
+  },
+  "53": {
+    "name": "Frying Pan",
+    "notes": "Fat double Anti-Sune",
+    "primary": "(r' U' R U') (R' U R U') R' U2 r",
+    "secondary": ""
+  },
+  "54": {
+    "name": "Anti-Frying Pan",
+    "notes": "Mirror of Frying Pan",
+    "primary": "(r U R' U) (R U' R' U) R U2' r'",
+    "secondary": ""
+  },
+  "55": {
+    "name": "Highway",
+    "notes": "#1 shorter; #2 longer but fingertrickable",
+    "primary": "R U2 R2 (U' R U' R') U2 F R F'",
+    "secondary": "y (R' F R U) (R U' R2' F') R2 U' R' (U R U R')"
+  },
+  "56": {
+    "name": "Streetlights",
+    "notes": "#1 long but fast; #2 mirror",
+    "primary": "r U r' (U R U' R') (U R U' R') r U' r'",
+    "secondary": "r' U' r (U' R' U R) (U' R' U R) r' U r"
+  },
+  "57": {
+    "name": "H",
+    "notes": "(sexy) M' (wide insert)",
+    "primary": "(R U R' U') M' (U R U' r')",
+    "secondary": ""
+  }
 }

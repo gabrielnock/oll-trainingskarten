@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "updatedAt": null,
+  "cases": {
+    "26": {
+      "status": "yellow",
+      "favorite": "secondary",
+      "note": "Prefer mirror angle",
+      "custom": []
+    },
+    "27": {
+      "status": "green",
+      "favorite": "custom-0",
+      "note": "Muscle memory solid",
+      "custom": [
+        "R U R' U R U2 R'"
+      ]
+    }
+  }
+}
