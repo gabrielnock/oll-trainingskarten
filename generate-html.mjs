@@ -11,7 +11,7 @@ mkdirSync(cacheDir, { recursive: true });
 
 /** Recolor VisualCube defaults to match the page palette. */
 const COLOR_MAP = {
-  "#FEFE00": "#D4AE00", // yellow → slightly darker gold
+  "#FEFE00": "#E8C20A", // yellow → brighter gold
   "#404040": "#5C6A78", // dark grey → lighter blue-grey
 };
 
