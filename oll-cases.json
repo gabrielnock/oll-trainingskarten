@@ -1,0 +1,401 @@
+[
+  {
+    "num": 1,
+    "category": "Dot Case",
+    "setup": "F R' F' R U2' F R' F' R2' U2' R'",
+    "primary": "(R U2 R') (R' F R F') U2 (R' F R F')",
+    "secondary": "R U2 R2 F R F' U2 R' F R F'"
+  },
+  {
+    "num": 2,
+    "category": "Dot Case",
+    "setup": "f U R U' R' f' F U R U' R' F'",
+    "primary": "F (R U R' U') F' f (R U R' U') f'",
+    "secondary": "y' R U' R2 D' r U r' D R2 U R'"
+  },
+  {
+    "num": 3,
+    "category": "Dot Case",
+    "setup": "F U R U' R' F' U f U R U' R' f' y",
+    "primary": "y' f (R U R' U') f' (U') F (R U R' U') F'",
+    "secondary": "y' f R U R' U' f' U' F R U R' U' F'"
+  },
+  {
+    "num": 4,
+    "category": "Dot Case",
+    "setup": "F U R U' R' F' U' f U R U' R' f' y",
+    "primary": "y' f (R U R' U') f' (U) F (R U R' U') F'",
+    "secondary": "y' R' F2 R2 U2 R' F' R U2 R2 F2 R"
+  },
+  {
+    "num": 5,
+    "category": "Square Shapes",
+    "setup": "r' U' R U' R' U2' r",
+    "primary": "r' U2 (R U R' U) r",
+    "secondary": "r' U2 R U R' U r"
+  },
+  {
+    "num": 6,
+    "category": "Square Shapes",
+    "setup": "r U R' U R U2' r'",
+    "primary": "r U2 (R' U' R U') r'",
+    "secondary": "r U2 R' U' R U' r'"
+  },
+  {
+    "num": 7,
+    "category": "Lightning Shapes",
+    "setup": "r U2' R' U' R U' r'",
+    "primary": "r (U R' U R) U2 r'",
+    "secondary": "r U R' U R U2 r'"
+  },
+  {
+    "num": 8,
+    "category": "Lightning Shapes",
+    "setup": "r' U2' R U R' U r y2'",
+    "primary": "y2 r' (U' R U' R') U2 r",
+    "secondary": "y2 r' U' R U' R' U2 r"
+  },
+  {
+    "num": 9,
+    "category": "Fish Shapes",
+    "setup": "F U R U' R2' F' R U R U' R' y'",
+    "primary": "y (R U R' U') (R' F R) (R U R' U') F'",
+    "secondary": "y R U R' U' R' F R2 U R' U' F'"
+  },
+  {
+    "num": 10,
+    "category": "Fish Shapes",
+    "setup": "R U2' R' F R' F' R U' R U' R'",
+    "primary": "(R U R' U) (R' F R F') (R U2 R')",
+    "secondary": "R U R' U R' F R F' R U2 R'"
+  },
+  {
+    "num": 11,
+    "category": "Lightning Shapes",
+    "setup": "M U' R U2' R' U' R U' R2' r",
+    "primary": "M (R U R' U R U2 R') U M'",
+    "secondary": "r' R2 U R' U R U2 R' U M'"
+  },
+  {
+    "num": 12,
+    "category": "Lightning Shapes",
+    "setup": "F U R U' R' F' U' F U R U' R' F'",
+    "primary": "y' M' (R' U' R U' R' U2 R) U' M",
+    "secondary": "y' M' R' U' R U' R' U2 R U' M"
+  },
+  {
+    "num": 13,
+    "category": "Knight Move Shapes",
+    "setup": "F' U' F r U' r' U r U r'",
+    "primary": "(r U' r') U' (r U r') (F' U F)",
+    "secondary": "F U R U2 R' U' R U R' F'"
+  },
+  {
+    "num": 14,
+    "category": "Knight Move Shapes",
+    "setup": "F U F' R' F R U' R' F' R",
+    "primary": "R' F (R U R') F' R (F U' F')",
+    "secondary": "R' F R U R' F' R F U' F'"
+  },
+  {
+    "num": 15,
+    "category": "Knight Move Shapes",
+    "setup": "r' U' r U' R' U R r' U r",
+    "primary": "(r' U' r) (R' U' R U) (r' U r)",
+    "secondary": "r' U' r R' U' R U r' U r"
+  },
+  {
+    "num": 16,
+    "category": "Knight Move Shapes",
+    "setup": "r U r' U R U' R' r U' r'",
+    "primary": "(r U r') (R U R' U') (r U' r')",
+    "secondary": "r U r' R U R' U' r U' r'"
+  },
+  {
+    "num": 17,
+    "category": "Dot Case",
+    "setup": "F R' F' R U2' F R' F' R U' R U' R'",
+    "primary": "(R U R' U) (R' F R F') U2 (R' F R F')",
+    "secondary": "R U R' U R' F R F' U2 R' F R F'"
+  },
+  {
+    "num": 18,
+    "category": "Dot Case",
+    "setup": "r' U2' R U R' U r2' U2' R' U' R U' r'",
+    "primary": "y (R U2 R') (R' F R F') U2 M' (U R U' r')",
+    "secondary": "y R U2 R2 F R F' U2 M' U R U' r'"
+  },
+  {
+    "num": 19,
+    "category": "Dot Case",
+    "setup": "F R' F' R M U R U' R' U' M'",
+    "primary": "M U (R U R' U') M' (R' F R F')",
+    "secondary": "y S' R U R' S U' R' F R F'"
+  },
+  {
+    "num": 20,
+    "category": "Dot Case",
+    "setup": "r U R' U' M2' U R U' R' U' M'",
+    "primary": "(r U R' U') M2 (U R U' R') U' M'",
+    "secondary": "r U R' U' M2 U R U' R' U' M'"
+  },
+  {
+    "num": 21,
+    "category": "OCLL",
+    "setup": "R U R' U R U' R' U R U2' R' y'",
+    "primary": "(R U R' U) (R U' R' U) (R U2 R')",
+    "secondary": "R U R' U R U' R' U R U2 R'"
+  },
+  {
+    "num": 22,
+    "category": "OCLL",
+    "setup": "R' U2' R2' U R2' U R2' U2' R'",
+    "primary": "R U2 (R2' U') (R2 U') (R2' U') U' R",
+    "secondary": "R U2 R2 U' R2 U' R2 U2 R"
+  },
+  {
+    "num": 23,
+    "category": "OCLL",
+    "setup": "R U2' R D R' U2' R D' R2'",
+    "primary": "R2 D (R' U2 R) D' (R' U2 R')",
+    "secondary": "R2 D R' U2 R D' R' U2 R'"
+  },
+  {
+    "num": 24,
+    "category": "OCLL",
+    "setup": "F R' F' r U R U' r'",
+    "primary": "(r U R' U') (r' F R F')",
+    "secondary": "r U R' U' r' F R F'"
+  },
+  {
+    "num": 25,
+    "category": "OCLL",
+    "setup": "R' F' r U R U' r' F y'",
+    "primary": "y (F' r U R') (U' r' F R)",
+    "secondary": "R U2 R D R' U2 R D' R2"
+  },
+  {
+    "num": 26,
+    "category": "OCLL",
+    "setup": "R U R' U R U2' R' y'",
+    "primary": "y R U2 (R' U' R U') R'",
+    "secondary": "y R U2 R' U' R U' R'"
+  },
+  {
+    "num": 27,
+    "category": "OCLL",
+    "setup": "R U2' R' U' R U' R'",
+    "primary": "(R U R' U) (R U2 R')",
+    "secondary": "R U R' U R U2 R'"
+  },
+  {
+    "num": 28,
+    "category": "All Corners Oriented",
+    "setup": "R U R' U' M' U R U' r'",
+    "primary": "(r U R' U') M (U R U' R')",
+    "secondary": "r U R' U' M U R U' R'"
+  },
+  {
+    "num": 29,
+    "category": "Awkward Shapes",
+    "setup": "M F R' F' R U R U' R' U' M'",
+    "primary": "y (R U R') U' (R U' R') (F' U' F) (R U R')",
+    "secondary": "r2 D' r U r' D r2 U' r' U' r"
+  },
+  {
+    "num": 30,
+    "category": "Awkward Shapes",
+    "setup": "F U R U2' R' U R U2' R' U' F' y2'",
+    "primary": "y2 F U (R U2 R') U' (R U2 R') U' F'",
+    "secondary": "y' r' D' r U' r' D r2 U' r' U r U r'"
+  },
+  {
+    "num": 31,
+    "category": "P Shapes",
+    "setup": "R' F R U R' U' F' U R",
+    "primary": "(R' U' F) (U R U' R') F' R",
+    "secondary": "R' U' F U R U' R' F' R"
+  },
+  {
+    "num": 32,
+    "category": "P Shapes",
+    "setup": "f R' F' R U R U' R' S'",
+    "primary": "S (R U R' U') (R' F R f')",
+    "secondary": "S R U R' U' R' F R f'"
+  },
+  {
+    "num": 33,
+    "category": "T Shapes",
+    "setup": "F R' F' R U R U' R'",
+    "primary": "(R U R' U') (R' F R F')",
+    "secondary": "R U R' U' R' F R F'"
+  },
+  {
+    "num": 34,
+    "category": "C Shapes",
+    "setup": "F U R' U' R' F' R U R2' U' R' y2'",
+    "primary": "y2 R U R2 U' R' F (R U R U') F'",
+    "secondary": "y f R f' U' r' U' R U M'"
+  },
+  {
+    "num": 35,
+    "category": "Fish Shapes",
+    "setup": "R U2' R' F R' F' R2' U2' R'",
+    "primary": "(R U2 R') (R' F R F') (R U2 R')",
+    "secondary": "R U2 R2 F R F' R U2 R'"
+  },
+  {
+    "num": 36,
+    "category": "W Shapes",
+    "setup": "F' L F L' U' L' U' L U L' U L y2'",
+    "primary": "y2 (L' U' L U') (L' U L U) (L F' L' F)",
+    "secondary": "y R U R2 F' U' F U R2 U2 R'"
+  },
+  {
+    "num": 37,
+    "category": "Fish Shapes",
+    "setup": "F R U' R' U R U R' F'",
+    "primary": "F R (U' R' U') (R U R') F'",
+    "secondary": "F R' F' R U R U' R'"
+  },
+  {
+    "num": 38,
+    "category": "W Shapes",
+    "setup": "F R' F' R U R U R' U' R U' R'",
+    "primary": "(R U R' U) (R U' R' U') (R' F R F')",
+    "secondary": "R U R' U R U' R' U' R' F R F'"
+  },
+  {
+    "num": 39,
+    "category": "Lightning Shapes",
+    "setup": "L U F' U' L' U L F L' y'",
+    "primary": "y L F' (L' U' L U) F U' L'",
+    "secondary": "y' f' r U r' U' r' F r S"
+  },
+  {
+    "num": 40,
+    "category": "Lightning Shapes",
+    "setup": "R' U' F U R U' R' F' R y'",
+    "primary": "y R' F (R U R' U') F' U R",
+    "secondary": "y R' F R U R' U' F' U R"
+  },
+  {
+    "num": 41,
+    "category": "Awkward Shapes",
+    "setup": "F U R U' R' F' R U2' R' U' R U' R' y2'",
+    "primary": "y2 (R U R' U) (R U2 R') F (R U R' U') F'",
+    "secondary": "y2 R U R' U R U2 R' F R U R' U' F'"
+  },
+  {
+    "num": 42,
+    "category": "Awkward Shapes",
+    "setup": "F U R U' R' F' R' U2' R U R' U R",
+    "primary": "(R' U' R U') (R' U2 R) F (R U R' U') F'",
+    "secondary": "R' U' R U' R' U2 R F R U R' U' F'"
+  },
+  {
+    "num": 43,
+    "category": "P Shapes",
+    "setup": "f' U' L' U L f",
+    "primary": "y R' U' (F' U F) R",
+    "secondary": "y R' U' F' U F R"
+  },
+  {
+    "num": 44,
+    "category": "P Shapes",
+    "setup": "f U R U' R' f'",
+    "primary": "f (R U R' U') f'",
+    "secondary": "f R U R' U' f'"
+  },
+  {
+    "num": 45,
+    "category": "T Shapes",
+    "setup": "F U R U' R' F'",
+    "primary": "F (R U R' U') F'",
+    "secondary": "F R U R' U' F'"
+  },
+  {
+    "num": 46,
+    "category": "C Shapes",
+    "setup": "R' U' F R' F' R U R",
+    "primary": "R' U' (R' F R F') U R",
+    "secondary": "R' U' R' F R F' U R"
+  },
+  {
+    "num": 47,
+    "category": "L Shapes",
+    "setup": "F' U' L' U L U' L' U L F",
+    "primary": "F' (L' U' L U) (L' U' L U) F",
+    "secondary": "y' F R' F' R U2 R U' R' U R U2 R'"
+  },
+  {
+    "num": 48,
+    "category": "L Shapes",
+    "setup": "F U R U' R' U R U' R' F'",
+    "primary": "F (R U R' U') (R U R' U') F'",
+    "secondary": "F R U R' U' R U R' U' F'"
+  },
+  {
+    "num": 49,
+    "category": "L Shapes",
+    "setup": "r' U r2' U' r2' U' r2' U r' y2'",
+    "primary": "y2 r U' (r2 U) (r2 U) (r2) U' r",
+    "secondary": "y2 r U' r2 U r2 U r2 U' r"
+  },
+  {
+    "num": 50,
+    "category": "L Shapes",
+    "setup": "r U' r2' U r2' U r2' U' r",
+    "primary": "r' U (r2 U') (r2 U') (r2) U r'",
+    "secondary": "r' U r2 U' r2 U' r2 U r'"
+  },
+  {
+    "num": 51,
+    "category": "Line Shapes",
+    "setup": "f U R U' R' U R U' R' f'",
+    "primary": "f (R U R' U') (R U R' U') f'",
+    "secondary": "y2 F U R U' R' U R U' R' F'"
+  },
+  {
+    "num": 52,
+    "category": "Line Shapes",
+    "setup": "F R U R' d R' U' R U' R'",
+    "primary": "y2 R' (F' U' F U') (R U R' U) R",
+    "secondary": "y2 R' F' U' F U' R U R' U R"
+  },
+  {
+    "num": 53,
+    "category": "L Shapes",
+    "setup": "r' U2' R U R' U' R U R' U r",
+    "primary": "(r' U' R U') (R' U R U') (R' U2 r)",
+    "secondary": "r' U' R U' R' U R U' R' U2 r"
+  },
+  {
+    "num": 54,
+    "category": "L Shapes",
+    "setup": "r U2' R' U' R U R' U' R U' r'",
+    "primary": "(r U R' U) (R U' R' U) (R U2 r')",
+    "secondary": "r U R' U R U' R' U R U2 r'"
+  },
+  {
+    "num": 55,
+    "category": "Line Shapes",
+    "setup": "F R' F' U2' R U R' U R2' U2' R'",
+    "primary": "R U2 R2 (U' R U' R') U2 (F R F')",
+    "secondary": "y R' F U R U' R2 F' R2 U R' U' R"
+  },
+  {
+    "num": 56,
+    "category": "Line Shapes",
+    "setup": "r U r' R U R' U' R U R' U' r U' r'",
+    "primary": "(r U r') (U R U' R') (U R U' R') (r U' r')",
+    "secondary": "r U r' U R U' R' U R U' R' r U' r'"
+  },
+  {
+    "num": 57,
+    "category": "All Corners Oriented",
+    "setup": "r U R' U' M U R U' R'",
+    "primary": "(R U R' U') M' (U R U' r')",
+    "secondary": "R U R' U' M' U R U' r'"
+  }
+]

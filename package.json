@@ -1,0 +1,15 @@
+{
+  "name": "oll-trainingskarten",
+  "version": "1.0.0",
+  "description": "DIN-A6 OLL trainings cards from CubeHead's OLL in One Month guide",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node generate-html.mjs",
+    "parse": "node parse-speedcubedb.mjs",
+    "start": "npx --yes serve . -p 4173",
+    "open": "start index.html"
+  },
+  "keywords": ["oll", "rubiks-cube", "speedcubing", "flashcards"],
+  "license": "UNLICENSED"
+}

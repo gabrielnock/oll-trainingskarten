@@ -1,0 +1,4319 @@
+OLL - Speed Cube Database
+
+SpeedCubeDB
+
+2 Sided PLL Recognition
+
+SQ1 CSP Tracing Tool
+
+Cross Color
+
+White
+
+Yellow
+
+Green
+
+Blue
+
+Red
+
+Orange
+
+Related Sets
+
+### Filter:
+
+0/2
+
+All Corners Oriented
+
+0/4
+
+Awkward Shapes
+
+0/2
+
+C Shapes
+
+0/8
+
+Dot Case
+
+0/4
+
+Fish Shapes
+
+0/4
+
+Knight Move Shapes
+
+0/6
+
+L Shapes
+
+0/6
+
+Lightning Shapes
+
+0/4
+
+Line Shapes
+
+0/7
+
+OCLL
+
+0/4
+
+P Shapes
+
+0/2
+
+Square Shapes
+
+0/2
+
+T Shapes
+
+0/2
+
+W Shapes
+
+## OLL 1
+
+-
+
+-
+
+Dot Case
+
+setup:
+
+F R' F' R U2' F R' F' R2' U2' R'
+
+Standard Alg:
+
+(R U2 R') (R' F R F') U2 (R' F R F')
+
+R U2 R2 F R F' U2 R' F R F'
+
+Community Votes:
+
+149
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y R U' R2 D' r U' r' D R2 U R'
+
+Community Votes:
+
+34
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U D r)
+
+f R U R' U' R f' U' r' U' R U M'
+
+Community Votes:
+
+12
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+5GEN (R U r f M)
+
+L' U2 L2 F' L' F U2 L F' L' F
+
+Community Votes:
+
+6
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+- More Algorithms
+
+## OLL 2
+
+-
+
+-
+
+Dot Case
+
+setup:
+
+f U R U' R' f' F U R U' R' F'
+
+Standard Alg:
+
+F (R U R' U') F' f (R U R' U') f'
+
+y' R U' R2 D' r U r' D R2 U R'
+
+Community Votes:
+
+88
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U D r)
+
+F R U R' U' S R U R' U' f'
+
+Community Votes:
+
+64
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+5GEN (R U F f S)
+
+F R U R' U' F' f R U R' U' f'
+
+Community Votes:
+
+38
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+4GEN (R U F f)
+
+y r U r' U2 R U2 R' U2 r U' r'
+
+Community Votes:
+
+38
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+- More Algorithms
+
+## OLL 3
+
+-
+
+-
+
+Dot Case
+
+setup:
+
+F U R U' R' F' U f U R U' R' f' y
+
+Standard Alg:
+
+y' f (R U R' U') f' (U') F (R U R' U') F'
+
+y' f R U R' U' f' U' F R U R' U' F'
+
+Community Votes:
+
+44
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+4GEN (R U F f)
+
+y R' F2 R2 U2 R' F R U2 R2 F2 R
+
+Community Votes:
+
+35
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+r' R2 U R' U r U2 r' U M'
+
+Community Votes:
+
+30
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U r M)
+
+M R U R' U r U2 r' U M'
+
+Community Votes:
+
+19
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U r M)
+
+- More Algorithms
+
+## OLL 4
+
+-
+
+-
+
+Dot Case
+
+setup:
+
+F U R U' R' F' U' f U R U' R' f' y
+
+Standard Alg:
+
+y' f (R U R' U') f' (U) F (R U R' U') F'
+
+y' R' F2 R2 U2 R' F' R U2 R2 F2 R
+
+Community Votes:
+
+42
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y' f R U R' U' f' U F R U R' U' F'
+
+Community Votes:
+
+26
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+4GEN (R U F f)
+
+R' F R F' U' S R' U' R U R S'
+
+Community Votes:
+
+16
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+4GEN (R U F S)
+
+y F U R U' R' F' U' F R U R' U' F'
+
+Community Votes:
+
+14
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+- More Algorithms
+
+## OLL 5
+
+-
+
+-
+
+Square Shapes
+
+setup:
+
+r' U' R U' R' U2' r
+
+Standard Alg:
+
+r' U2 (R U R' U) r
+
+r' U2 R U R' U r
+
+Community Votes:
+
+77
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+y2 l' U2 L U L' U l
+
+Community Votes:
+
+35
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (U L l)
+
+y2 R' F2 r U r' F R
+
+Community Votes:
+
+22
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+y2 R' F2 L F L' F R
+
+Community Votes:
+
+2
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (R L F)
+
+- More Algorithms
+
+## OLL 6
+
+-
+
+-
+
+Square Shapes
+
+setup:
+
+r U R' U R U2' r'
+
+Standard Alg:
+
+r U2 (R' U' R U') r'
+
+r U2 R' U' R U' r'
+
+Community Votes:
+
+85
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+F U' R2 D R' U' R D' R2 U F'
+
+Community Votes:
+
+3
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U F D)
+
+y2 l U2 L' U' L U' l'
+
+Community Votes:
+
+3
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (U L l)
+
+y' x' D R2 U' R' U R' D' x
+
+Community Votes:
+
+3
+
+Movecount:
+
+9 ETM7 STM
+
+Face Moves:
+
+3GEN (R U D)
+
+- More Algorithms
+
+## OLL 7
+
+-
+
+-
+
+Lightning Shapes
+
+setup:
+
+r U2' R' U' R U' r'
+
+Standard Alg:
+
+r (U R' U R) U2 r'
+
+r U R' U R U2 r'
+
+Community Votes:
+
+77
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+S' R U R' U R U2 R' U S
+
+Community Votes:
+
+8
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U S)
+
+L' U2 L U2 L F' L' F
+
+Community Votes:
+
+6
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+y2 l U L' U L U2 l'
+
+Community Votes:
+
+4
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (U L l)
+
+- More Algorithms
+
+## OLL 8
+
+-
+
+-
+
+Lightning Shapes
+
+setup:
+
+r' U2' R U R' U r y2'
+
+Standard Alg:
+
+y2 r' (U' R U' R') U2 r
+
+y2 r' U' R U' R' U2 r
+
+Community Votes:
+
+50
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+l' U' L U' L' U2 l
+
+Community Votes:
+
+46
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (U L l)
+
+R U2 R' U2 R' F R F'
+
+Community Votes:
+
+26
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+R' F' r U' r' F2 R
+
+Community Votes:
+
+22
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+- More Algorithms
+
+## OLL 9
+
+-
+
+-
+
+Fish Shapes
+
+setup:
+
+F U R U' R2' F' R U R U' R' y'
+
+Standard Alg:
+
+y (R U R' U') (R' F R) (R U R' U') F'
+
+y R U R' U' R' F R2 U R' U' F'
+
+Community Votes:
+
+89
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+R U2 R' U' S' R U' R' S
+
+Community Votes:
+
+22
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U S)
+
+y2 F' U' F r U' r' U r U r'
+
+Community Votes:
+
+7
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (U F r)
+
+y' L' U' L U' L F' L' F L' U2 L
+
+Community Votes:
+
+7
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+- More Algorithms
+
+## OLL 10
+
+-
+
+-
+
+Fish Shapes
+
+setup:
+
+R U2' R' F R' F' R U' R U' R'
+
+Standard Alg:
+
+(R U R' U) (R' F R F') (R U2 R')
+
+R U R' U R' F R F' R U2 R'
+
+Community Votes:
+
+58
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y F U F' R' F R U' R' F' R
+
+Community Votes:
+
+16
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y M' R' U2 R U R' U R U M
+
+Community Votes:
+
+8
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U M)
+
+y2 L' U' L U L F' L2 U' L U F
+
+Community Votes:
+
+6
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+- More Algorithms
+
+## OLL 11
+
+-
+
+-
+
+Lightning Shapes
+
+setup:
+
+M U' R U2' R' U' R U' R2' r
+
+Standard Alg:
+
+M (R U R' U R U2 R') U M'
+
+r' R2 U R' U R U2 R' U M'
+
+Community Votes:
+
+45
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U r M)
+
+y2 r U R' U R' F R F' R U2 r'
+
+Community Votes:
+
+37
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+S R U R' U R U2 R' U2 S'
+
+Community Votes:
+
+29
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U S)
+
+M R U R' U R U2 R' U M'
+
+Community Votes:
+
+29
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U M)
+
+- More Algorithms
+
+## OLL 12
+
+-
+
+-
+
+Lightning Shapes
+
+setup:
+
+F U R U' R' F' U' F U R U' R' F'
+
+Standard Alg:
+
+y' M' (R' U' R U' R' U2 R) U' M
+
+y' M' R' U' R U' R' U2 R U' M
+
+Community Votes:
+
+37
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U M)
+
+F R U R' U' F' U F R U R' U' F'
+
+Community Votes:
+
+27
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y' S R' U' R U' R' U2 R U2 S'
+
+Community Votes:
+
+18
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U S)
+
+y M L' U' L U' L' U2 L U' M'
+
+Community Votes:
+
+10
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (U L M)
+
+- More Algorithms
+
+## OLL 13
+
+-
+
+-
+
+Knight Move Shapes
+
+setup:
+
+F' U' F r U' r' U r U r'
+
+Standard Alg:
+
+(r U' r') U' (r U r') (F' U F)
+
+F U R U2 R' U' R U R' F'
+
+Community Votes:
+
+43
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+F U R U' R2 F' R U R U' R'
+
+Community Votes:
+
+43
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+r U' r' U' r U r' F' U F
+
+Community Votes:
+
+28
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (U F r)
+
+y2 f R U R2 U' R' U R U' f'
+
+Community Votes:
+
+7
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U f)
+
+- More Algorithms
+
+## OLL 14
+
+-
+
+-
+
+Knight Move Shapes
+
+setup:
+
+F U F' R' F R U' R' F' R
+
+Standard Alg:
+
+R' F (R U R') F' R (F U' F')
+
+R' F R U R' F' R F U' F'
+
+Community Votes:
+
+56
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+r U R' U' r' F R2 U R' U' F'
+
+Community Votes:
+
+29
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+l' U l U l' U' l F U' F'
+
+Community Votes:
+
+9
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (U F l)
+
+F' U' L' U L2 F L' U' L' U L
+
+Community Votes:
+
+6
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+- More Algorithms
+
+## OLL 15
+
+-
+
+-
+
+Knight Move Shapes
+
+setup:
+
+r' U' r U' R' U R r' U r
+
+Standard Alg:
+
+(r' U' r) (R' U' R U) (r' U r)
+
+r' U' r R' U' R U r' U r
+
+Community Votes:
+
+40
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+y2 l' U' l L' U' L U l' U l
+
+Community Votes:
+
+35
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (U L l)
+
+r' U' M' U' R U r' U r
+
+Community Votes:
+
+14
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+4GEN (R U r M)
+
+y2 R' F' R L' U' L U R' F R
+
+Community Votes:
+
+12
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U L F)
+
+- More Algorithms
+
+## OLL 16
+
+-
+
+-
+
+Knight Move Shapes
+
+setup:
+
+r U r' U R U' R' r U' r'
+
+Standard Alg:
+
+(r U r') (R U R' U') (r U' r')
+
+r U r' R U R' U' r U' r'
+
+Community Votes:
+
+76
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+r U M U R' U' r U' r'
+
+Community Votes:
+
+11
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+4GEN (R U r M)
+
+y2 R' F R U R' U' F' R U' R' U2 R
+
+Community Votes:
+
+7
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 l U l' L U L' U' l U' l'
+
+Community Votes:
+
+4
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (U L l)
+
+- More Algorithms
+
+## OLL 17
+
+-
+
+-
+
+Dot Case
+
+setup:
+
+F R' F' R U2' F R' F' R U' R U' R'
+
+Standard Alg:
+
+(R U R' U) (R' F R F') U2 (R' F R F')
+
+R U R' U R' F R F' U2 R' F R F'
+
+Community Votes:
+
+58
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 F R' F' R U S' R U' R' S
+
+Community Votes:
+
+51
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U F S)
+
+y2 F R' F' R2 r' U R U' R' U' M'
+
+Community Votes:
+
+12
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+5GEN (R U F r M)
+
+y' F' r U r' U' S r' F r S'
+
+Community Votes:
+
+8
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (U F r S)
+
+- More Algorithms
+
+## OLL 18
+
+-
+
+-
+
+Dot Case
+
+setup:
+
+r' U2' R U R' U r2' U2' R' U' R U' r'
+
+Standard Alg:
+
+y (R U2 R') (R' F R F') U2 M' (U R U' r')
+
+y R U2 R2 F R F' U2 M' U R U' r'
+
+Community Votes:
+
+42
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+5GEN (R U F r M)
+
+r U R' U R U2 r2 U' R U' R' U2 r
+
+Community Votes:
+
+23
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+y F S' R U' R' S R U2 R' U' F'
+
+Community Votes:
+
+23
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U F S)
+
+R D r' U' r D' R' U' R2 F R F' R
+
+Community Votes:
+
+10
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+5GEN (R U F D r)
+
+- More Algorithms
+
+## OLL 19
+
+-
+
+-
+
+Dot Case
+
+setup:
+
+F R' F' R M U R U' R' U' M'
+
+Standard Alg:
+
+M U (R U R' U') M' (R' F R F')
+
+y S' R U R' S U' R' F R F'
+
+Community Votes:
+
+48
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U F S)
+
+M U R U R' U' M' R' F R F'
+
+Community Votes:
+
+36
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U F M)
+
+R' U2 F R U R' U' F2 U2 F R
+
+Community Votes:
+
+14
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+r' R U R U R' U' r R2 F R F'
+
+Community Votes:
+
+8
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+- More Algorithms
+
+## OLL 20
+
+-
+
+-
+
+Dot Case
+
+setup:
+
+r U R' U' M2' U R U' R' U' M'
+
+Standard Alg:
+
+(r U R' U') M2 (U R U' R') U' M'
+
+r U R' U' M2 U R U' R' U' M'
+
+Community Votes:
+
+56
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U r M)
+
+M' U2 M U2 M' U M U2 M' U2 M
+
+Community Votes:
+
+42
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+2GEN (U M)
+
+S' R U R' S U' M' U R U' r'
+
+Community Votes:
+
+28
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+5GEN (R U r M S)
+
+S R' U' R U R U R U' R' S'
+
+Community Votes:
+
+24
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U S)
+
+- More Algorithms
+
+## OLL 21
+
+-
+
+-
+
+OCLL
+
+setup:
+
+R U R' U R U' R' U R U2' R' y'
+
+Standard Alg:
+
+(R U R' U) (R U' R' U) (R U2 R')
+
+R U R' U R U' R' U R U2 R'
+
+Community Votes:
+
+77
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+2GEN (R U)
+
+y R U2 R' U' R U R' U' R U' R'
+
+Community Votes:
+
+48
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+2GEN (R U)
+
+y F R U R' U' R U R' U' R U R' U' F'
+
+Community Votes:
+
+34
+
+Movecount:
+
+14 ETM14 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+R' U' R U' R' U R U' R' U2 R
+
+Community Votes:
+
+13
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+2GEN (R U)
+
+- More Algorithms
+
+## OLL 22
+
+-
+
+-
+
+OCLL
+
+setup:
+
+R' U2' R2' U R2' U R2' U2' R'
+
+Standard Alg:
+
+R U2 (R2' U') (R2 U') (R2' U') U' R
+
+R U2 R2 U' R2 U' R2 U2 R
+
+Community Votes:
+
+98
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+2GEN (R U)
+
+R' U2 R2 U R2 U R2 U2 R'
+
+Community Votes:
+
+18
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+2GEN (R U)
+
+f R U R' U' S' R U R' U' F'
+
+Community Votes:
+
+17
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+5GEN (R U F f S)
+
+f R U R' U' f' F R U R' U' F'
+
+Community Votes:
+
+4
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+4GEN (R U F f)
+
+- More Algorithms
+
+## OLL 23
+
+-
+
+-
+
+OCLL
+
+setup:
+
+R U2' R D R' U2' R D' R2'
+
+Standard Alg:
+
+R2 D (R' U2 R) D' (R' U2 R')
+
+R2 D R' U2 R D' R' U2 R'
+
+Community Votes:
+
+104
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U D)
+
+y2 R2 D' R U2 R' D R U2 R
+
+Community Votes:
+
+40
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U D)
+
+R U R' U R U2 R2 U' R U' R' U2 R
+
+Community Votes:
+
+13
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+2GEN (R U)
+
+y R U R' U' R U' R' U2 R U' R' U2 R U R'
+
+Community Votes:
+
+5
+
+Movecount:
+
+15 ETM15 STM
+
+Face Moves:
+
+2GEN (R U)
+
+- More Algorithms
+
+## OLL 24
+
+-
+
+-
+
+OCLL
+
+setup:
+
+F R' F' r U R U' r'
+
+Standard Alg:
+
+(r U R' U') (r' F R F')
+
+r U R' U' r' F R F'
+
+Community Votes:
+
+117
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+y2 R' F' r U R U' r' F
+
+Community Votes:
+
+14
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+y' x' R U R' D R U' R' D' x
+
+Community Votes:
+
+12
+
+Movecount:
+
+10 ETM8 STM
+
+Face Moves:
+
+3GEN (R U D)
+
+y R U R D R' U' R D' R2
+
+Community Votes:
+
+12
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U D)
+
+- More Algorithms
+
+## OLL 25
+
+-
+
+-
+
+OCLL
+
+setup:
+
+R' F' r U R U' r' F y'
+
+Standard Alg:
+
+y (F' r U R') (U' r' F R)
+
+R U2 R D R' U2 R D' R2
+
+Community Votes:
+
+98
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U D)
+
+y F' r U R' U' r' F R
+
+Community Votes:
+
+77
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+F R' F' r U R U' r'
+
+Community Votes:
+
+63
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+x R' U R D' R' U' R D x'
+
+Community Votes:
+
+13
+
+Movecount:
+
+10 ETM8 STM
+
+Face Moves:
+
+3GEN (R U D)
+
+- More Algorithms
+
+## OLL 26
+
+-
+
+-
+
+OCLL
+
+setup:
+
+R U R' U R U2' R' y'
+
+Standard Alg:
+
+y R U2 (R' U' R U') R'
+
+y R U2 R' U' R U' R'
+
+Community Votes:
+
+83
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+2GEN (R U)
+
+R' U' R U' R' U2 R
+
+Community Votes:
+
+42
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+2GEN (R U)
+
+y2 L' U' L U' L' U2 L
+
+Community Votes:
+
+24
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+2GEN (U L)
+
+y2 L' U R U' L U R'
+
+Community Votes:
+
+4
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+3GEN (R U L)
+
+- More Algorithms
+
+## OLL 27
+
+-
+
+-
+
+OCLL
+
+setup:
+
+R U2' R' U' R U' R'
+
+Standard Alg:
+
+(R U R' U) (R U2 R')
+
+R U R' U R U2 R'
+
+Community Votes:
+
+109
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+2GEN (R U)
+
+y' R' U2 R U R' U R
+
+Community Votes:
+
+15
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+2GEN (R U)
+
+y L' U2 L U L' U L
+
+Community Votes:
+
+8
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+2GEN (U L)
+
+y2 L U L' U L U2 L'
+
+Community Votes:
+
+7
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+2GEN (U L)
+
+- More Algorithms
+
+## OLL 28
+
+-
+
+-
+
+All Corners Oriented
+
+setup:
+
+R U R' U' M' U R U' r'
+
+Standard Alg:
+
+(r U R' U') M (U R U' R')
+
+r U R' U' M U R U' R'
+
+Community Votes:
+
+113
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+4GEN (R U r M)
+
+R' F R S R' F' R S'
+
+Community Votes:
+
+25
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (R F S)
+
+r U R' U' r' R U R U' R'
+
+Community Votes:
+
+25
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+y2 M' U M U2 M' U M
+
+Community Votes:
+
+17
+
+Movecount:
+
+7 ETM7 STM
+
+Face Moves:
+
+2GEN (U M)
+
+- More Algorithms
+
+## OLL 29
+
+-
+
+-
+
+Awkward Shapes
+
+setup:
+
+M F R' F' R U R U' R' U' M'
+
+Standard Alg:
+
+y (R U R') U' (R U' R') (F' U' F) (R U R')
+
+r2 D' r U r' D r2 U' r' U' r
+
+Community Votes:
+
+57
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (U D r)
+
+y R U R' U' R U' R' F' U' F R U R'
+
+Community Votes:
+
+40
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y S' R U R' U' R' F R F' U S
+
+Community Votes:
+
+25
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U F S)
+
+M U R U R' U' R' F R F' M'
+
+Community Votes:
+
+19
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U F M)
+
+- More Algorithms
+
+## OLL 30
+
+-
+
+-
+
+Awkward Shapes
+
+setup:
+
+F U R U2' R' U R U2' R' U' F' y2'
+
+Standard Alg:
+
+y2 F U (R U2 R') U' (R U2 R') U' F'
+
+y' r' D' r U' r' D r2 U' r' U r U r'
+
+Community Votes:
+
+46
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (U D r)
+
+y2 F U R U2 R' U' R U2 R' U' F'
+
+Community Votes:
+
+44
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 F R' F R2 U' R' U' R U R' F2
+
+Community Votes:
+
+29
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y S' R' U' R f R' U R U' F'
+
+Community Votes:
+
+14
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+5GEN (R U F f S)
+
+- More Algorithms
+
+## OLL 31
+
+-
+
+-
+
+P Shapes
+
+setup:
+
+R' F R U R' U' F' U R
+
+Standard Alg:
+
+(R' U' F) (U R U' R') F' R
+
+R' U' F U R U' R' F' R
+
+Community Votes:
+
+77
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 S' L' U' L U L F' L' f
+
+Community Votes:
+
+13
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+5GEN (U L F f S)
+
+y S R U R' U' f' U' F
+
+Community Votes:
+
+12
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+5GEN (R U F f S)
+
+y' F R' F' R U R U R' U' R U' R'
+
+Community Votes:
+
+7
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+- More Algorithms
+
+## OLL 32
+
+-
+
+-
+
+P Shapes
+
+setup:
+
+f R' F' R U R U' R' S'
+
+Standard Alg:
+
+S (R U R' U') (R' F R f')
+
+S R U R' U' R' F R f'
+
+Community Votes:
+
+74
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+5GEN (R U F f S)
+
+y2 L U F' U' L' U L F L'
+
+Community Votes:
+
+20
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+R U B' U' R' U R B R'
+
+Community Votes:
+
+14
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U B)
+
+y' R' F R F' U' r U' r' U r U r'
+
+Community Votes:
+
+6
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+- More Algorithms
+
+## OLL 33
+
+-
+
+-
+
+T Shapes
+
+setup:
+
+F R' F' R U R U' R'
+
+Standard Alg:
+
+(R U R' U') (R' F R F')
+
+R U R' U' R' F R F'
+
+Community Votes:
+
+116
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 L' U' L U L F' L' F
+
+Community Votes:
+
+5
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+y2 r' F' r U r U' r' F
+
+Community Votes:
+
+3
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (U F r)
+
+R U R' F' U' F R U' R'
+
+Community Votes:
+
+2
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+- More Algorithms
+
+## OLL 34
+
+-
+
+-
+
+C Shapes
+
+setup:
+
+F U R' U' R' F' R U R2' U' R' y2'
+
+Standard Alg:
+
+y2 R U R2 U' R' F (R U R U') F'
+
+y f R f' U' r' U' R U M'
+
+Community Votes:
+
+80
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+5GEN (R U r f M)
+
+y2 R U R2 U' R' F R U R U' F'
+
+Community Votes:
+
+54
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+F R U R' U' R' F' r U R U' r'
+
+Community Votes:
+
+27
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+y2 R U R' U' B' R' F R F' B
+
+Community Votes:
+
+18
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U F B)
+
+- More Algorithms
+
+## OLL 35
+
+-
+
+-
+
+Fish Shapes
+
+setup:
+
+R U2' R' F R' F' R2' U2' R'
+
+Standard Alg:
+
+(R U2 R') (R' F R F') (R U2 R')
+
+R U2 R2 F R F' R U2 R'
+
+Community Votes:
+
+56
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+f R U R' U' f' R U R' U R U2 R'
+
+Community Votes:
+
+6
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (R U f)
+
+R U2 R' d' R' F R U' R' F' R
+
+Community Votes:
+
+3
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U F d)
+
+y L' U2 L2 F' L' F L' U2 L
+
+Community Votes:
+
+2
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+- More Algorithms
+
+## OLL 36
+
+-
+
+-
+
+W Shapes
+
+setup:
+
+F' L F L' U' L' U' L U L' U L y2'
+
+Standard Alg:
+
+y2 (L' U' L U') (L' U L U) (L F' L' F)
+
+y R U R2 F' U' F U R2 U2 R'
+
+Community Votes:
+
+58
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 L' U' L U' L' U L U L F' L' F
+
+Community Votes:
+
+53
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+y2 R U R' F' R U R' U' R' F R U' R' F R F'
+
+Community Votes:
+
+33
+
+Movecount:
+
+16 ETM16 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 R' F' U' F2 U R U' R' F' R
+
+Community Votes:
+
+16
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+- More Algorithms
+
+## OLL 37
+
+-
+
+-
+
+Fish Shapes
+
+setup:
+
+F R U' R' U R U R' F'
+
+Standard Alg:
+
+F R (U' R' U') (R U R') F'
+
+F R' F' R U R U' R'
+
+Community Votes:
+
+77
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+F R U' R' U' R U R' F'
+
+Community Votes:
+
+72
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y F' r U r' U' r' F r
+
+Community Votes:
+
+8
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (U F r)
+
+y2 r2 D' r U' r' D r U r
+
+Community Votes:
+
+3
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (U D r)
+
+- More Algorithms
+
+## OLL 38
+
+-
+
+-
+
+W Shapes
+
+setup:
+
+F R' F' R U R U R' U' R U' R'
+
+Standard Alg:
+
+(R U R' U) (R U' R' U') (R' F R F')
+
+R U R' U R U' R' U' R' F R F'
+
+Community Votes:
+
+91
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y F R U' R' S U' R U R' f'
+
+Community Votes:
+
+7
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+5GEN (R U F f S)
+
+r U R' U' r' F R U R U' R' F'
+
+Community Votes:
+
+2
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+y2 L U L' U L U' L' U' L' B L B'
+
+Community Votes:
+
+2
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+3GEN (U L B)
+
+- More Algorithms
+
+## OLL 39
+
+-
+
+-
+
+Lightning Shapes
+
+setup:
+
+L U F' U' L' U L F L' y'
+
+Standard Alg:
+
+y L F' (L' U' L U) F U' L'
+
+y' f' r U r' U' r' F r S
+
+Community Votes:
+
+45
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+5GEN (U F r f S)
+
+y' R U R' F' U' F U R U2 R'
+
+Community Votes:
+
+42
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y L F' L' U' L U F U' L'
+
+Community Votes:
+
+32
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+y' f' L F L' U' L' U L S
+
+Community Votes:
+
+17
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+5GEN (U L F f S)
+
+- More Algorithms
+
+## OLL 40
+
+-
+
+-
+
+Lightning Shapes
+
+setup:
+
+R' U' F U R U' R' F' R y'
+
+Standard Alg:
+
+y R' F (R U R' U') F' U R
+
+y R' F R U R' U' F' U R
+
+Community Votes:
+
+68
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y' f R' F' R U R U' R' S'
+
+Community Votes:
+
+37
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+5GEN (R U F f S)
+
+R r D r' U r D' r' U' R'
+
+Community Votes:
+
+2
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U D r)
+
+y' L' U' L F U F' U' L' U2 L
+
+Community Votes:
+
+1
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+- More Algorithms
+
+## OLL 41
+
+-
+
+-
+
+Awkward Shapes
+
+setup:
+
+F U R U' R' F' R U2' R' U' R U' R' y2'
+
+Standard Alg:
+
+y2 (R U R' U) (R U2 R') F (R U R' U') F'
+
+y2 R U R' U R U2 R' F R U R' U' F'
+
+Community Votes:
+
+54
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 F U R2 D R' U' R D' R2 F'
+
+Community Votes:
+
+21
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U F D)
+
+y' S U' R' F' U' F U R S'
+
+Community Votes:
+
+12
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+4GEN (R U F S)
+
+M U' F' L' U' L U F M'
+
+Community Votes:
+
+10
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+4GEN (U L F M)
+
+- More Algorithms
+
+## OLL 42
+
+-
+
+-
+
+Awkward Shapes
+
+setup:
+
+F U R U' R' F' R' U2' R U R' U R
+
+Standard Alg:
+
+(R' U' R U') (R' U2 R) F (R U R' U') F'
+
+R' U' R U' R' U2 R F R U R' U' F'
+
+Community Votes:
+
+41
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y F S' R U R' U' F' U S
+
+Community Votes:
+
+26
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+4GEN (R U F S)
+
+y R' F R F' R' F R F' R U R' U' R U R'
+
+Community Votes:
+
+23
+
+Movecount:
+
+15 ETM15 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y R' U' F2 u' R U R' D R2 B
+
+Community Votes:
+
+16
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+6GEN (R U F D B u)
+
+- More Algorithms
+
+## OLL 43
+
+-
+
+-
+
+P Shapes
+
+setup:
+
+f' U' L' U L f
+
+Standard Alg:
+
+y R' U' (F' U F) R
+
+y R' U' F' U F R
+
+Community Votes:
+
+62
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 F' U' L' U L F
+
+Community Votes:
+
+26
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+f' L' U' L U f
+
+Community Votes:
+
+24
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (U L f)
+
+B' U' R' U R B
+
+Community Votes:
+
+7
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (R U B)
+
+- More Algorithms
+
+## OLL 44
+
+-
+
+-
+
+P Shapes
+
+setup:
+
+f U R U' R' f'
+
+Standard Alg:
+
+f (R U R' U') f'
+
+f R U R' U' f'
+
+Community Votes:
+
+75
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (R U f)
+
+y2 F U R U' R' F'
+
+Community Votes:
+
+68
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y R U B U' B' R'
+
+Community Votes:
+
+6
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (R U B)
+
+y' L U F U' F' L'
+
+Community Votes:
+
+2
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+- More Algorithms
+
+## OLL 45
+
+-
+
+-
+
+T Shapes
+
+setup:
+
+F U R U' R' F'
+
+Standard Alg:
+
+F (R U R' U') F'
+
+F R U R' U' F'
+
+Community Votes:
+
+104
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y R' F' U' F U R
+
+Community Votes:
+
+17
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 f U R U' R' f'
+
+Community Votes:
+
+5
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (R U f)
+
+y2 F' L' U' L U F
+
+Community Votes:
+
+4
+
+Movecount:
+
+6 ETM6 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+- More Algorithms
+
+## OLL 46
+
+-
+
+-
+
+C Shapes
+
+setup:
+
+R' U' F R' F' R U R
+
+Standard Alg:
+
+R' U' (R' F R F') U R
+
+R' U' R' F R F' U R
+
+Community Votes:
+
+76
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+R' F' U' F R U' R' U2 R
+
+Community Votes:
+
+6
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y F R U R' U' F' U' R U R' U R U2 R'
+
+Community Votes:
+
+3
+
+Movecount:
+
+14 ETM14 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+l' U2 L2 F' L' F U L' U l
+
+Community Votes:
+
+3
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (U L F l)
+
+- More Algorithms
+
+## OLL 47
+
+-
+
+-
+
+L Shapes
+
+setup:
+
+F' U' L' U L U' L' U L F
+
+Standard Alg:
+
+F' (L' U' L U) (L' U' L U) F
+
+y' F R' F' R U2 R U' R' U R U2 R'
+
+Community Votes:
+
+40
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+F' L' U' L U L' U' L U F
+
+Community Votes:
+
+38
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (U L F)
+
+R' U' R' F R F' R' F R F' U R
+
+Community Votes:
+
+28
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y' R' F' U' F U F' U' F U R
+
+Community Votes:
+
+9
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+- More Algorithms
+
+## OLL 48
+
+-
+
+-
+
+L Shapes
+
+setup:
+
+F U R U' R' U R U' R' F'
+
+Standard Alg:
+
+F (R U R' U') (R U R' U') F'
+
+F R U R' U' R U R' U' F'
+
+Community Votes:
+
+69
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 f U R U' R' U R U' R' f'
+
+Community Votes:
+
+8
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U f)
+
+R U2 R' U' R U R' U2 R' F R F'
+
+Community Votes:
+
+3
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+F R' F' U2 R U R' U R2 U2 R'
+
+Community Votes:
+
+1
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+- More Algorithms
+
+## OLL 49
+
+-
+
+-
+
+L Shapes
+
+setup:
+
+r' U r2' U' r2' U' r2' U r' y2'
+
+Standard Alg:
+
+y2 r U' (r2 U) (r2 U) (r2) U' r
+
+y2 r U' r2 U r2 U r2 U' r
+
+Community Votes:
+
+59
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+2GEN (U r)
+
+l U' l2 U l2 U l2 U' l
+
+Community Votes:
+
+14
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+2GEN (U l)
+
+R B' R2 F R2 B R2 F' R
+
+Community Votes:
+
+8
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R F B)
+
+y2 R' F R' F' R2 U2 B' R B R'
+
+Community Votes:
+
+4
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U F B)
+
+- More Algorithms
+
+## OLL 50
+
+-
+
+-
+
+L Shapes
+
+setup:
+
+r U' r2' U r2' U r2' U' r
+
+Standard Alg:
+
+r' U (r2 U') (r2 U') (r2) U r'
+
+r' U r2 U' r2 U' r2 U r'
+
+Community Votes:
+
+51
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+2GEN (U r)
+
+y2 R' F R2 B' R2 F' R2 B R'
+
+Community Votes:
+
+11
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+3GEN (R F B)
+
+y' R U2 R' U' R U' R' F R U R' U' F'
+
+Community Votes:
+
+11
+
+Movecount:
+
+13 ETM13 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y2 l' U l2 U' l2 U' l2 U l'
+
+Community Votes:
+
+10
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+2GEN (U l)
+
+- More Algorithms
+
+## OLL 51
+
+-
+
+-
+
+Line Shapes
+
+setup:
+
+f U R U' R' U R U' R' f'
+
+Standard Alg:
+
+f (R U R' U') (R U R' U') f'
+
+y2 F U R U' R' U R U' R' F'
+
+Community Votes:
+
+64
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+f R U R' U' R U R' U' f'
+
+Community Votes:
+
+53
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U f)
+
+y' R' U' R' F R F' R U' R' U2 R
+
+Community Votes:
+
+5
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y r' F' U' F U F' U' F U r
+
+Community Votes:
+
+3
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (U F r)
+
+- More Algorithms
+
+## OLL 52
+
+-
+
+-
+
+Line Shapes
+
+setup:
+
+F R U R' d R' U' R U' R'
+
+Standard Alg:
+
+y2 R' (F' U' F U') (R U R' U) R
+
+y2 R' F' U' F U' R U R' U R
+
+Community Votes:
+
+56
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+R U R' U R U' B U' B' R'
+
+Community Votes:
+
+44
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U B)
+
+R U R' U R d' R U' R' F'
+
+Community Votes:
+
+16
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+4GEN (R U F d)
+
+R U R' U R U' y R U' R' F'
+
+Community Votes:
+
+12
+
+Movecount:
+
+11 ETM10 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+- More Algorithms
+
+## OLL 53
+
+-
+
+-
+
+L Shapes
+
+setup:
+
+r' U2' R U R' U' R U R' U r
+
+Standard Alg:
+
+(r' U' R U') (R' U R U') (R' U2 r)
+
+r' U' R U' R' U R U' R' U2 r
+
+Community Votes:
+
+33
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+y2 l' U' L U' L' U L U' L' U2 l
+
+Community Votes:
+
+25
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (U L l)
+
+y r' U2 R U R' U' R U R' U r
+
+Community Votes:
+
+23
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+y' l' U2 L U L' U' L U L' U l
+
+Community Votes:
+
+13
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (U L l)
+
+- More Algorithms
+
+## OLL 54
+
+-
+
+-
+
+L Shapes
+
+setup:
+
+r U2' R' U' R U R' U' R U' r'
+
+Standard Alg:
+
+(r U R' U) (R U' R' U) (R U2 r')
+
+r U R' U R U' R' U R U2 r'
+
+Community Votes:
+
+45
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+y' r U2 R' U' R U R' U' R U' r'
+
+Community Votes:
+
+26
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+y' r U r' R U R' U' R U R' U' r U' r'
+
+Community Votes:
+
+4
+
+Movecount:
+
+14 ETM14 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+y2 l U L' U L U' L' U L U2 l'
+
+Community Votes:
+
+3
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (U L l)
+
+- More Algorithms
+
+## OLL 55
+
+-
+
+-
+
+Line Shapes
+
+setup:
+
+F R' F' U2' R U R' U R2' U2' R'
+
+Standard Alg:
+
+R U2 R2 (U' R U' R') U2 (F R F')
+
+y R' F U R U' R2 F' R2 U R' U' R
+
+Community Votes:
+
+52
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+R U2 R2 U' R U' R' U2 F R F'
+
+Community Votes:
+
+34
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+y R' F R U R U' R2 F' R2 U' R' U R U R'
+
+Community Votes:
+
+34
+
+Movecount:
+
+15 ETM15 STM
+
+Face Moves:
+
+3GEN (R U F)
+
+r U2 R2 F R F' U2 r' F R F'
+
+Community Votes:
+
+19
+
+Movecount:
+
+11 ETM11 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+- More Algorithms
+
+## OLL 56
+
+-
+
+-
+
+Line Shapes
+
+setup:
+
+r U r' R U R' U' R U R' U' r U' r'
+
+Standard Alg:
+
+(r U r') (U R U' R') (U R U' R') (r U' r')
+
+r U r' U R U' R' U R U' R' r U' r'
+
+Community Votes:
+
+33
+
+Movecount:
+
+14 ETM14 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+r U r' U R U' R' M' U R U2 r'
+
+Community Votes:
+
+31
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+4GEN (R U r M)
+
+F R U R' U' R F' r U R' U' r'
+
+Community Votes:
+
+19
+
+Movecount:
+
+12 ETM12 STM
+
+Face Moves:
+
+4GEN (R U F r)
+
+r' U' r U' R' U R U' R' U R r' U r
+
+Community Votes:
+
+17
+
+Movecount:
+
+14 ETM14 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+- More Algorithms
+
+## OLL 57
+
+-
+
+-
+
+All Corners Oriented
+
+setup:
+
+r U R' U' M U R U' R'
+
+Standard Alg:
+
+(R U R' U') M' (U R U' r')
+
+R U R' U' M' U R U' r'
+
+Community Votes:
+
+96
+
+Movecount:
+
+9 ETM9 STM
+
+Face Moves:
+
+4GEN (R U r M)
+
+y R U' R' S' R U R' S
+
+Community Votes:
+
+12
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (R U S)
+
+y R U R' S' R U' R' S
+
+Community Votes:
+
+8
+
+Movecount:
+
+8 ETM8 STM
+
+Face Moves:
+
+3GEN (R U S)
+
+R U R' U' R' r U R U' r'
+
+Community Votes:
+
+7
+
+Movecount:
+
+10 ETM10 STM
+
+Face Moves:
+
+3GEN (R U r)
+
+- More Algorithms
+
+# OLL
+
+## 3x3
+
+OLL or Orientation of the Last Layer is the third step of the CFOP method, which aims to orient (same color facing up) the top layer of the 3x3. This step is fully algorithmic, and consists of 57 cases.
+
+Two look OLL is a smaller subset which orients the top layer in two stages. First, the edges are oriented - There are 3 possible cases. Then the corners are oriented - There are 7 possible cases.
+
+## Log In to Track Your Progress
+
+##### Algorithms Learnt and Personal Algorithm Sheets
+
+Sign In with WCA Login
+
+WCA login is no longer supported on this site.
+
+Based on my personal experience, I have found the WCA organization to be unreliable in ways that affect privacy, personal safety, fairness, and both transparency and proper handling of incidents. In my experience, none of these incidents have been publicly documented.
+
+I recommend that others exercise caution when relying on the WCA for any purpose, including attending WCA-sanctioned competitions, authentication, or organizational matters. This reflects my personal perspective and experience.

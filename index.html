@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OLL Trainingskarten (DIN A6)</title>
+  <style>
+    :root {
+      --ink: #1a1a1f;
+      --muted: #5c5c66;
+      --accent: #2563eb;
+      --border: #d4d4dc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background: #e8e8ee;
+    }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 0.75rem 1rem;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .toolbar p { margin: 0; flex: 1; font-size: 0.9rem; color: var(--muted); }
+    .toolbar button {
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      border-radius: 6px;
+    }
+    .preview-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .card {
+      width: 105mm;
+      min-height: 148mm;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      padding: 4mm 5mm;
+    }
+    .card-head h1 {
+      margin: 0;
+      font-size: 11pt;
+      line-height: 1.2;
+    }
+    .meta {
+      margin: 1mm 0 0;
+      font-size: 8pt;
+      color: var(--muted);
+    }
+    .card-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 38mm 1fr;
+      gap: 3mm;
+      margin-top: 3mm;
+      align-items: start;
+    }
+    .diagram {
+      margin: 0;
+      text-align: center;
+    }
+    .diagram img {
+      width: 36mm;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .algs section { margin-bottom: 2.5mm; }
+    .algs h2 {
+      margin: 0 0 1mm;
+      font-size: 7pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .hint { font-weight: 400; text-transform: none; letter-spacing: 0; }
+    .alg {
+      margin: 0;
+      font-family: "Cascadia Mono", "Consolas", monospace;
+      font-size: 7.5pt;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+    .alg.primary { font-weight: 600; color: #0f172a; }
+    .notes p {
+      margin: 0;
+      font-size: 7pt;
+      line-height: 1.35;
+      color: #334155;
+    }
+    .card-foot {
+      margin-top: 2mm;
+      padding-top: 2mm;
+      border-top: 1px solid var(--border);
+      font-size: 6pt;
+      color: var(--muted);
+      text-align: center;
+    }
+    @media print {
+      body { background: #fff; }
+      .toolbar { display: none; }
+      .preview-wrap { padding: 0; gap: 0; }
+      .card {
+        box-shadow: none;
+        border: none;
+        page-break-after: always;
+        break-after: page;
+      }
+      .card:last-child { page-break-after: auto; }
+    }
+    @page {
+      size: 105mm 148mm;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <p><strong>57 OLL-Karten</strong> · DIN A6 (105×148 mm) · Bilder laden beim ersten Öffnen (Internet nötig). Drucken: „Als PDF speichern“ oder doppelseitig schneiden.</p>
+    <button type="button" onclick="window.print()">Drucken / PDF</button>
+  </div>
+  <main class="preview-wrap">
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 1 · Nazi / Dot</h1>
+        <p class="meta">Punkt-Fälle</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+R%27+F%27+R+U2%27+F+R%27+F%27+R2%27+U2%27+R%27" alt="OLL 1 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F R' F' R U2' F R' F' R2' U2' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">f (R U R' U') f' U F (R U R' U') F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">f (sexy) f' U (T)</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>f (Sexy) f' U (T) — zweiter Alg in CubeHead-Guide</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 2 · Zamboni</h1>
+        <p class="meta">Punkt-Fälle</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=f+U+R+U%27+R%27+f%27+F+U+R+U%27+R%27+F%27" alt="OLL 2 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">f U R U' R' f' F U R U' R' F'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">F (R U R' U') F' f (R U R' U') f'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y (r U r') U2 R U2' R' U2 (r U' r')</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>F (Sexy) F' f (Sexy) f'</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 3 · Anti-Nazi</h1>
+        <p class="meta">Punkt-Fälle</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R+U%27+R%27+F%27+U+f+U+R+U%27+R%27+f%27+y" alt="OLL 3 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R U' R' F' U f U R U' R' f' y</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">f (R U R' U') f' U' F (R U R' U') F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y' f R U R' U' f' U' F R U R' U' F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>f (sexy) f' U' (T)</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 4 · Crown (Dot)</h1>
+        <p class="meta">Punkt-Fälle</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R+U%27+R%27+F%27+U%27+f+U+R+U%27+R%27+f%27+y" alt="OLL 4 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R U' R' F' U' f U R U' R' f' y</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(r U R' U R U2 r') (r' U' R U' R' U2 r)</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y R U2' (R2' F R F') U2' M' (U R U' r')</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>(Righty-Square) (Lefty-Square) kombiniert</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 5 · Righty-Square</h1>
+        <p class="meta">Quadrat</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r%27+U%27+R+U%27+R%27+U2%27+r" alt="OLL 5 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r' U' R U' R' U2' r</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">r U2 R' U' R U' r'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r' U2 R U R' U r</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Anti-Sune-Anfang und -Ende mit wide moves</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 6 · Lefty-Square</h1>
+        <p class="meta">Quadrat</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r+U+R%27+U+R+U2%27+r%27" alt="OLL 6 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r U R' U R U2' r'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">r' U2' R U R' U r</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r U2 R' U' R U' r'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Spiegel von Righty-Square</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 7 · Lightning</h1>
+        <p class="meta">Blitz</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r+U2%27+R%27+U%27+R+U%27+r%27" alt="OLL 7 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r U2' R' U' R U' r'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">r U R' U R U2' r'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r U R' U R U2 r'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Wide Sune — easy right?</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 8 · Reverse Lightning</h1>
+        <p class="meta">Blitz</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r%27+U2%27+R+U+R%27+U+r+y2%27" alt="OLL 8 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r' U2' R U R' U r y2'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">r' U' R U' R' U2 r</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y2 l' U' L U' L' U2 l</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Spiegel von Lightning</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 9 · Kite</h1>
+        <p class="meta">Fisch</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R+U%27+R2%27+F%27+R+U+R+U%27+R%27+y%27" alt="OLL 9 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R U' R2' F' R U R U' R' y'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U R' U') R' F (R2 U R' U') F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y R U R' U' R' F R2 U R' U' F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Startet wie T-Perm</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 10 · Anti-Kite</h1>
+        <p class="meta">Fisch</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R+U2%27+R%27+F+R%27+F%27+R+U%27+R+U%27+R%27" alt="OLL 10 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R U2' R' F R' F' R U' R U' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U R' U) (R' F R F') (R U2' R')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R U R' U R' F R F' R U2 R'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>(Su)(sledge)(ne)</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 11 · Downstairs</h1>
+        <p class="meta">Blitz</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=M+U%27+R+U2%27+R%27+U%27+R+U%27+R2%27+r" alt="OLL 11 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">M U' R U2' R' U' R U' R2' r</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">r' (R2 U R' U R U2 R') U M'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r' R2 U R' U R U2 R' U M'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>M (Sune) U M'</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 12 · Upstairs</h1>
+        <p class="meta">Blitz</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R+U%27+R%27+F%27+U%27+F+U+R+U%27+R%27+F%27" alt="OLL 12 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R U' R' F' U' F U R U' R' F'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">M' (R' U' R U' R' U2 R) U' M</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y' M' R' U' R U' R' U2 R U' M</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>M' (Sune-mirror) U' M</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 13 · Gun</h1>
+        <p class="meta">Springer</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F%27+U%27+F+r+U%27+r%27+U+r+U+r%27" alt="OLL 13 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F' U' F r U' r' U r U r'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">F U R U' R2' F' R U (R U' R')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">(r U' r') (U' r U r') (F' U F)</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Beide Algs etwa gleich gut — Fingertricks nachschauen</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 14 · Anti-Gun</h1>
+        <p class="meta">Springer</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+F%27+R%27+F+R+U%27+R%27+F%27+R" alt="OLL 14 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U F' R' F R U' R' F' R</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R' F R) (U R' F' R) (F U' F')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">(r' U r) (U r' U' r) y (R U' R')</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Fingertricks lohnen sich</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 15 · Squeegee</h1>
+        <p class="meta">Springer</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r%27+U%27+r+U%27+R%27+U+R+r%27+U+r" alt="OLL 15 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r' U' r U' R' U R r' U r</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(r' U' r) (R' U' R U) (r' U r)</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y2 l' U' l (L' U' L U) l' U l</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Zweiter Alg für Linkshänder / andere Perspektive</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 16 · Anti-Squeegee</h1>
+        <p class="meta">Springer</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r+U+r%27+U+R+U%27+R%27+r+U%27+r%27" alt="OLL 16 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r U r' U R U' R' r U' r'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(r U r') (R U R' U') (r U' r')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r U r' R U R' U' r U' r'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Spiegel von Squeegee</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 17 · Slash / Dot</h1>
+        <p class="meta">Punkt-Fälle</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+R%27+F%27+R+U2%27+F+R%27+F%27+R+U%27+R+U%27+R%27" alt="OLL 17 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F R' F' R U2' F R' F' R U' R U' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U R' U) (R' F R F') U2' (R' F R F')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R U R' U R' F R F' U2 R' F R F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>(R U R' U) (sledge) U2' (sledge)</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 18 · X / Super Lip</h1>
+        <p class="meta">Punkt-Fälle</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r%27+U2%27+R+U+R%27+U+r2%27+U2%27+R%27+U%27+R+U%27+r%27" alt="OLL 18 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r' U2' R U R' U r2' U2' R' U' R U' r'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">M U (R U R' U') M2' (U R U' r')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y R U2 R2 F R F' U2 M' U R U' r'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>M U (sexy) M2' (fat insert)</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 19 · Bunny</h1>
+        <p class="meta">Punkt-Fälle</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+R%27+F%27+R+M+U+R+U%27+R%27+U%27+M%27" alt="OLL 19 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F R' F' R M U R U' R' U' M'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">M U (R U R' U') M' (R' F R F')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y S' R U R' S U' R' F R F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>M U (sexy) M' (sledge)</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 20 · Blank</h1>
+        <p class="meta">Punkt-Fälle</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r+U+R%27+U%27+M2%27+U+R+U%27+R%27+U%27+M%27" alt="OLL 20 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r U R' U' M2' U R U' R' U' M'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U2') (R2' F R F') U2' (R' F R F')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r U R' U' M2 U R U' R' U' M'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>(R U2' R') (Sledge) U2' (Sledge)</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 21 · Cross</h1>
+        <p class="meta">OCLL (gelöstes Kreuz)</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R+U+R%27+U+R+U%27+R%27+U+R+U2%27+R%27+y%27" alt="OLL 21 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R U R' U R U' R' U R U2' R' y'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U2 R') (U' R U R') (U' R U' R')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y (R U R' U) (R U' R' U) (R U2' R')</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Beginnt und endet wie (Anti-)Sune</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 22 · Bruno</h1>
+        <p class="meta">OCLL (gelöstes Kreuz)</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R%27+U2%27+R2%27+U+R2%27+U+R2%27+U2%27+R%27" alt="OLL 22 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R' U2' R2' U R2' U R2' U2' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R U2' R2' U' R2 U' R2' U2' R</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R U2 R2 U' R2 U' R2 U2 R</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Nie die R-Seite loslassen! U mit linker Hand</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 23 · Headlights</h1>
+        <p class="meta">OCLL (gelöstes Kreuz)</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R+U2%27+R+D+R%27+U2%27+R+D%27+R2%27" alt="OLL 23 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R U2' R D R' U2' R D' R2'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R2 D (R' U2 R) D' (R' U2 R')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y2 R2' D' (R U2 R') D (R U2 R)</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>D' am Ringfinger drücken — wohl härtester der Gruppe</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 24 · Bowtie</h1>
+        <p class="meta">OCLL (gelöstes Kreuz)</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+R%27+F%27+r+U+R+U%27+r%27" alt="OLL 24 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F R' F' r U R U' r'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">F' (r U R' U') r' F R</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">Same as Chameleon with the last F' in front</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Wie Chameleon, nur F' vorne</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 25 · Chameleon</h1>
+        <p class="meta">OCLL (gelöstes Kreuz)</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R%27+F%27+r+U+R+U%27+r%27+F+y%27" alt="OLL 25 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R' F' r U R U' r' F y'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(r U R' U') (r' F R F')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R U2 R D R' U2 R D' R2</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Sexy, dann Sledge — mit r statt R starten</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 26 · Anti-Sune</h1>
+        <p class="meta">OCLL (gelöstes Kreuz)</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R+U+R%27+U+R+U2%27+R%27+y%27" alt="OLL 26 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R U R' U R U2' R' y'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R U2 R' U' R U' R'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y' R' U' R U' R' U2 R</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Inverse vom „dopesten Alg“</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 27 · Sune</h1>
+        <p class="meta">OCLL (gelöstes Kreuz)</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R+U2%27+R%27+U%27+R+U%27+R%27" alt="OLL 27 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R U2' R' U' R U' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R U R' U R U2' R'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y' R' U2' R U R' U R</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Dopest alg of them all 😎</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 28 · Arrow</h1>
+        <p class="meta">Alle Ecken orientiert</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R+U+R%27+U%27+M%27+U+R+U%27+r%27" alt="OLL 28 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R U R' U' M' U R U' r'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(r U R' U') M (U R U' R')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r U R' U' M U R U' R'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>(wide sexy) M (insert)</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 29 · Awkward / Knight</h1>
+        <p class="meta">Awkward</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=M+F+R%27+F%27+R+U+R+U%27+R%27+U%27+M%27" alt="OLL 29 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">M F R' F' R U R U' R' U' M'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">y (R U R') U' (R U' R') (F' U' F) (R U R')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r2 D' r U r' D r2 U' r' U' r</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Knight-Move-Gruppe im Guide</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 30 · Anti-WTF</h1>
+        <p class="meta">Awkward</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R+U2%27+R%27+U+R+U2%27+R%27+U%27+F%27+y2%27" alt="OLL 30 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R U2' R' U R U2' R' U' F' y2'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">F U (R U2 R' U') (R U2 R' U') F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y' r' D' r U' r' D r2 U' r' U r U r'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Erstes U mit linkem Index schieben</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 31 · Couch</h1>
+        <p class="meta">P-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R%27+F+R+U+R%27+U%27+F%27+U+R" alt="OLL 31 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R' F R U R' U' F' U R</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R' U' F (U R U' R') F' R</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R' U' F U R U' R' F' R</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Inverse von Big Lightning</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 32 · Anti-Couch</h1>
+        <p class="meta">P-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=f+R%27+F%27+R+U+R+U%27+R%27+S%27" alt="OLL 32 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">f R' F' R U R U' R' S'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R U B' (U' R' U) R B R'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">S (R U R' U') (R' F R f')</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Fingertrick nachschauen — pretty dope</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 33 · Key</h1>
+        <p class="meta">T-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+R%27+F%27+R+U+R+U%27+R%27" alt="OLL 33 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F R' F' R U R U' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U R' U') (R' F R F')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R U R' U' R' F R F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>(sexy) (sledge)</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 34 · C-Shape</h1>
+        <p class="meta">C-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R%27+U%27+R%27+F%27+R+U+R2%27+U%27+R%27+y2%27" alt="OLL 34 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R' U' R' F' R U R2' U' R' y2'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">y2 R U R2 U' R' F (R U R U') F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y f R f' U' r' U' R U M'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>C-Form Fisch-Variante</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 35 · Fish Salad</h1>
+        <p class="meta">Fisch</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R+U2%27+R%27+F+R%27+F%27+R2%27+U2%27+R%27" alt="OLL 35 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R U2' R' F R' F' R2' U2' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U2') (R2' F R F') (R U2' R')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R U2 R2 F R F' R U2 R'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>(R U2' R') (sledge) (R U2' R')</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 36 · C-shape / Fish</h1>
+        <p class="meta">W-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F%27+L+F+L%27+U%27+L%27+U%27+L+U+L%27+U+L+y2%27" alt="OLL 36 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F' L F L' U' L' U' L U L' U L y2'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">y2 (L' U' L U') (L' U L U) (L F' L' F)</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y R U R2 F' U' F U R2 U2 R'</p>
+          </section>
+          
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 37 · Mounted Fish</h1>
+        <p class="meta">Fisch</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+R+U%27+R%27+U+R+U+R%27+F%27" alt="OLL 37 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F R U' R' U R U R' F'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">F (R U' R' U') (R U R' F')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">F R' F' R U R U' R'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Super schnell — einer der schnellsten Fälle</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 38 · W-Shape</h1>
+        <p class="meta">W-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+R%27+F%27+R+U+R+U+R%27+U%27+R+U%27+R%27" alt="OLL 38 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F R' F' R U R U R' U' R U' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U R' U) (R U' R' U') (R' F R F')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R U R' U R U' R' U' R' F R F'</p>
+          </section>
+          
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 39 · Lefty Big Lightning</h1>
+        <p class="meta">Blitz</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=L+U+F%27+U%27+L%27+U+L+F+L%27+y%27" alt="OLL 39 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">L U F' U' L' U L F L' y'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">L F' (L' U' L U) F U' L'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y2 (R U R') (F' U' F) (U R U2 R')</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Spiegel von Big Lightning</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 40 · Big Lightning</h1>
+        <p class="meta">Blitz</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R%27+U%27+F+U+R+U%27+R%27+F%27+R+y%27" alt="OLL 40 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R' U' F U R U' R' F' R y'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R' F (R U R' U') F' U R</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R' F (Sexy) F' U R</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>⚡ Sehr einfach — früh lernen</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 41 · Poodle</h1>
+        <p class="meta">Awkward</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R+U%27+R%27+F%27+R+U2%27+R%27+U%27+R+U%27+R%27+y2%27" alt="OLL 41 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R U' R' F' R U2' R' U' R U' R' y2'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U R' U R U2' R') F (R U R' U') F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y2 R U R' U R U2 R' F R U R' U' F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>(Sune) + (T-case) — lang aber schnell</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 42 · Anti-Poodle</h1>
+        <p class="meta">Awkward</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R+U%27+R%27+F%27+R%27+U2%27+R+U+R%27+U+R" alt="OLL 42 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R U' R' F' R' U2' R U R' U R</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R' U' R U' R' U2 R) F (R U R' U') F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R' U' R U' R' U2 R F R U R' U' F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>(Anti-Sune) + (T)</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 43 · Inverse P</h1>
+        <p class="meta">P-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=f%27+U%27+L%27+U+L+f" alt="OLL 43 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">f' U' L' U L f</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">f' (L' U' L U) f</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y R' U' F' U F R</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Spiegel von P — zweiter Alg wenn du L-Moves hasst</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 44 · P</h1>
+        <p class="meta">P-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=f+U+R+U%27+R%27+f%27" alt="OLL 44 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">f U R U' R' f'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">f (R U R' U') f'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y2 F (U R U' R') F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>f (sexy) f' — sehr einfach</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 45 · T</h1>
+        <p class="meta">T-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R+U%27+R%27+F%27" alt="OLL 45 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R U' R' F'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">F (R U R' U') F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">F R U R' U' F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>F (sexy) F' — easy right?</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 46 · Seein' Headlights (C)</h1>
+        <p class="meta">C-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=R%27+U%27+F+R%27+F%27+R+U+R" alt="OLL 46 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">R' U' F R' F' R U R</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R' U' (R' F R F') U R</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R' U' R' F R F' U R</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>C + Headlights</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 47 · Anti-Breakneck</h1>
+        <p class="meta">L-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F%27+U%27+L%27+U+L+U%27+L%27+U+L+F" alt="OLL 47 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F' U' L' U L U' L' U L F</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R' U' (R' F R F') (R' F R F') U R</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">F' (L' U' L U) (L' U' L U) F</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>R' U' (double Sledge) U R — #2 für Linkshänder</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 48 · Breakneck</h1>
+        <p class="meta">L-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+U+R+U%27+R%27+U+R+U%27+R%27+F%27" alt="OLL 48 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F U R U' R' U R U' R' F'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">F (R U R' U') (R U R' U') F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">F (double Sexy) F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>F (double Sexy) F' — super easy</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 49 · Back Squeezy</h1>
+        <p class="meta">L-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r%27+U+r2%27+U%27+r2%27+U%27+r2%27+U+r%27+y2%27" alt="OLL 49 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r' U r2' U' r2' U' r2' U r' y2'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">r U' r2' U r2 U r2' U' r</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y2 r U' r2 U r2 U r2 U' r</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Spiegel von Front Squeezy</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 50 · Front Squeezy</h1>
+        <p class="meta">L-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r+U%27+r2%27+U+r2%27+U+r2%27+U%27+r" alt="OLL 50 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r U' r2' U r2' U r2' U' r</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">r' U r2 U' r2' U' r2 U r'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r' U r2 U' r2 U' r2 U r'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Nie r loslassen!</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 51 · Ant</h1>
+        <p class="meta">Linie</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=f+U+R+U%27+R%27+U+R+U%27+R%27+f%27" alt="OLL 51 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">f U R U' R' U R U' R' f'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">f (R U R' U') (R U R' U') f'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y2 F (U R U' R') (U R U' R') F'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>f 2(sexy) f' — L-Form / Line</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 52 · WTF</h1>
+        <p class="meta">Linie</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+R+U+R%27+d+R%27+U%27+R+U%27+R%27" alt="OLL 52 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F R U R' d R' U' R U' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">r2 D' (r U r') D r2 (U' r' U' r)</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y (R U R' U') (R U' R') (F' U' F) (R U R')</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>#1 sehr schnell mit gutem D — #2 wenn D schwierig</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 53 · L-Shape</h1>
+        <p class="meta">L-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r%27+U2%27+R+U+R%27+U%27+R+U+R%27+U+r" alt="OLL 53 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r' U2' R U R' U' R U R' U r</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(r' U' R U') (R' U R U') (R' U2 r)</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r' U' R U' R' U R U' R' U2 r</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Aus CubeHead L-Formen-Block</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 54 · Frying Pan</h1>
+        <p class="meta">L-Form</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r+U2%27+R%27+U%27+R+U+R%27+U%27+R+U%27+r%27" alt="OLL 54 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r U2' R' U' R U R' U' R U' r'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(r' U' R U') (R' U R U') R' U2 r</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r U R' U R U' R' U R U2 r'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>fat double Anti-Sune</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 55 · Highway</h1>
+        <p class="meta">Linie</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=F+R%27+F%27+U2%27+R+U+R%27+U+R2%27+U2%27+R%27" alt="OLL 55 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">F R' F' U2' R U R' U R2' U2' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">R U2 R2 (U' R U' R') U2 F R F'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">y (R' F R U) (R U' R2' F') R2 U' R' (U R U R')</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>#1 kürzer — #2 länger aber fingertrickbar</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 56 · Streetlights</h1>
+        <p class="meta">Linie</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r+U+r%27+R+U+R%27+U%27+R+U+R%27+U%27+r+U%27+r%27" alt="OLL 56 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r U r' R U R' U' R U R' U' r U' r'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">r U r' (U R U' R') (U R U' R') r U' r'</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">r' U' r (U' R' U R) (U' R' U R) r' U r</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>#1 lang aber schnell — #2 Spiegel</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <h1>OLL 57 · H (All oriented)</h1>
+        <p class="meta">Alle Ecken orientiert</p>
+      </header>
+      <div class="card-body">
+        <figure class="diagram">
+          <img src="https://visualcube.api.cubing.net/?fmt=svg&size=160&view=plan&stage=oll&bg=t&alg=r+U+R%27+U%27+M+U+R+U%27+R%27" alt="OLL 57 Muster" loading="lazy" />
+        </figure>
+        <div class="algs">
+          <section>
+            <h2>Setup <span class="hint">(Fall erzeugen)</span></h2>
+            <p class="alg">r U R' U' M U R U' R'</p>
+          </section>
+          <section>
+            <h2>Algorithmus <span class="hint">(CubeHead / Standard)</span></h2>
+            <p class="alg primary">(R U R' U') M' (U R U' r')</p>
+          </section>
+          <section>
+            <h2>Alternative</h2>
+            <p class="alg">R U R' U' M' U R U' r'</p>
+          </section>
+          <section class="notes">
+            <h2>Hinweise</h2>
+            <p>Alle Ecken schon gelb — letzter Fall!</p>
+          </section>
+        </div>
+      </div>
+      <footer class="card-foot">OLL in One Month · CubeHead · Training</footer>
+    </article>
+  </main>
+</body>
+</html>
