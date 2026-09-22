@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="OLL Training Cards">
+  <!-- Offset shadow (matches site logo tile) -->
+  <rect x="3.5" y="3.5" width="26" height="26" rx="6" fill="#8f3a16"/>
+  <rect x="2" y="2" width="26" height="26" rx="6" fill="#566996"/>
+  <!--
+    Sune (#27) U-face (plan):
+    . Y .
+    Y Y Y
+    . Y Y
+  -->
+  <g fill="#5C6A78">
+    <!-- non-yellow stickers -->
+    <rect x="5.2" y="5.2" width="5.6" height="5.6" rx="1.1"/>
+    <rect x="19.2" y="5.2" width="5.6" height="5.6" rx="1.1"/>
+    <rect x="5.2" y="19.2" width="5.6" height="5.6" rx="1.1"/>
+  </g>
+  <g fill="#E8C20A">
+    <!-- yellow stickers -->
+    <rect x="12.2" y="5.2" width="5.6" height="5.6" rx="1.1"/>
+    <rect x="5.2" y="12.2" width="5.6" height="5.6" rx="1.1"/>
+    <rect x="12.2" y="12.2" width="5.6" height="5.6" rx="1.1"/>
+    <rect x="19.2" y="12.2" width="5.6" height="5.6" rx="1.1"/>
+    <rect x="12.2" y="19.2" width="5.6" height="5.6" rx="1.1"/>
+    <rect x="19.2" y="19.2" width="5.6" height="5.6" rx="1.1"/>
+  </g>
+</svg>
