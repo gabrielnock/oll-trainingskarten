@@ -175,6 +175,9 @@ function cardHtml(c) {
       <div class="title-row">
         <h1 class="title">${esc(c.name)}</h1>
         <span class="case-no">#${c.num}</span>
+        <button type="button" class="status-toggle screen-only" data-status-toggle aria-expanded="false" aria-label="Learning status" title="Status">
+          <span class="status-pip" aria-hidden="true"></span>
+        </button>
       </div>
       <div class="inline-box setup-box">
         <span class="inline-label">Setup</span>
@@ -268,6 +271,9 @@ const clientJs = `
 
   let state = { version: 1, updatedAt: null, cases: {} };
   let modalCase = null;
+  let practiceOn = false;
+  let practiceIndex = 0;
+  let touchStartX = null;
 
   function migrateCase(raw) {
     const c = { ...defaultCase(), ...(raw || {}) };
@@ -582,6 +588,94 @@ const clientJs = `
       const any = [...sec.querySelectorAll(".case-row")].some((r) => !r.hidden);
       sec.hidden = !any;
     });
+    if (practiceOn) refreshPractice();
+  }
+
+  function visibleCaseRows() {
+    return [...document.querySelectorAll(".case-row")].filter(
+      (r) => !r.hidden && !r.classList.contains("is-filtered-out")
+    );
+  }
+
+  function setPracticeUi(on) {
+    practiceOn = on;
+    document.body.classList.toggle("practice-mode", on);
+    const btn = document.getElementById("btn-practice");
+    if (btn) btn.setAttribute("aria-pressed", on ? "true" : "false");
+    if (!on) {
+      document.querySelectorAll(".case-row.is-practice-current").forEach((r) => {
+        r.classList.remove("is-practice-current");
+      });
+    }
+  }
+
+  function refreshPractice() {
+    if (!practiceOn) return;
+    const rows = visibleCaseRows();
+    if (!rows.length) {
+      document.querySelectorAll(".case-row").forEach((r) => r.classList.remove("is-practice-current"));
+      const meta = document.getElementById("practice-meta");
+      if (meta) meta.textContent = "0 / 0";
+      return;
+    }
+    if (practiceIndex >= rows.length) practiceIndex = rows.length - 1;
+    if (practiceIndex < 0) practiceIndex = 0;
+    document.querySelectorAll(".case-row").forEach((r) => r.classList.remove("is-practice-current"));
+    const current = rows[practiceIndex];
+    current.classList.add("is-practice-current");
+    const meta = document.getElementById("practice-meta");
+    if (meta) meta.textContent = (practiceIndex + 1) + " / " + rows.length;
+    const name = current.querySelector(".title")?.textContent?.trim() || ("#" + current.dataset.case);
+    if (meta) meta.title = name;
+    current.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+
+  function practiceStep(delta) {
+    if (!practiceOn) return;
+    const rows = visibleCaseRows();
+    if (!rows.length) return;
+    practiceIndex = (practiceIndex + delta + rows.length) % rows.length;
+    refreshPractice();
+  }
+
+  function enterPractice(fromCase) {
+    const rows = visibleCaseRows();
+    if (!rows.length) return;
+    if (fromCase != null) {
+      const idx = rows.findIndex((r) => r.dataset.case === String(fromCase));
+      practiceIndex = idx >= 0 ? idx : 0;
+    } else {
+      practiceIndex = 0;
+    }
+    setPracticeUi(true);
+    setAnchorsCollapsed(true);
+    refreshPractice();
+  }
+
+  function exitPractice() {
+    const current = document.querySelector(".case-row.is-practice-current");
+    const id = current?.id;
+    setPracticeUi(false);
+    if (id) {
+      requestAnimationFrame(() => scrollToId(id, 180));
+    }
+  }
+
+  function setAnchorsCollapsed(collapsed) {
+    const wrap = document.getElementById("anchors-wrap");
+    const btn = document.getElementById("btn-groups");
+    if (!wrap || !btn) return;
+    wrap.classList.toggle("is-collapsed", collapsed);
+    btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  }
+
+  function closeAllStatusPanels(exceptRow) {
+    document.querySelectorAll(".case-row.status-open").forEach((row) => {
+      if (exceptRow && row === exceptRow) return;
+      row.classList.remove("status-open");
+      const t = row.querySelector("[data-status-toggle]");
+      if (t) t.setAttribute("aria-expanded", "false");
+    });
   }
 
   function updateCounts() {
@@ -611,6 +705,7 @@ const clientJs = `
         applyStatus(row);
         applyFilter();
         updateCounts();
+        closeAllStatusPanels();
       }
       if (t.matches("[data-fav]")) {
         const data = ensure(row.dataset.case);
@@ -628,6 +723,14 @@ const clientJs = `
     });
 
     row.addEventListener("click", (e) => {
+      const statusToggle = e.target.closest("[data-status-toggle]");
+      if (statusToggle) {
+        const open = !row.classList.contains("status-open");
+        closeAllStatusPanels(open ? row : null);
+        row.classList.toggle("status-open", open);
+        statusToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        return;
+      }
       const addBtn = e.target.closest("[data-add-alg]");
       if (addBtn) {
         openModal(row.dataset.case);
@@ -714,6 +817,14 @@ const clientJs = `
     requestAnimationFrame(frame);
   }
 
+  function setActionsOpen(open) {
+    const menu = document.getElementById("actions-menu");
+    const btn = document.getElementById("btn-menu");
+    if (!menu || !btn) return;
+    menu.classList.toggle("is-open", open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
   function bindGlobal() {
     document.querySelectorAll("[data-filter]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -729,17 +840,104 @@ const clientJs = `
         const id = (a.getAttribute("href") || "").slice(1);
         if (!id || !document.getElementById(id)) return;
         e.preventDefault();
+        if (practiceOn) exitPractice();
         scrollToId(id, a.classList.contains("nav-chip") ? 180 : 240);
         history.pushState(null, "", "#" + id);
+        if (window.matchMedia("(max-width: 720px)").matches) setAnchorsCollapsed(true);
       });
     });
 
+    document.getElementById("btn-groups")?.addEventListener("click", () => {
+      const wrap = document.getElementById("anchors-wrap");
+      setAnchorsCollapsed(!(wrap && wrap.classList.contains("is-collapsed")));
+    });
+
+    document.getElementById("btn-practice")?.addEventListener("click", () => {
+      if (practiceOn) exitPractice();
+      else enterPractice();
+    });
+    document.getElementById("practice-prev")?.addEventListener("click", () => practiceStep(-1));
+    document.getElementById("practice-next")?.addEventListener("click", () => practiceStep(1));
+    document.getElementById("practice-exit")?.addEventListener("click", () => exitPractice());
+
+    document.getElementById("btn-menu")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const menu = document.getElementById("actions-menu");
+      setActionsOpen(!(menu && menu.classList.contains("is-open")));
+    });
+    document.addEventListener("click", (e) => {
+      const menu = document.getElementById("actions-menu");
+      if (menu && menu.classList.contains("is-open") && !menu.contains(e.target)) {
+        setActionsOpen(false);
+      }
+      if (!e.target.closest(".case-row") && !e.target.closest(".status-panel")) {
+        closeAllStatusPanels();
+      }
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        setActionsOpen(false);
+        closeAllStatusPanels();
+        closeModal();
+        if (practiceOn) exitPractice();
+        return;
+      }
+      if (!practiceOn) return;
+      const tag = (e.target && e.target.tagName) || "";
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        practiceStep(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        practiceStep(1);
+      }
+    });
+
+    let lastScrollY = window.scrollY;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!window.matchMedia("(max-width: 720px)").matches) return;
+        const y = window.scrollY;
+        if (y > lastScrollY + 24) setAnchorsCollapsed(true);
+        lastScrollY = y;
+      },
+      { passive: true }
+    );
+
+    const swipeRoot = document.querySelector("main");
+    swipeRoot?.addEventListener(
+      "touchstart",
+      (e) => {
+        if (!practiceOn || e.touches.length !== 1) return;
+        touchStartX = e.touches[0].clientX;
+      },
+      { passive: true }
+    );
+    swipeRoot?.addEventListener(
+      "touchend",
+      (e) => {
+        if (!practiceOn || touchStartX == null) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        touchStartX = null;
+        if (Math.abs(dx) < 48) return;
+        practiceStep(dx < 0 ? 1 : -1);
+      },
+      { passive: true }
+    );
+
     document.getElementById("btn-print")?.addEventListener("click", () => {
+      setActionsOpen(false);
       document.querySelectorAll(".case-row").forEach(applyAlgOrder);
       window.print();
     });
-    document.getElementById("btn-export")?.addEventListener("click", exportFile);
+    document.getElementById("btn-export")?.addEventListener("click", () => {
+      setActionsOpen(false);
+      exportFile();
+    });
     document.getElementById("btn-import")?.addEventListener("click", () => {
+      setActionsOpen(false);
       document.getElementById("import-file")?.click();
     });
     document.getElementById("import-file")?.addEventListener("change", (e) => {
@@ -758,9 +956,8 @@ const clientJs = `
       }
       if (e.key === "Escape") closeModal();
     });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeModal();
-    });
+
+    setAnchorsCollapsed(window.matchMedia("(max-width: 720px)").matches);
   }
 
   loadLocal();
@@ -773,12 +970,12 @@ const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OLL Training Cards (A6)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Gabis OLL Trainer</title>
   <meta name="theme-color" content="#566996" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="OLL Cards" />
+  <meta name="apple-mobile-web-app-title" content="Gabis OLL" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" />
@@ -882,9 +1079,11 @@ const html = `<!DOCTYPE html>
       gap: 0.55rem;
       font-weight: 700;
       letter-spacing: -0.03em;
-      font-size: 1.08rem;
+      font-size: 1.02rem;
       color: var(--anthracite);
+      min-width: 0;
     }
+    .brand-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .brand-mark {
       width: 1.6rem;
       height: 1.6rem;
@@ -895,15 +1094,59 @@ const html = `<!DOCTYPE html>
         var(--main);
       box-shadow: 3px 3px 0 var(--brown);
     }
-    .meta { font-size: 0.76rem; color: var(--muted); }
-    #save-stamp { font-size: 0.7rem; color: var(--muted); }
+    #save-stamp {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-left: 0.15rem;
+    }
 
     .actions {
       margin-left: auto;
+      position: relative;
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
       align-items: center;
+      gap: 0.4rem;
+    }
+    .icon-btn {
+      appearance: none;
+      width: 2.1rem;
+      height: 2.1rem;
+      padding: 0;
+      border: 2px solid var(--dove);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.9);
+      color: var(--anthracite);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: 2px 2px 0 rgba(42,46,51,0.08);
+    }
+    .icon-btn:hover,
+    .icon-btn[aria-expanded="true"] {
+      border-color: var(--anthracite);
+      background: var(--mist);
+    }
+    .icon-btn svg { width: 1.05rem; height: 1.05rem; display: block; }
+    .actions-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.35rem);
+      right: 0;
+      z-index: 90;
+      min-width: 11.5rem;
+      padding: 0.4rem;
+      background: var(--white);
+      border: 2px solid var(--anthracite);
+      border-radius: 12px;
+      box-shadow: 4px 4px 0 var(--dove-blue);
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .actions.is-open .actions-panel { display: flex; }
+    .actions-panel .btn {
+      width: 100%;
+      justify-content: flex-start;
+      box-shadow: none;
     }
     .btn {
       appearance: none;
@@ -918,6 +1161,9 @@ const html = `<!DOCTYPE html>
       color: var(--anthracite);
       box-shadow: 3px 3px 0 var(--dove);
       transition: transform .12s ease, box-shadow .12s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--dove-blue); }
     .btn-primary {
@@ -932,16 +1178,18 @@ const html = `<!DOCTYPE html>
       display: flex;
       flex-wrap: wrap;
       gap: 0.4rem;
-      margin-top: 0.65rem;
+      margin-top: 0.7rem;
       align-items: center;
     }
-    .filters-label {
+    .filters-label,
+    .anchors-label {
       font-size: 0.66rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--muted);
       font-weight: 700;
       margin-right: 0.15rem;
+      flex-shrink: 0;
     }
     .filter-chip {
       border: 2px solid var(--dove);
@@ -984,26 +1232,83 @@ const html = `<!DOCTYPE html>
       padding: 0 0.35rem;
     }
 
+    .anchors-wrap {
+      margin-top: 0.85rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--line);
+    }
+    .anchors-toggle {
+      appearance: none;
+      border: 2px solid var(--dove);
+      background: var(--white);
+      border-radius: 8px;
+      padding: 0.32rem 0.7rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      font-family: var(--font);
+      color: var(--anthracite);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 2px 2px 0 rgba(42,46,51,0.08);
+    }
+    .anchors-toggle:hover,
+    .anchors-toggle[aria-expanded="true"] {
+      border-color: var(--anthracite);
+      background: var(--mist);
+    }
+    .anchors-toggle .chev {
+      font-size: 0.6rem;
+      transition: transform 0.18s ease;
+    }
+    .anchors-wrap.is-collapsed .anchors-toggle .chev {
+      transform: rotate(-90deg);
+    }
     .anchors {
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem;
-      margin-top: 0.6rem;
+      margin-top: 0.5rem;
+      align-items: center;
+    }
+    .anchors-wrap.is-collapsed .anchors {
+      display: none;
     }
     .nav-chip {
       text-decoration: none;
       color: var(--anthracite);
       font-size: 0.68rem;
       font-weight: 700;
-      padding: 0.3rem 0.65rem;
+      padding: 0.35rem 0.65rem;
       border-radius: 8px;
       background: var(--white);
       border: 2px solid var(--dove);
+      white-space: nowrap;
     }
     .nav-chip:hover {
       border-color: var(--anthracite);
       background: var(--mist);
       color: var(--anthracite);
+    }
+    .filter-chip .lbl-short { display: none; }
+
+    .mode-chip {
+      border: 2px solid var(--dove);
+      background: var(--white);
+      border-radius: 999px;
+      padding: 0.32rem 0.75rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: var(--font);
+      cursor: pointer;
+      color: var(--anthracite);
+      box-shadow: 2px 2px 0 rgba(42,46,51,0.08);
+    }
+    .mode-chip[aria-pressed="true"] {
+      background: var(--main);
+      color: var(--white);
+      border-color: transparent;
     }
 
     main { padding: 1.25rem 1rem 3.5rem; max-width: 1140px; margin: 0 auto; }
@@ -1144,6 +1449,34 @@ const html = `<!DOCTYPE html>
       gap: 3mm;
       margin-top: 0.6mm;
     }
+    .status-toggle {
+      appearance: none;
+      border: 2px solid var(--dove);
+      background: var(--white);
+      width: 1.55rem;
+      height: 1.55rem;
+      border-radius: 0.45rem;
+      padding: 0;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      align-self: center;
+      box-shadow: 2px 2px 0 rgba(42,46,51,0.08);
+    }
+    .status-toggle[aria-expanded="true"] {
+      border-color: var(--anthracite);
+      background: var(--mist);
+    }
+    .status-pip {
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 0.2rem;
+      background: var(--dove-mid);
+    }
+    .case-row[data-status="red"] .status-pip { background: var(--brown); }
+    .case-row[data-status="yellow"] .status-pip { background: var(--gold); }
+    .case-row[data-status="green"] .status-pip { background: var(--main); }
     .title {
       margin: 0;
       font-size: 13.5pt;
@@ -1377,12 +1710,15 @@ const html = `<!DOCTYPE html>
       border: 2px solid var(--anthracite);
       border-radius: 12px;
       padding: 2.4mm;
-      display: flex;
+      display: none;
       flex-direction: column;
       gap: 2mm;
       box-shadow: 4px 4px 0 var(--gold);
       align-self: flex-start;
       margin-top: 0;
+    }
+    .case-row.status-open .status-panel {
+      display: flex;
     }
     .status-opt {
       display: flex;
@@ -1471,17 +1807,121 @@ const html = `<!DOCTYPE html>
       margin-top: 0.9rem;
     }
 
+    .practice-bar {
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 70;
+      padding: 0.65rem 1rem calc(0.65rem + env(safe-area-inset-bottom));
+      background: var(--glass);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-top: 2px solid var(--anthracite);
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      box-shadow: 0 -8px 24px rgba(42,46,51,0.08);
+    }
+    body.practice-mode .practice-bar { display: flex; }
+    body.practice-mode .group-heading,
+    body.practice-mode .ref-list { display: none !important; }
+    body.practice-mode .group-section {
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+    }
+    body.practice-mode .group-section[hidden] { display: none !important; }
+    body.practice-mode .cards { gap: 0; min-height: 70vh; justify-content: center; }
+    body.practice-mode .case-row { display: none; }
+    body.practice-mode .case-row.is-practice-current {
+      display: flex;
+      margin: 0 auto;
+    }
+    body.practice-mode main { padding-bottom: 5.5rem; }
+    .practice-bar .btn { min-width: 2.5rem; }
+    .practice-meta {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--anthracite);
+      min-width: 5.5rem;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
     @media (max-width: 720px) {
+      .toolbar {
+        padding-top: max(0.55rem, env(safe-area-inset-top));
+        padding-bottom: 0.65rem;
+        padding-left: max(0.75rem, env(safe-area-inset-left));
+        padding-right: max(0.75rem, env(safe-area-inset-right));
+      }
+      .brand { font-size: 0.88rem; }
+      #save-stamp { display: none; }
       .ref-row { grid-template-columns: 1fr; }
-      .actions { margin-left: 0; width: 100%; }
       .case-row { flex-direction: column; align-items: center; }
-      .status-panel { width: 105mm; flex-direction: row; flex-wrap: wrap; align-items: center; }
+      .case-row.status-open .status-panel {
+        width: min(105mm, 100%);
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 0.15rem;
+        margin-left: -0.15rem;
+        margin-right: -0.15rem;
+        padding-left: 0.15rem;
+        padding-right: 0.15rem;
+      }
+      .filters::-webkit-scrollbar { display: none; }
+      .anchors {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .anchors::-webkit-scrollbar { display: none; }
+      .filter-chip {
+        flex-shrink: 0;
+        min-height: 2rem;
+        padding: 0.28rem 0.6rem;
+      }
+      .filter-chip .lbl-full { display: none; }
+      .filter-chip .lbl-short { display: inline; }
+      .nav-chip { flex-shrink: 0; min-height: 2rem; display: inline-flex; align-items: center; }
+      .anchors-wrap { margin-top: 0.7rem; padding-top: 0.7rem; }
+      main {
+        padding: 1rem max(0.75rem, env(safe-area-inset-left)) calc(2.5rem + env(safe-area-inset-bottom));
+        padding-right: max(0.75rem, env(safe-area-inset-right));
+      }
+      body.practice-mode main {
+        padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+      }
+      .group-section { scroll-margin-top: 7.5rem; }
+      .modal-panel input,
+      .note-box input.inline-value,
+      #alg-modal-input { font-size: 16px; }
+      body.practice-mode .card {
+        width: min(105mm, calc(100vw - 1.5rem));
+        height: auto;
+        min-height: 0;
+        max-height: none;
+      }
     }
 
     @media print {
       body { background: #fff; }
       body::before, body::after { display: none !important; }
-      .toolbar, .ref-list, .group-heading, .screen-only, .modal, .card-accent { display: none !important; }
+      .toolbar, .ref-list, .group-heading, .screen-only, .modal, .card-accent, .practice-bar { display: none !important; }
+      body.practice-mode .case-row:not(.is-filtered-out) { display: block !important; }
+      body.practice-mode .group-section { display: block !important; }
       .group-section {
         margin: 0;
         padding: 0;
@@ -1515,30 +1955,47 @@ const html = `<!DOCTYPE html>
 <body>
   <header class="toolbar">
     <div class="toolbar-top">
-      <div class="brand"><span class="brand-mark" aria-hidden="true"></span> OLL Training</div>
-      <span class="meta">${cards.length} cases · A6</span>
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">Gabis OLL Trainer</span></div>
       <span id="save-stamp"></span>
-      <div class="actions">
-        <button type="button" class="btn btn-ghost" id="btn-import">Import</button>
-        <button type="button" class="btn btn-ghost" id="btn-export">Export JSON</button>
-        <button type="button" class="btn btn-primary" id="btn-print">Print / PDF</button>
+      <div class="actions" id="actions-menu">
+        <button type="button" class="mode-chip" id="btn-practice" aria-pressed="false" title="Practice one case at a time">Practice</button>
+        <button type="button" class="icon-btn" id="btn-menu" aria-expanded="false" aria-controls="actions-panel" aria-label="More actions" title="More">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+        </button>
+        <div class="actions-panel" id="actions-panel" role="menu">
+          <button type="button" class="btn btn-ghost" id="btn-import" role="menuitem">Import</button>
+          <button type="button" class="btn btn-ghost" id="btn-export" role="menuitem">Export JSON</button>
+          <button type="button" class="btn btn-primary" id="btn-print" role="menuitem">Print / PDF</button>
+        </div>
         <input type="file" id="import-file" accept="application/json,.json" hidden />
       </div>
     </div>
     <div class="filters" aria-label="Status filter">
       <span class="filters-label">Filter</span>
-      <button type="button" class="filter-chip" data-filter="red"><span class="pip"></span> Not learned <span class="n" data-count="red">0</span></button>
-      <button type="button" class="filter-chip" data-filter="yellow"><span class="pip"></span> Learning <span class="n" data-count="yellow">0</span></button>
-      <button type="button" class="filter-chip" data-filter="green"><span class="pip"></span> Learned <span class="n" data-count="green">0</span></button>
-      <button type="button" class="filter-chip" data-filter="none"><span class="pip"></span> Unmarked <span class="n" data-count="none">0</span></button>
+      <button type="button" class="filter-chip" data-filter="red"><span class="pip"></span><span class="lbl-full"> Not learned </span><span class="lbl-short"> Not </span><span class="n" data-count="red">0</span></button>
+      <button type="button" class="filter-chip" data-filter="yellow"><span class="pip"></span><span class="lbl-full"> Learning </span><span class="lbl-short"> Learn </span><span class="n" data-count="yellow">0</span></button>
+      <button type="button" class="filter-chip" data-filter="green"><span class="pip"></span><span class="lbl-full"> Learned </span><span class="lbl-short"> Done </span><span class="n" data-count="green">0</span></button>
+      <button type="button" class="filter-chip" data-filter="none"><span class="pip"></span><span class="lbl-full"> Unmarked </span><span class="lbl-short"> — </span><span class="n" data-count="none">0</span></button>
     </div>
-    <nav class="anchors" aria-label="Groups">
-      ${navLinks}
-    </nav>
+    <div class="anchors-wrap is-collapsed" id="anchors-wrap">
+      <button type="button" class="anchors-toggle" id="btn-groups" aria-expanded="false" aria-controls="anchors-nav">
+        Groups <span class="chev" aria-hidden="true">▾</span>
+      </button>
+      <nav class="anchors" id="anchors-nav" aria-label="Groups">
+        ${navLinks}
+      </nav>
+    </div>
   </header>
   <main>
 ${groupSections}
   </main>
+
+  <div class="practice-bar screen-only" id="practice-bar" aria-label="Practice navigation">
+    <button type="button" class="btn btn-ghost" id="practice-prev" aria-label="Previous case">‹</button>
+    <span class="practice-meta" id="practice-meta">0 / 0</span>
+    <button type="button" class="btn btn-ghost" id="practice-next" aria-label="Next case">›</button>
+    <button type="button" class="btn btn-primary" id="practice-exit">Exit</button>
+  </div>
 
   <div class="modal" id="alg-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="alg-modal-title">
     <div class="modal-backdrop" id="alg-modal-backdrop"></div>
