@@ -1,7 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="OLL Training Cards">
-  <!-- Full-bleed for iOS mask; Sune (#27) sticker pattern -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Gabis OLL Trainer">
   <rect width="180" height="180" fill="#566996"/>
-  <g fill="#5C6A78">
+  <g fill="#a6abbd">
     <rect x="22" y="22" width="40" height="40" rx="8"/>
     <rect x="118" y="22" width="40" height="40" rx="8"/>
     <rect x="22" y="118" width="40" height="40" rx="8"/>

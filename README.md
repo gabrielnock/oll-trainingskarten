@@ -47,4 +47,4 @@ npm run parse
 npm run build   # fetches VisualCube SVGs (cached in svg-cache/), recolors, writes index.html
 ```
 
-Cube diagrams are **inline SVGs**. Yellow `#FEFE00` → `#E8C20A`, grey `#404040` → `#5C6A78`.
+Cube diagrams are **inline SVGs**. Yellow `#FEFE00` → `#E8C20A`, grey `#404040` → `#424656`.
