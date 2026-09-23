@@ -273,6 +273,7 @@ const clientJs = `
   let modalCase = null;
   let practiceOn = false;
   let practiceIndex = 0;
+  let practiceQueue = [];
   let touchStartX = null;
 
   function migrateCase(raw) {
@@ -597,12 +598,44 @@ const clientJs = `
     );
   }
 
+  function shuffleIds(ids) {
+    const a = ids.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = a[i];
+      a[i] = a[j];
+      a[j] = tmp;
+    }
+    return a;
+  }
+
+  function syncPracticeQueue() {
+    const visibleIds = visibleCaseRows().map((r) => r.dataset.case);
+    const visibleSet = new Set(visibleIds);
+    const currentId = practiceQueue[practiceIndex];
+    practiceQueue = practiceQueue.filter((id) => visibleSet.has(id));
+    const inQueue = new Set(practiceQueue);
+    const missing = visibleIds.filter((id) => !inQueue.has(id));
+    if (missing.length) practiceQueue = practiceQueue.concat(shuffleIds(missing));
+    if (!practiceQueue.length && visibleIds.length) {
+      practiceQueue = shuffleIds(visibleIds);
+    }
+    if (currentId) {
+      const idx = practiceQueue.indexOf(currentId);
+      practiceIndex = idx >= 0 ? idx : 0;
+    } else {
+      practiceIndex = 0;
+    }
+  }
+
   function setPracticeUi(on) {
     practiceOn = on;
     document.body.classList.toggle("practice-mode", on);
     const btn = document.getElementById("btn-practice");
     if (btn) btn.setAttribute("aria-pressed", on ? "true" : "false");
     if (!on) {
+      practiceQueue = [];
+      practiceIndex = 0;
       document.querySelectorAll(".case-row.is-practice-current").forEach((r) => {
         r.classList.remove("is-practice-current");
       });
@@ -611,38 +644,42 @@ const clientJs = `
 
   function refreshPractice() {
     if (!practiceOn) return;
-    const rows = visibleCaseRows();
-    if (!rows.length) {
+    syncPracticeQueue();
+    if (!practiceQueue.length) {
       document.querySelectorAll(".case-row").forEach((r) => r.classList.remove("is-practice-current"));
       const meta = document.getElementById("practice-meta");
       if (meta) meta.textContent = "0 / 0";
       return;
     }
-    if (practiceIndex >= rows.length) practiceIndex = rows.length - 1;
+    if (practiceIndex >= practiceQueue.length) practiceIndex = practiceQueue.length - 1;
     if (practiceIndex < 0) practiceIndex = 0;
     document.querySelectorAll(".case-row").forEach((r) => r.classList.remove("is-practice-current"));
-    const current = rows[practiceIndex];
+    const current = document.querySelector(
+      '.case-row[data-case="' + practiceQueue[practiceIndex] + '"]'
+    );
+    if (!current) return;
     current.classList.add("is-practice-current");
     const meta = document.getElementById("practice-meta");
-    if (meta) meta.textContent = (practiceIndex + 1) + " / " + rows.length;
+    if (meta) meta.textContent = (practiceIndex + 1) + " / " + practiceQueue.length;
     const name = current.querySelector(".title")?.textContent?.trim() || ("#" + current.dataset.case);
-    if (meta) meta.title = name;
+    if (meta) meta.title = name + " · random order";
     current.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
 
   function practiceStep(delta) {
     if (!practiceOn) return;
-    const rows = visibleCaseRows();
-    if (!rows.length) return;
-    practiceIndex = (practiceIndex + delta + rows.length) % rows.length;
+    syncPracticeQueue();
+    if (!practiceQueue.length) return;
+    practiceIndex = (practiceIndex + delta + practiceQueue.length) % practiceQueue.length;
     refreshPractice();
   }
 
   function enterPractice(fromCase) {
     const rows = visibleCaseRows();
     if (!rows.length) return;
+    practiceQueue = shuffleIds(rows.map((r) => r.dataset.case));
     if (fromCase != null) {
-      const idx = rows.findIndex((r) => r.dataset.case === String(fromCase));
+      const idx = practiceQueue.indexOf(String(fromCase));
       practiceIndex = idx >= 0 ? idx : 0;
     } else {
       practiceIndex = 0;
@@ -1085,14 +1122,11 @@ const html = `<!DOCTYPE html>
     }
     .brand-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .brand-mark {
-      width: 1.6rem;
-      height: 1.6rem;
-      border-radius: 0.45rem;
-      background:
-        linear-gradient(135deg, var(--gold) 0 50%, transparent 50%),
-        linear-gradient(225deg, var(--main-lt) 0 50%, transparent 50%),
-        var(--main);
-      box-shadow: 3px 3px 0 var(--brown);
+      width: 1.7rem;
+      height: 1.7rem;
+      flex-shrink: 0;
+      display: block;
+      border-radius: 0.4rem;
     }
     #save-stamp {
       font-size: 0.65rem;
@@ -1955,10 +1989,10 @@ const html = `<!DOCTYPE html>
 <body>
   <header class="toolbar">
     <div class="toolbar-top">
-      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">Gabis OLL Trainer</span></div>
+      <div class="brand"><img class="brand-mark" src="favicon.svg" width="27" height="27" alt="" /><span class="brand-text">Gabis OLL Trainer</span></div>
       <span id="save-stamp"></span>
       <div class="actions" id="actions-menu">
-        <button type="button" class="mode-chip" id="btn-practice" aria-pressed="false" title="Practice one case at a time">Practice</button>
+        <button type="button" class="mode-chip" id="btn-practice" aria-pressed="false" title="Practice filtered cases in random order">Practice</button>
         <button type="button" class="icon-btn" id="btn-menu" aria-expanded="false" aria-controls="actions-panel" aria-label="More actions" title="More">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
         </button>
