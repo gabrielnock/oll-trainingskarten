@@ -1311,8 +1311,11 @@ const html = `<!DOCTYPE html>
       padding-top: 0.75rem;
       border-top: 1px solid var(--line);
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 0.45rem 0.5rem;
     }
     .anchors-toggle {
       appearance: none;
@@ -1339,10 +1342,11 @@ const html = `<!DOCTYPE html>
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem;
-      margin-top: 0.5rem;
+      margin-top: 0;
       align-items: center;
-      justify-content: flex-end;
-      width: 100%;
+      justify-content: flex-start;
+      flex: 1 1 0;
+      min-width: 0;
     }
     .anchors-wrap.is-collapsed .anchors {
       display: none;
@@ -1978,7 +1982,8 @@ const html = `<!DOCTYPE html>
       }
       .filters::-webkit-scrollbar { display: none; }
       .anchors {
-        justify-content: flex-end;
+        flex: 1 1 0;
+        min-width: 0;
       }
       .filter-chip {
         flex-shrink: 0;
