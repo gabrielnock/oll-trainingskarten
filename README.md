@@ -1,6 +1,6 @@
-# OLL Training Cards (A6)
+# Gabis OLL Trainer
 
-Interactive A6 flashcards for all **57 OLL cases** (CubeHead nicknames), with learning status, favorite algs, notes, and JSON progress export.
+Interactive A6 flashcards for all **57 OLL cases** (CubeHead nicknames), with learning status, favorite algs, per-alg notes, and JSON progress export.
 
 ## Quick start
 
@@ -12,14 +12,16 @@ npm start
 
 ## Features
 
-- Sticky glass header with group anchors + status filters (red / yellow / green / unmarked)
+- Sticky glass header with group anchors + status filters (red / orange / green)
 - Case thumbnails in each group submenu
-- Status checkboxes beside each card (not learned / learning / learned)
+- Status beside each card (not learned / learning / learned) — default is not learned
 - ★ favorite toggle per alg — favorite is bold and shown first (also in Print/PDF)
-- **+ Alg** button opens a modal to add your own algorithms
-- One note field per card (bottom)
+- **+ Alg** opens a modal to add your own algorithms (with optional note)
+- **Edit** on custom algs to change alg/note or remove
+- Tips shown with the default primary algorithm
 - **Export JSON** / **Import** for backup & migration (`oll-progress.json`)
 - Progress also auto-saved in `localStorage`
+- Practice mode: filtered cases in random order
 
 ## Progress file format
 
@@ -27,14 +29,15 @@ See `oll-progress.example.json`:
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "updatedAt": "…",
   "cases": {
     "27": {
       "status": "green",
       "favorite": "custom-0",
-      "note": "…",
-      "custom": ["R U R' U R U2 R'"]
+      "custom": [
+        { "alg": "R U R' U R U2 R'", "note": "…" }
+      ]
     }
   }
 }

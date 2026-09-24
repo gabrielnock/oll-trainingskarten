@@ -18,18 +18,18 @@ const COLOR_MAP = {
 const GROUP_META = {
   OCLL: { label: "OCLL", slug: "ocll", order: 0 },
   "All Corners Oriented": { label: "Oriented Corners", slug: "oriented-corners", order: 1 },
-  "T Shapes": { label: "T Cases", slug: "t-cases", order: 2 },
-  "Square Shapes": { label: "Square Cases", slug: "square-cases", order: 3 },
-  "Lightning Shapes": { label: "Lightning Cases", slug: "lightning-cases", order: 4 },
-  "P Shapes": { label: "P Cases", slug: "p-cases", order: 5 },
-  "C Shapes": { label: "C Cases", slug: "c-cases", order: 6 },
-  "Fish Shapes": { label: "Fish Cases", slug: "fish-cases", order: 7 },
-  "W Shapes": { label: "W Cases", slug: "w-cases", order: 8 },
-  "L Shapes": { label: "L Cases", slug: "l-cases", order: 9 },
-  "Line Shapes": { label: "Line Cases", slug: "line-cases", order: 10 },
-  "Knight Move Shapes": { label: "Knight Move Cases", slug: "knight-cases", order: 11 },
-  "Awkward Shapes": { label: "Awkward Cases", slug: "awkward-cases", order: 12 },
-  "Dot Case": { label: "Dot Cases", slug: "dot-cases", order: 13 },
+  "T Shapes": { label: "T", slug: "t-cases", order: 2 },
+  "Square Shapes": { label: "Square", slug: "square-cases", order: 3 },
+  "Lightning Shapes": { label: "Lightning", slug: "lightning-cases", order: 4 },
+  "P Shapes": { label: "P", slug: "p-cases", order: 5 },
+  "C Shapes": { label: "C", slug: "c-cases", order: 6 },
+  "Fish Shapes": { label: "Fish", slug: "fish-cases", order: 7 },
+  "W Shapes": { label: "W", slug: "w-cases", order: 8 },
+  "L Shapes": { label: "L", slug: "l-cases", order: 9 },
+  "Line Shapes": { label: "Line", slug: "line-cases", order: 10 },
+  "Knight Move Shapes": { label: "Knight Move", slug: "knight-cases", order: 11 },
+  "Awkward Shapes": { label: "Awkward", slug: "awkward-cases", order: 12 },
+  "Dot Case": { label: "Dot", slug: "dot-cases", order: 13 },
 };
 
 function visualUrl(setup, size = 200) {
@@ -151,7 +151,7 @@ const groups = [...new Set(cards.map((c) => c.slug))]
 
 function cardHtml(c) {
   const tip = c.tip
-    ? `<div class="inline-box tip-box"><span class="inline-label">Tip</span><span class="inline-value">${esc(c.tip)}</span></div>`
+    ? `<div class="inline-box tip-box alg-meta"><span class="inline-label">Tip</span><span class="inline-value">${esc(c.tip)}</span></div>`
     : "";
   const altRow = c.secondary
     ? `
@@ -168,7 +168,7 @@ function cardHtml(c) {
     : "";
 
   return `
-  <div class="case-row" data-case="${c.num}" data-status="" id="oll-${c.num}">
+  <div class="case-row" data-case="${c.num}" data-status="red" id="oll-${c.num}">
     <article class="card">
       <div class="card-accent" aria-hidden="true"></div>
       <p class="group">${esc(c.group)}</p>
@@ -195,28 +195,22 @@ function cardHtml(c) {
           <div class="alg-body">
             <div class="alg-label-row"><span class="alg-label" data-label>ALG</span></div>
             <p class="alg primary" data-alg-text data-alg-raw="${esc(c.primary)}">${esc(c.primary)}</p>
+            ${tip}
           </div>
         </div>${altRow}
       </div>
       <div class="card-actions screen-only">
         <button type="button" class="btn-add-alg" data-add-alg title="Add algorithm">+</button>
       </div>
-      <div class="card-footer">
-        ${tip}
-        <label class="inline-box note-box">
-          <span class="inline-label">Note</span>
-          <input type="text" class="inline-value" data-note placeholder="…" />
-        </label>
-      </div>
     </article>
     <aside class="status-panel screen-only" aria-label="Learning status">
       <label class="status-opt red" title="Not learned">
-        <input type="checkbox" data-status="red" />
+        <input type="checkbox" data-status="red" checked />
         <span class="dot"></span>
         <span class="status-text">Not learned</span>
       </label>
-      <label class="status-opt yellow" title="Learning">
-        <input type="checkbox" data-status="yellow" />
+      <label class="status-opt orange" title="Learning">
+        <input type="checkbox" data-status="orange" />
         <span class="dot"></span>
         <span class="status-text">Learning</span>
       </label>
@@ -238,7 +232,7 @@ const groupSections = groups
     const list = g.cases
       .map(
         (c) => `
-      <div class="ref-row" data-case="${c.num}" data-status="">
+      <div class="ref-row" data-case="${c.num}" data-status="red">
         <a class="ref-link" href="#oll-${c.num}">
           <strong>#${c.num}</strong>
           <span class="thumb">${c.thumbSvg}</span>
@@ -263,32 +257,49 @@ const clientJs = `
   const FILE_NAME = "oll-progress.json";
 
   const defaultCase = () => ({
-    status: "",
+    status: "red",
     favorite: "primary",
-    note: "",
     custom: [],
   });
 
-  let state = { version: 1, updatedAt: null, cases: {} };
+  let state = { version: 2, updatedAt: null, cases: {} };
   let modalCase = null;
+  let modalEditIdx = null;
   let practiceOn = false;
   let practiceIndex = 0;
   let practiceQueue = [];
   let touchStartX = null;
 
+  function normalizeCustomEntry(item) {
+    if (item && typeof item === "object" && typeof item.alg === "string") {
+      return { alg: item.alg, note: typeof item.note === "string" ? item.note : "" };
+    }
+    return { alg: String(item || ""), note: "" };
+  }
+
   function migrateCase(raw) {
     const c = { ...defaultCase(), ...(raw || {}) };
-    if (typeof c.note !== "string") {
-      if (raw && raw.notes && typeof raw.notes === "object") {
-        c.note = raw.notes.primary || raw.notes.secondary || "";
-      } else {
-        c.note = "";
-      }
-    }
+    const legacyNote =
+      typeof c.note === "string"
+        ? c.note
+        : raw && raw.notes && typeof raw.notes === "object"
+          ? raw.notes.primary || raw.notes.secondary || ""
+          : "";
+    delete c.note;
     delete c.notes;
     if (!Array.isArray(c.custom)) c.custom = [];
+    c.custom = c.custom.map(normalizeCustomEntry);
+    if (legacyNote) {
+      if (String(c.favorite).startsWith("custom-")) {
+        const i = Number(String(c.favorite).replace("custom-", ""));
+        if (c.custom[i] && !c.custom[i].note) c.custom[i].note = legacyNote;
+      } else if (c.custom.length === 1 && !c.custom[0].note) {
+        c.custom[0].note = legacyNote;
+      }
+    }
     if (!c.favorite) c.favorite = "primary";
-    if (c.status == null) c.status = "";
+    if (c.status === "yellow") c.status = "orange";
+    if (c.status !== "red" && c.status !== "orange" && c.status !== "green") c.status = "red";
     return c;
   }
 
@@ -311,7 +322,7 @@ const clientJs = `
       if (!raw) return;
       const parsed = JSON.parse(raw);
       if (parsed && parsed.cases) {
-        state = { version: 1, updatedAt: parsed.updatedAt || null, cases: parsed.cases };
+        state = { version: 2, updatedAt: parsed.updatedAt || null, cases: parsed.cases };
         Object.keys(state.cases).forEach((k) => {
           state.cases[k] = migrateCase(state.cases[k]);
         });
@@ -335,7 +346,7 @@ const clientJs = `
       try {
         const parsed = JSON.parse(reader.result);
         if (!parsed || typeof parsed.cases !== "object") throw new Error("Invalid file");
-        state = { version: 1, updatedAt: parsed.updatedAt || null, cases: parsed.cases };
+        state = { version: 2, updatedAt: parsed.updatedAt || null, cases: parsed.cases };
         Object.keys(state.cases).forEach((k) => {
           state.cases[k] = migrateCase(state.cases[k]);
         });
@@ -348,10 +359,15 @@ const clientJs = `
     reader.readAsText(file);
   }
 
-  function makeCustomRow(slot, text) {
+  function makeCustomRow(slot, entry) {
     const row = document.createElement("div");
     row.className = "alg-row";
     row.dataset.slot = slot;
+    const noteHtml = entry.note
+      ? '<div class="inline-box note-box alg-meta"><span class="inline-label">Note</span><span class="inline-value">' +
+        escHtml(entry.note) +
+        "</span></div>"
+      : "";
     row.innerHTML =
       '<label class="fav" title="Favorite">' +
       '<input type="checkbox" data-fav="' + slot + '" />' +
@@ -359,13 +375,14 @@ const clientJs = `
       '<div class="alg-body">' +
       '<div class="alg-label-row">' +
       '<span class="alg-label" data-label>ALT</span>' +
-      '<button type="button" class="btn-remove-alg screen-only" data-remove="' + slot + '" title="Remove">×</button>' +
+      '<button type="button" class="btn-edit-alg screen-only" data-edit="' + slot + '" title="Edit">Edit</button>' +
       "</div>" +
       '<p class="alg" data-alg-text></p>' +
+      noteHtml +
       "</div>";
     const algEl = row.querySelector("[data-alg-text]");
-    algEl.dataset.algRaw = text;
-    algEl.textContent = text;
+    algEl.dataset.algRaw = entry.alg;
+    algEl.textContent = entry.alg;
     return row;
   }
 
@@ -415,8 +432,8 @@ const clientJs = `
     const list = row.querySelector("[data-alg-list]");
     if (!list) return;
     list.querySelectorAll('.alg-row[data-slot^="custom-"]').forEach((el) => el.remove());
-    data.custom.forEach((alg, i) => {
-      list.appendChild(makeCustomRow("custom-" + i, alg));
+    data.custom.forEach((entry, i) => {
+      list.appendChild(makeCustomRow("custom-" + i, normalizeCustomEntry(entry)));
     });
   }
 
@@ -540,12 +557,11 @@ const clientJs = `
 
   function applyStatus(row) {
     const data = ensure(row.dataset.case);
-    const status = data.status === "red" || data.status === "yellow" || data.status === "green"
-      ? data.status
-      : "";
+    const status =
+      data.status === "orange" || data.status === "green" ? data.status : "red";
     data.status = status;
     row.setAttribute("data-status", status);
-    row.querySelectorAll("[data-status]").forEach((cb) => {
+    row.querySelectorAll("input[data-status]").forEach((cb) => {
       cb.checked = cb.dataset.status === status;
     });
     document.querySelectorAll('.ref-row[data-case="' + row.dataset.case + '"]').forEach((ref) => {
@@ -553,17 +569,10 @@ const clientJs = `
     });
   }
 
-  function applyNote(row) {
-    const data = ensure(row.dataset.case);
-    const input = row.querySelector("[data-note]");
-    if (input) input.value = data.note || "";
-  }
-
   function applyAll() {
     document.querySelectorAll(".case-row").forEach((row) => {
       syncCustomRows(row);
       applyStatus(row);
-      applyNote(row);
       applyAlgOrder(row, false);
       bindRow(row);
     });
@@ -571,22 +580,25 @@ const clientJs = `
     updateCounts();
   }
 
+  function caseStatus(caseNum) {
+    const st = ensure(caseNum).status;
+    return st === "orange" || st === "green" ? st : "red";
+  }
+
   function applyFilter() {
     const activeBtn = document.querySelector("[data-filter].is-on");
     const filter = activeBtn ? activeBtn.dataset.filter : "";
     document.querySelectorAll(".case-row, .ref-row").forEach((el) => {
-      const st = el.getAttribute("data-status") || "";
-      let show = true;
-      if (filter === "red" || filter === "yellow" || filter === "green") {
-        show = st === filter;
-      } else if (filter === "none") {
-        show = st === "";
-      }
+      const st = caseStatus(el.dataset.case);
+      el.setAttribute("data-status", st);
+      const show = !(filter === "red" || filter === "orange" || filter === "green") || st === filter;
       el.hidden = !show;
       el.classList.toggle("is-filtered-out", !show);
     });
     document.querySelectorAll(".group-section").forEach((sec) => {
-      const any = [...sec.querySelectorAll(".case-row")].some((r) => !r.hidden);
+      const any = [...sec.querySelectorAll(".case-row")].some(
+        (r) => !r.hidden && !r.classList.contains("is-filtered-out")
+      );
       sec.hidden = !any;
     });
     if (practiceOn) refreshPractice();
@@ -716,11 +728,11 @@ const clientJs = `
   }
 
   function updateCounts() {
-    const counts = { red: 0, yellow: 0, green: 0, none: 0 };
+    const counts = { red: 0, orange: 0, green: 0 };
     document.querySelectorAll(".case-row").forEach((row) => {
-      const st = ensure(row.dataset.case).status || "none";
-      if (counts[st] != null) counts[st]++;
-      else counts.none++;
+      const st = ensure(row.dataset.case).status;
+      const key = st === "orange" || st === "green" ? st : "red";
+      counts[key]++;
     });
     Object.entries(counts).forEach(([k, v]) => {
       const el = document.querySelector('[data-count="' + k + '"]');
@@ -737,7 +749,10 @@ const clientJs = `
       const t = e.target;
       if (t.matches("[data-status]")) {
         const data = ensure(row.dataset.case);
-        data.status = t.checked ? t.dataset.status : "";
+        data.status = t.checked ? t.dataset.status : "red";
+        if (data.status !== "red" && data.status !== "orange" && data.status !== "green") {
+          data.status = "red";
+        }
         saveLocal();
         applyStatus(row);
         applyFilter();
@@ -752,13 +767,6 @@ const clientJs = `
       }
     });
 
-    row.addEventListener("input", (e) => {
-      if (e.target.matches("[data-note]")) {
-        ensure(row.dataset.case).note = e.target.value;
-        saveLocal();
-      }
-    });
-
     row.addEventListener("click", (e) => {
       const statusToggle = e.target.closest("[data-status-toggle]");
       if (statusToggle) {
@@ -770,36 +778,39 @@ const clientJs = `
       }
       const addBtn = e.target.closest("[data-add-alg]");
       if (addBtn) {
-        openModal(row.dataset.case);
+        openModal(row.dataset.case, null);
         return;
       }
-      const rem = e.target.closest("[data-remove]");
-      if (rem) {
-        const slot = rem.dataset.remove;
-        const m = /^custom-(\\d+)$/.exec(slot);
+      const editBtn = e.target.closest("[data-edit]");
+      if (editBtn) {
+        const m = /^custom-(\\d+)$/.exec(editBtn.dataset.edit);
         if (!m) return;
-        const data = ensure(row.dataset.case);
-        const idx = Number(m[1]);
-        data.custom.splice(idx, 1);
-        if (String(data.favorite).startsWith("custom-")) {
-          const favIdx = Number(String(data.favorite).replace("custom-", ""));
-          if (favIdx === idx) data.favorite = "primary";
-          else if (favIdx > idx) data.favorite = "custom-" + (favIdx - 1);
-        }
-        saveLocal();
-        syncCustomRows(row);
-        applyAlgOrder(row);
+        openModal(row.dataset.case, Number(m[1]));
       }
     });
   }
 
-  function openModal(caseNum) {
+  function openModal(caseNum, editIdx) {
     modalCase = caseNum;
+    modalEditIdx = editIdx == null ? null : editIdx;
     const modal = document.getElementById("alg-modal");
     const input = document.getElementById("alg-modal-input");
+    const note = document.getElementById("alg-modal-note");
     const title = document.getElementById("alg-modal-title");
-    if (title) title.textContent = "Add alg · OLL #" + caseNum;
-    if (input) input.value = "";
+    const saveBtn = document.getElementById("alg-modal-save");
+    const removeBtn = document.getElementById("alg-modal-remove");
+    const editing = modalEditIdx != null;
+    if (title) title.textContent = (editing ? "Edit alg" : "Add alg") + " · OLL #" + caseNum;
+    if (saveBtn) saveBtn.textContent = editing ? "Save" : "Add";
+    if (removeBtn) removeBtn.hidden = !editing;
+    if (editing) {
+      const entry = normalizeCustomEntry(ensure(caseNum).custom[modalEditIdx] || { alg: "", note: "" });
+      if (input) input.value = entry.alg;
+      if (note) note.value = entry.note;
+    } else {
+      if (input) input.value = "";
+      if (note) note.value = "";
+    }
     modal?.classList.add("is-open");
     modal?.setAttribute("aria-hidden", "false");
     setTimeout(() => input?.focus(), 30);
@@ -807,6 +818,7 @@ const clientJs = `
 
   function closeModal() {
     modalCase = null;
+    modalEditIdx = null;
     const modal = document.getElementById("alg-modal");
     modal?.classList.remove("is-open");
     modal?.setAttribute("aria-hidden", "true");
@@ -814,11 +826,37 @@ const clientJs = `
 
   function submitModal() {
     const input = document.getElementById("alg-modal-input");
+    const noteEl = document.getElementById("alg-modal-note");
     const alg = (input?.value || "").trim();
+    const note = (noteEl?.value || "").trim();
     if (!alg || modalCase == null) return;
     const data = ensure(modalCase);
-    data.custom.push(alg);
-    data.favorite = "custom-" + (data.custom.length - 1);
+    const entry = { alg, note };
+    if (modalEditIdx != null) {
+      data.custom[modalEditIdx] = entry;
+    } else {
+      data.custom.push(entry);
+      data.favorite = "custom-" + (data.custom.length - 1);
+    }
+    saveLocal();
+    const row = document.querySelector('.case-row[data-case="' + modalCase + '"]');
+    if (row) {
+      syncCustomRows(row);
+      applyAlgOrder(row);
+    }
+    closeModal();
+  }
+
+  function removeModalAlg() {
+    if (modalCase == null || modalEditIdx == null) return;
+    const data = ensure(modalCase);
+    const idx = modalEditIdx;
+    data.custom.splice(idx, 1);
+    if (String(data.favorite).startsWith("custom-")) {
+      const favIdx = Number(String(data.favorite).replace("custom-", ""));
+      if (favIdx === idx) data.favorite = "primary";
+      else if (favIdx > idx) data.favorite = "custom-" + (favIdx - 1);
+    }
     saveLocal();
     const row = document.querySelector('.case-row[data-case="' + modalCase + '"]');
     if (row) {
@@ -986,7 +1024,15 @@ const clientJs = `
     document.getElementById("alg-modal-cancel")?.addEventListener("click", closeModal);
     document.getElementById("alg-modal-backdrop")?.addEventListener("click", closeModal);
     document.getElementById("alg-modal-save")?.addEventListener("click", submitModal);
+    document.getElementById("alg-modal-remove")?.addEventListener("click", removeModalAlg);
     document.getElementById("alg-modal-input")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitModal();
+      }
+      if (e.key === "Escape") closeModal();
+    });
+    document.getElementById("alg-modal-note")?.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
         submitModal();
@@ -1016,6 +1062,7 @@ const html = `<!DOCTYPE html>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     :root {
       --main: #566996;
@@ -1037,6 +1084,9 @@ const html = `<!DOCTYPE html>
       --teal: var(--main);
       --sage: var(--main-lt);
       --sky: var(--main-lt);
+      --status-red: #9a1212;
+      --status-orange: #ffb347;
+      --status-green: #2e7d32;
       --cream: #f7f2f3;
       --mist: #eceef2;
       --line: rgba(86, 105, 150, 0.18);
@@ -1160,7 +1210,8 @@ const html = `<!DOCTYPE html>
       border-color: var(--anthracite);
       background: var(--mist);
     }
-    .icon-btn svg { width: 1.05rem; height: 1.05rem; display: block; }
+    .icon-btn svg,
+    .icon-btn i { font-size: 0.95rem; line-height: 1; display: block; }
     .actions-panel {
       display: none;
       position: absolute;
@@ -1215,16 +1266,6 @@ const html = `<!DOCTYPE html>
       margin-top: 0.7rem;
       align-items: center;
     }
-    .filters-label,
-    .anchors-label {
-      font-size: 0.66rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      font-weight: 700;
-      margin-right: 0.15rem;
-      flex-shrink: 0;
-    }
     .filter-chip {
       border: 2px solid var(--dove);
       background: var(--white);
@@ -1246,17 +1287,16 @@ const html = `<!DOCTYPE html>
       border-radius: 50%;
       background: var(--dove-mid);
     }
-    .filter-chip[data-filter="red"] .pip { background: var(--gold); }
-    .filter-chip[data-filter="yellow"] .pip { background: var(--main-lt); }
-    .filter-chip[data-filter="green"] .pip { background: var(--teal); }
+    .filter-chip[data-filter="red"] .pip { background: var(--status-red); }
+    .filter-chip[data-filter="orange"] .pip { background: var(--status-orange); }
+    .filter-chip[data-filter="green"] .pip { background: var(--status-green); }
     .filter-chip.is-on {
       color: var(--white);
       border-color: transparent;
     }
-    .filter-chip.is-on[data-filter="red"] { background: var(--gold); }
-    .filter-chip.is-on[data-filter="yellow"] { background: var(--main-lt); color: var(--brown); }
-    .filter-chip.is-on[data-filter="green"] { background: var(--teal); }
-    .filter-chip.is-on[data-filter="none"] { background: var(--anthracite); }
+    .filter-chip.is-on[data-filter="red"] { background: var(--status-red); }
+    .filter-chip.is-on[data-filter="orange"] { background: var(--status-orange); }
+    .filter-chip.is-on[data-filter="green"] { background: var(--status-green); }
     .filter-chip .n {
       font-variant-numeric: tabular-nums;
       opacity: 0.9;
@@ -1270,41 +1310,39 @@ const html = `<!DOCTYPE html>
       margin-top: 0.85rem;
       padding-top: 0.75rem;
       border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
     }
     .anchors-toggle {
       appearance: none;
+      width: 2.1rem;
+      height: 2.1rem;
+      padding: 0;
       border: 2px solid var(--dove);
-      background: var(--white);
-      border-radius: 8px;
-      padding: 0.32rem 0.7rem;
-      font-size: 0.68rem;
-      font-weight: 700;
-      font-family: var(--font);
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
       color: var(--anthracite);
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+      display: grid;
+      place-items: center;
       box-shadow: 2px 2px 0 rgba(42,46,51,0.08);
+      flex-shrink: 0;
     }
     .anchors-toggle:hover,
     .anchors-toggle[aria-expanded="true"] {
       border-color: var(--anthracite);
       background: var(--mist);
     }
-    .anchors-toggle .chev {
-      font-size: 0.6rem;
-      transition: transform 0.18s ease;
-    }
-    .anchors-wrap.is-collapsed .anchors-toggle .chev {
-      transform: rotate(-90deg);
-    }
+    .anchors-toggle i { font-size: 0.95rem; line-height: 1; }
     .anchors {
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem;
       margin-top: 0.5rem;
       align-items: center;
+      justify-content: flex-end;
+      width: 100%;
     }
     .anchors-wrap.is-collapsed .anchors {
       display: none;
@@ -1394,9 +1432,9 @@ const html = `<!DOCTYPE html>
     }
     .ref-row:nth-child(odd) { background: rgba(232,238,243,0.35); }
     .ref-row:last-child { border-bottom: none; }
-    .ref-row[data-status="red"] { box-shadow: inset 4px 0 0 var(--gold); background: rgba(164, 79, 95, 0.1); }
-    .ref-row[data-status="yellow"] { box-shadow: inset 4px 0 0 var(--main-lt); background: rgba(166, 171, 189, 0.16); }
-    .ref-row[data-status="green"] { box-shadow: inset 4px 0 0 var(--main); background: rgba(86, 105, 150, 0.1); }
+    .ref-row[data-status="red"] { box-shadow: inset 4px 0 0 var(--status-red); background: rgba(154, 18, 18, 0.08); }
+    .ref-row[data-status="orange"] { box-shadow: inset 4px 0 0 var(--status-orange); background: rgba(255, 179, 71, 0.16); }
+    .ref-row[data-status="green"] { box-shadow: inset 4px 0 0 var(--status-green); background: rgba(46, 125, 50, 0.1); }
     .ref-link {
       display: inline-flex;
       align-items: center;
@@ -1444,9 +1482,16 @@ const html = `<!DOCTYPE html>
       width: min(100%, 148mm);
       scroll-margin-top: 8.5rem;
     }
-    .case-row[data-status="red"] .card { box-shadow: 0 0 0 3px rgba(164, 79, 95, 0.45), 5px 5px 0 var(--main-lt); }
-    .case-row[data-status="yellow"] .card { box-shadow: 0 0 0 3px rgba(166, 171, 189, 0.65), 5px 5px 0 var(--main-lt); }
-    .case-row[data-status="green"] .card { box-shadow: 0 0 0 3px rgba(86, 105, 150, 0.45), 5px 5px 0 var(--main-lt); }
+    .case-row[hidden],
+    .case-row.is-filtered-out,
+    .ref-row[hidden],
+    .ref-row.is-filtered-out,
+    .group-section[hidden] {
+      display: none !important;
+    }
+    .case-row[data-status="red"] .card { box-shadow: 0 0 0 3px rgba(154, 18, 18, 0.4), 5px 5px 0 var(--main-lt); }
+    .case-row[data-status="orange"] .card { box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.55), 5px 5px 0 var(--main-lt); }
+    .case-row[data-status="green"] .card { box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.4), 5px 5px 0 var(--main-lt); }
 
     .card {
       width: 105mm;
@@ -1506,11 +1551,11 @@ const html = `<!DOCTYPE html>
       width: 0.65rem;
       height: 0.65rem;
       border-radius: 0.2rem;
-      background: var(--dove-mid);
+      background: var(--status-red);
     }
-    .case-row[data-status="red"] .status-pip { background: var(--gold); }
-    .case-row[data-status="yellow"] .status-pip { background: var(--main-lt); }
-    .case-row[data-status="green"] .status-pip { background: var(--main); }
+    .case-row[data-status="red"] .status-pip { background: var(--status-red); }
+    .case-row[data-status="orange"] .status-pip { background: var(--status-orange); }
+    .case-row[data-status="green"] .status-pip { background: var(--status-green); }
     .title {
       margin: 0;
       font-size: 13.5pt;
@@ -1579,7 +1624,7 @@ const html = `<!DOCTYPE html>
       min-width: 0;
       margin: 0;
       padding: 0.8mm 1.8mm;
-      font-size: 7.2pt;
+      font-size: 8.6pt;
       line-height: 1.25;
       display: flex;
       align-items: center;
@@ -1589,42 +1634,39 @@ const html = `<!DOCTYPE html>
       text-overflow: ellipsis;
     }
     .inline-value.alg {
-      font-size: 7.6pt;
-      white-space: normal;
-      word-break: break-word;
+      font-size: 9pt;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       display: block;
-      padding-top: 1mm;
-      padding-bottom: 1mm;
+      padding-top: 1.1mm;
+      padding-bottom: 1.1mm;
     }
     .setup-box { border-color: var(--gold); }
     .setup-box .inline-label { background: var(--brown); }
-    .setup-box .inline-value { background: var(--cream); }
+    .setup-box .inline-value { background: var(--cream); font-size: 9pt; }
+    .alg-meta {
+      margin-top: 1.4mm;
+      width: 100%;
+    }
     .tip-box { border-color: var(--main-lt); margin-top: 0; }
     .tip-box .inline-label { background: var(--main); }
-    .tip-box .inline-value { background: var(--mist); color: var(--main); font-size: 6.6pt; }
-    .note-box {
-      margin-top: 1.2mm;
-      border-color: var(--dove-blue);
-      cursor: text;
+    .tip-box .inline-value {
+      background: var(--mist);
+      color: var(--main);
+      font-size: 7.2pt;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    .note-box { border-color: var(--dove-blue); margin-top: 0; }
     .note-box .inline-label { background: var(--dove-blue); }
-    .note-box input.inline-value {
-      border: none;
-      outline: none;
+    .note-box .inline-value {
       background: #f3f6f8;
-      font-family: var(--font);
-      font-size: 7pt;
-      width: 100%;
-      padding: 0.8mm 1.8mm;
-    }
-
-    .card-footer {
-      margin-top: auto;
-      padding-top: 2mm;
-      border-top: 1px dashed var(--dove);
-      display: flex;
-      flex-direction: column;
-      gap: 1.2mm;
+      font-size: 7.2pt;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .alg-list {
@@ -1632,6 +1674,7 @@ const html = `<!DOCTYPE html>
       flex-direction: column;
       gap: 1.4mm;
       margin-top: 0.5mm;
+      flex: 1;
     }
     .alg-row {
       display: grid;
@@ -1650,7 +1693,7 @@ const html = `<!DOCTYPE html>
       box-shadow: 0 6px 18px rgba(86, 105, 150, 0.18);
     }
     .alg-row.is-favorite {
-      margin-bottom: 2.5mm;
+      margin-bottom: 5.5mm;
       border-color: var(--anthracite);
       background: var(--white);
       box-shadow: inset 3px 0 0 var(--gold);
@@ -1671,7 +1714,7 @@ const html = `<!DOCTYPE html>
     }
     .alg {
       margin: 0.5mm 0 0;
-      font-size: 9pt;
+      font-size: 9.5pt;
       line-height: 1.28;
       word-break: break-word;
       color: var(--ink);
@@ -1696,20 +1739,27 @@ const html = `<!DOCTYPE html>
     .alg-row.is-favorite .fav span {
       color: var(--gold);
     }
-    .btn-remove-alg {
-      border: none;
-      background: transparent;
-      color: var(--dove-mid);
+    .btn-edit-alg {
+      appearance: none;
+      border: 1.5px solid var(--dove);
+      background: var(--white);
+      color: var(--anthracite);
       cursor: pointer;
-      font-size: 11pt;
+      font-size: 6.5pt;
+      font-weight: 700;
       font-family: var(--font);
       line-height: 1;
-      padding: 0 1mm;
+      padding: 0.8mm 1.6mm;
+      border-radius: 999px;
     }
-    .btn-remove-alg:hover { color: var(--brown); }
+    .btn-edit-alg:hover {
+      border-color: var(--anthracite);
+      background: var(--mist);
+    }
 
     .card-actions {
-      margin: 1.2mm 0 0;
+      margin: auto 0 0;
+      padding-top: 1.2mm;
       display: flex;
       justify-content: flex-end;
     }
@@ -1772,16 +1822,16 @@ const html = `<!DOCTYPE html>
       background: var(--white);
       flex-shrink: 0;
     }
-    .status-opt.red .dot { border-color: var(--gold); }
-    .status-opt.yellow .dot { border-color: var(--main-lt); }
-    .status-opt.green .dot { border-color: var(--main); }
+    .status-opt.red .dot { border-color: var(--status-red); }
+    .status-opt.orange .dot { border-color: var(--status-orange); }
+    .status-opt.green .dot { border-color: var(--status-green); }
     .status-opt input:checked + .dot {
       background: currentColor;
       box-shadow: inset 0 0 0 2px #fff;
     }
-    .status-opt.red { color: var(--gold); }
-    .status-opt.yellow { color: #6e7486; }
-    .status-opt.green { color: var(--main); }
+    .status-opt.red { color: var(--status-red); }
+    .status-opt.orange { color: var(--status-orange); }
+    .status-opt.green { color: var(--status-green); }
 
     .modal {
       position: fixed;
@@ -1823,7 +1873,9 @@ const html = `<!DOCTYPE html>
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--dove-blue);
+      margin-top: 0.65rem;
     }
+    .modal-panel label:first-of-type { margin-top: 0; }
     .modal-panel input[type="text"] {
       width: 100%;
       border: 2px solid var(--dove);
@@ -1836,10 +1888,20 @@ const html = `<!DOCTYPE html>
     }
     .modal-actions {
       display: flex;
+      align-items: center;
       justify-content: flex-end;
       gap: 0.45rem;
       margin-top: 0.9rem;
     }
+    .modal-actions-spacer { flex: 1; }
+    .btn-danger {
+      color: var(--white);
+      background: var(--status-red);
+      border-color: var(--status-red);
+      box-shadow: 3px 3px 0 rgba(154, 18, 18, 0.35);
+      margin-right: auto;
+    }
+    .btn-danger:hover { box-shadow: 4px 4px 0 rgba(154, 18, 18, 0.45); }
 
     .practice-bar {
       display: none;
@@ -1916,12 +1978,8 @@ const html = `<!DOCTYPE html>
       }
       .filters::-webkit-scrollbar { display: none; }
       .anchors {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
+        justify-content: flex-end;
       }
-      .anchors::-webkit-scrollbar { display: none; }
       .filter-chip {
         flex-shrink: 0;
         min-height: 2rem;
@@ -1940,8 +1998,8 @@ const html = `<!DOCTYPE html>
       }
       .group-section { scroll-margin-top: 7.5rem; }
       .modal-panel input,
-      .note-box input.inline-value,
-      #alg-modal-input { font-size: 16px; }
+      #alg-modal-input,
+      #alg-modal-note { font-size: 16px; }
       body.practice-mode .card {
         width: min(105mm, calc(100vw - 1.5rem));
         height: auto;
@@ -1974,13 +2032,11 @@ const html = `<!DOCTYPE html>
         width: 105mm;
         height: 148mm;
       }
-      .alg-row.is-favorite { margin-bottom: 3.5mm; }
+      .alg-row.is-favorite { margin-bottom: 5mm; }
       .diagram { border: none; }
-      .tip-box .inline-value { white-space: normal; overflow: visible; text-overflow: unset; }
-      .note-box input.inline-value { border: none; background: transparent; }
-      .note-box input.inline-value:placeholder-shown { display: none; }
-      .note-box:has(input:placeholder-shown) { display: none; }
-      .card-footer { border-top: none; padding-top: 1mm; }
+      .tip-box .inline-value,
+      .note-box .inline-value { white-space: normal; overflow: visible; text-overflow: unset; }
+      .note-box:not(:has(.inline-value:not(:empty))) { display: none; }
     }
     @page { size: 105mm 148mm; margin: 0; }
   </style>
@@ -1993,8 +2049,8 @@ const html = `<!DOCTYPE html>
       <span id="save-stamp"></span>
       <div class="actions" id="actions-menu">
         <button type="button" class="mode-chip" id="btn-practice" aria-pressed="false" title="Practice filtered cases in random order">Practice</button>
-        <button type="button" class="icon-btn" id="btn-menu" aria-expanded="false" aria-controls="actions-panel" aria-label="More actions" title="More">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+        <button type="button" class="icon-btn" id="btn-menu" aria-expanded="false" aria-controls="actions-panel" aria-label="File actions" title="File">
+          <i class="fa-solid fa-file" aria-hidden="true"></i>
         </button>
         <div class="actions-panel" id="actions-panel" role="menu">
           <button type="button" class="btn btn-ghost" id="btn-import" role="menuitem">Import</button>
@@ -2005,15 +2061,13 @@ const html = `<!DOCTYPE html>
       </div>
     </div>
     <div class="filters" aria-label="Status filter">
-      <span class="filters-label">Filter</span>
       <button type="button" class="filter-chip" data-filter="red"><span class="pip"></span><span class="lbl-full"> Not learned </span><span class="lbl-short"> Not </span><span class="n" data-count="red">0</span></button>
-      <button type="button" class="filter-chip" data-filter="yellow"><span class="pip"></span><span class="lbl-full"> Learning </span><span class="lbl-short"> Learn </span><span class="n" data-count="yellow">0</span></button>
+      <button type="button" class="filter-chip" data-filter="orange"><span class="pip"></span><span class="lbl-full"> Learning </span><span class="lbl-short"> Learn </span><span class="n" data-count="orange">0</span></button>
       <button type="button" class="filter-chip" data-filter="green"><span class="pip"></span><span class="lbl-full"> Learned </span><span class="lbl-short"> Done </span><span class="n" data-count="green">0</span></button>
-      <button type="button" class="filter-chip" data-filter="none"><span class="pip"></span><span class="lbl-full"> Unmarked </span><span class="lbl-short"> — </span><span class="n" data-count="none">0</span></button>
     </div>
     <div class="anchors-wrap is-collapsed" id="anchors-wrap">
-      <button type="button" class="anchors-toggle" id="btn-groups" aria-expanded="false" aria-controls="anchors-nav">
-        Groups <span class="chev" aria-hidden="true">▾</span>
+      <button type="button" class="anchors-toggle" id="btn-groups" aria-expanded="false" aria-controls="anchors-nav" aria-label="Groups" title="Groups">
+        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
       </button>
       <nav class="anchors" id="anchors-nav" aria-label="Groups">
         ${navLinks}
@@ -2039,7 +2093,13 @@ ${groupSections}
         Algorithm
         <input type="text" id="alg-modal-input" placeholder="e.g. R U R' U R U2' R'" autocomplete="off" />
       </label>
+      <label>
+        Note
+        <input type="text" id="alg-modal-note" placeholder="Optional note for this alg" autocomplete="off" />
+      </label>
       <div class="modal-actions">
+        <button type="button" class="btn btn-danger" id="alg-modal-remove" hidden>Remove</button>
+        <span class="modal-actions-spacer"></span>
         <button type="button" class="btn btn-ghost" id="alg-modal-cancel">Cancel</button>
         <button type="button" class="btn btn-primary" id="alg-modal-save">Add</button>
       </div>
@@ -2053,19 +2113,17 @@ ${groupSections}
 writeFileSync(join(__dirname, "index.html"), html, "utf8");
 
 const example = {
-  version: 1,
+  version: 2,
   updatedAt: null,
   cases: {
     "27": {
       status: "green",
       favorite: "custom-0",
-      note: "Muscle memory solid",
-      custom: ["R U R' U R U2 R'"],
+      custom: [{ alg: "R U R' U R U2 R'", note: "Muscle memory solid" }],
     },
     "26": {
-      status: "yellow",
+      status: "orange",
       favorite: "secondary",
-      note: "Prefer mirror angle",
       custom: [],
     },
   },
