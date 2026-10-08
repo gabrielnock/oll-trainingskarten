@@ -860,6 +860,18 @@ const clientJs = `
     modal?.setAttribute("aria-hidden", "true");
   }
 
+  function openNotationModal() {
+    const modal = document.getElementById("notation-modal");
+    modal?.classList.add("is-open");
+    modal?.setAttribute("aria-hidden", "false");
+  }
+
+  function closeNotationModal() {
+    const modal = document.getElementById("notation-modal");
+    modal?.classList.remove("is-open");
+    modal?.setAttribute("aria-hidden", "true");
+  }
+
   function submitModal() {
     const input = document.getElementById("alg-modal-input");
     const noteEl = document.getElementById("alg-modal-note");
@@ -967,6 +979,12 @@ const clientJs = `
       if (practiceOn) exitPractice();
       else enterPractice();
     });
+    document.getElementById("btn-notation")?.addEventListener("click", () => {
+      setActionsOpen(false);
+      openNotationModal();
+    });
+    document.getElementById("notation-modal-backdrop")?.addEventListener("click", closeNotationModal);
+    document.getElementById("notation-modal-close")?.addEventListener("click", closeNotationModal);
     document.getElementById("practice-prev")?.addEventListener("click", () => practiceStep(-1));
     document.getElementById("practice-next")?.addEventListener("click", () => practiceStep(1));
     document.getElementById("practice-exit")?.addEventListener("click", () => exitPractice());
@@ -990,6 +1008,7 @@ const clientJs = `
         setActionsOpen(false);
         closeAllStatusPanels();
         closeModal();
+        closeNotationModal();
         if (practiceOn) exitPractice();
         return;
       }
@@ -1111,6 +1130,9 @@ const html = `<!DOCTYPE html>
       <span id="save-stamp"></span>
       <div class="actions" id="actions-menu">
         <button type="button" class="mode-chip" id="btn-practice" aria-pressed="false" title="Practice filtered cases in random order">Practice</button>
+        <button type="button" class="icon-btn" id="btn-notation" aria-label="Cube notation" title="Notation">
+          <i class="fa-solid fa-book" aria-hidden="true"></i>
+        </button>
         <button type="button" class="icon-btn" id="btn-menu" aria-expanded="false" aria-controls="actions-panel" aria-label="File actions" title="File">
           <i class="fa-solid fa-file" aria-hidden="true"></i>
         </button>
@@ -1164,6 +1186,74 @@ ${groupSections}
         <span class="modal-actions-spacer"></span>
         <button type="button" class="btn btn-ghost" id="alg-modal-cancel">Cancel</button>
         <button type="button" class="btn btn-primary" id="alg-modal-save">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="notation-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="notation-modal-title">
+    <div class="modal-backdrop" id="notation-modal-backdrop"></div>
+    <div class="modal-panel modal-panel-wide">
+      <h3 id="notation-modal-title">Cube notation</h3>
+      <p class="notation-lead">Hold the cube with the U face on top and F facing you. Letters are clockwise quarter turns from that hold.</p>
+      <div class="notation-grid">
+        <div class="notation-block">
+          <h4>Faces</h4>
+          <dl class="notation-list">
+            <div><dt>R</dt><dd>Right</dd></div>
+            <div><dt>L</dt><dd>Left</dd></div>
+            <div><dt>U</dt><dd>Up</dd></div>
+            <div><dt>D</dt><dd>Down</dd></div>
+            <div><dt>F</dt><dd>Front</dd></div>
+            <div><dt>B</dt><dd>Back</dd></div>
+          </dl>
+        </div>
+        <div class="notation-block">
+          <h4>Modifiers</h4>
+          <dl class="notation-list">
+            <div><dt>R</dt><dd>90° clockwise</dd></div>
+            <div><dt>R'</dt><dd>90° counter-clockwise (prime)</dd></div>
+            <div><dt>R2</dt><dd>180°</dd></div>
+            <div><dt>R2'</dt><dd>180° the other way (same end)</dd></div>
+          </dl>
+        </div>
+        <div class="notation-block">
+          <h4>Wide moves</h4>
+          <dl class="notation-list">
+            <div><dt>r</dt><dd>Right + middle (Rw)</dd></div>
+            <div><dt>l</dt><dd>Left + middle (Lw)</dd></div>
+            <div><dt>u</dt><dd>Up + middle (Uw)</dd></div>
+            <div><dt>d</dt><dd>Down + middle (Dw)</dd></div>
+            <div><dt>f</dt><dd>Front + middle (Fw)</dd></div>
+            <div><dt>b</dt><dd>Back + middle (Bw)</dd></div>
+          </dl>
+        </div>
+        <div class="notation-block">
+          <h4>Slices</h4>
+          <dl class="notation-list">
+            <div><dt>M</dt><dd>Middle, like L (between L &amp; R)</dd></div>
+            <div><dt>E</dt><dd>Equator, like D (between U &amp; D)</dd></div>
+            <div><dt>S</dt><dd>Standing, like F (between F &amp; B)</dd></div>
+          </dl>
+        </div>
+        <div class="notation-block">
+          <h4>Cube rotations</h4>
+          <dl class="notation-list">
+            <div><dt>x</dt><dd>Whole cube like R</dd></div>
+            <div><dt>y</dt><dd>Whole cube like U</dd></div>
+            <div><dt>z</dt><dd>Whole cube like F</dd></div>
+          </dl>
+        </div>
+        <div class="notation-block">
+          <h4>Tips</h4>
+          <ul class="notation-tips">
+            <li>Lowercase = wide (two layers).</li>
+            <li>Parentheses group fingertricks, e.g. (R U R').</li>
+            <li>Leading y / y' / y2 often means rotate before the alg.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-primary" id="notation-modal-close">Close</button>
       </div>
     </div>
   </div>
