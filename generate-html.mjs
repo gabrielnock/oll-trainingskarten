@@ -314,6 +314,15 @@ const clientJs = `
     if (stamp) stamp.textContent = text || "";
   }
 
+  function setSourceStamp(source) {
+    const el = document.getElementById("source-stamp");
+    if (!el) return;
+    const online = source === "online";
+    el.dataset.source = online ? "online" : "local";
+    el.textContent = online ? "online" : "local";
+    el.title = online ? "Progress from oll-progress.json" : "Progress from this device";
+  }
+
   function applyParsedState(parsed) {
     if (!parsed || typeof parsed.cases !== "object") throw new Error("Invalid progress file");
     state = { version: 2, updatedAt: parsed.updatedAt || null, cases: parsed.cases };
@@ -325,7 +334,7 @@ const clientJs = `
   function saveLocal() {
     state.updatedAt = new Date().toISOString();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    setStamp("Saved locally · " + new Date().toLocaleTimeString());
+    setStamp("Saved · " + new Date().toLocaleTimeString());
   }
 
   function loadLocal() {
@@ -333,7 +342,6 @@ const clientJs = `
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return false;
       applyParsedState(JSON.parse(raw));
-      setStamp("Loaded locally");
       return true;
     } catch (_) {
       return false;
@@ -347,7 +355,6 @@ const clientJs = `
       const parsed = await res.json();
       applyParsedState(parsed);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      setStamp("Loaded from " + FILE_NAME);
       return true;
     } catch (_) {
       return false;
@@ -355,8 +362,12 @@ const clientJs = `
   }
 
   async function loadProgress() {
-    if (await loadRemoteProgress()) return "remote";
+    if (await loadRemoteProgress()) {
+      setSourceStamp("online");
+      return "online";
+    }
     loadLocal();
+    setSourceStamp("local");
     return "local";
   }
 
@@ -1096,7 +1107,7 @@ const html = `<!DOCTYPE html>
 <body>
   <header class="toolbar">
     <div class="toolbar-top">
-      <div class="brand"><img class="brand-mark" src="favicon.svg" width="27" height="27" alt="" /><span class="brand-text">Gabis OLL Trainer</span></div>
+      <div class="brand"><img class="brand-mark" src="favicon.svg" width="27" height="27" alt="" /><span class="brand-text">Gabis OLL Trainer</span><span id="source-stamp" class="source-stamp" data-source="local" title="Progress source">local</span></div>
       <span id="save-stamp"></span>
       <div class="actions" id="actions-menu">
         <button type="button" class="mode-chip" id="btn-practice" aria-pressed="false" title="Practice filtered cases in random order">Practice</button>

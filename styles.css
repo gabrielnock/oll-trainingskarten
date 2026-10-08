@@ -112,6 +112,24 @@ body::after {
   display: block;
   border-radius: 0.4rem;
 }
+.source-stamp {
+  flex-shrink: 0;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 0.18rem 0.35rem;
+  border-radius: 999px;
+  border: 1px solid var(--dove);
+  color: var(--muted);
+  background: rgba(255,255,255,0.75);
+}
+.source-stamp[data-source="online"] {
+  color: var(--main);
+  border-color: var(--main-lt);
+  background: rgba(86, 105, 150, 0.12);
+}
 #save-stamp {
   font-size: 0.65rem;
   color: var(--muted);
