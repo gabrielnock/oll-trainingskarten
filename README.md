@@ -20,10 +20,13 @@ npm start
 - **Edit** on custom algs to change alg/note or remove
 - Tips shown with the default primary algorithm
 - **Export JSON** / **Import** for backup & migration (`oll-progress.json`)
-- Progress also auto-saved in `localStorage`
+- Progress auto-saved in `localStorage`
+- On load: if `oll-progress.json` exists next to the app, that file is used; otherwise `localStorage`
 - Practice mode: filtered cases in random order
 
 ## Progress file format
+
+Put an exported `oll-progress.json` in the same folder as `index.html` (e.g. commit it for GitHub Pages) to share progress across devices. Edits in the browser still only update `localStorage` until you export and replace that file.
 
 See `oll-progress.example.json`:
 
@@ -49,5 +52,9 @@ See `oll-progress.example.json`:
 npm run parse
 npm run build   # fetches VisualCube SVGs (cached in svg-cache/), recolors, writes index.html
 ```
+
+## Styles
+
+Edit **`styles.css`** for layout/colors. Linked from `index.html` (no rebuild needed for CSS-only tweaks — just refresh). Run `npm run build` after changing `generate-html.mjs`.
 
 Cube diagrams are **inline SVGs**. Yellow `#FEFE00` → `#E8C20A`, grey `#404040` → `#424656`.
