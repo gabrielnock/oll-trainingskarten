@@ -183,6 +183,14 @@ function cardHtml(c) {
         <span class="inline-label">Setup</span>
         <span class="inline-value alg">${esc(c.setup)}</span>
       </div>
+      <div class="diagram-tools screen-only">
+        <button type="button" class="btn-rotate" data-rotate="-90" title="Rotate 90° left" aria-label="Rotate diagram 90 degrees counter-clockwise">
+          <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn-rotate" data-rotate="90" title="Rotate 90° right" aria-label="Rotate diagram 90 degrees clockwise">
+          <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+        </button>
+      </div>
       <figure class="diagram">
         ${c.svg}
       </figure>
@@ -457,10 +465,41 @@ const clientJs = `
     return 0;
   }
 
-  function applyDiagramRotation(row, deg) {
-    const svg = row.querySelector(".diagram .cube-svg");
+  function normDeg(deg) {
+    return ((Number(deg) || 0) % 360 + 360) % 360;
+  }
+
+  function getManualRot(row) {
+    return normDeg(row.dataset.manualRot);
+  }
+
+  function applyDiagramRotation(row, aufDeg) {
+    const figure = row.querySelector(".diagram");
+    const svg = figure?.querySelector(".cube-svg");
     if (!svg) return;
-    svg.style.transform = "rotate(" + (deg || 0) + "deg)";
+    if (aufDeg != null) row.dataset.aufRot = String(normDeg(aufDeg));
+    const manual = getManualRot(row);
+    const total = normDeg(Number(row.dataset.aufRot || 0) + manual);
+    svg.style.transform = "rotate(" + total + "deg)";
+    const twisted = manual !== 0;
+    row.classList.toggle("diagram-twisted", twisted);
+    if (figure) {
+      figure.classList.toggle("is-rotated", twisted);
+      figure.title = twisted
+        ? "Rotated view — algs assume original orientation. Click image to reset."
+        : "";
+    }
+  }
+
+  function nudgeDiagramRotation(row, delta) {
+    row.dataset.manualRot = String(normDeg(getManualRot(row) + delta));
+    applyDiagramRotation(row);
+  }
+
+  function resetDiagramRotation(row) {
+    if (getManualRot(row) === 0) return;
+    row.dataset.manualRot = "0";
+    applyDiagramRotation(row);
   }
 
   function syncCustomRows(row) {
@@ -810,6 +849,15 @@ const clientJs = `
         closeAllStatusPanels(open ? row : null);
         row.classList.toggle("status-open", open);
         statusToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        return;
+      }
+      const rotBtn = e.target.closest("[data-rotate]");
+      if (rotBtn) {
+        nudgeDiagramRotation(row, Number(rotBtn.dataset.rotate) || 0);
+        return;
+      }
+      if (e.target.closest(".diagram")) {
+        resetDiagramRotation(row);
         return;
       }
       const addBtn = e.target.closest("[data-add-alg]");
