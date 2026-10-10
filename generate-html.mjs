@@ -156,22 +156,25 @@ function cardHtml(c) {
   const altRow = c.secondary
     ? `
         <div class="alg-row" data-slot="secondary" data-builtin="1">
-          <label class="fav" title="Favorite">
-            <input type="checkbox" data-fav="secondary" />
-            <span>★</span>
-          </label>
           <div class="alg-body">
-            <div class="alg-label-row"><span class="alg-label" data-label>ALT</span></div>
+            <div class="alg-tools screen-only">
+              <button type="button" class="btn-alg-tool" data-hide="secondary" title="Hide algorithm" aria-label="Hide algorithm"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i></button>
+              <label class="fav" title="Favorite">
+                <input type="checkbox" data-fav="secondary" />
+                <span>★</span>
+              </label>
+            </div>
             <p class="alg" data-alg-text data-alg-raw="${esc(c.secondary)}">${esc(c.secondary)}</p>
           </div>
         </div>`
     : "";
 
   return `
-  <div class="case-row" data-case="${c.num}" data-status="red" id="oll-${c.num}">
+  <div class="case-row" data-case="${c.num}" data-group="${c.slug}" data-status="red" id="oll-${c.num}">
     <article class="card">
-      <div class="card-accent" aria-hidden="true"></div>
-      <p class="group">${esc(c.group)}</p>
+      <header class="card-header">
+        <span class="group">${esc(c.group)}</span>
+      </header>
       <div class="title-row">
         <h1 class="title">${esc(c.name)}</h1>
         <span class="case-no">#${c.num}</span>
@@ -196,19 +199,25 @@ function cardHtml(c) {
       </figure>
       <div class="alg-list" data-alg-list>
         <div class="alg-row" data-slot="primary" data-builtin="1">
-          <label class="fav" title="Favorite">
-            <input type="checkbox" data-fav="primary" checked />
-            <span>★</span>
-          </label>
           <div class="alg-body">
-            <div class="alg-label-row"><span class="alg-label" data-label>ALG</span></div>
+            <div class="alg-tools screen-only">
+              <button type="button" class="btn-alg-tool" data-hide="primary" title="Hide algorithm" aria-label="Hide algorithm"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i></button>
+              <label class="fav" title="Favorite">
+                <input type="checkbox" data-fav="primary" checked />
+                <span>★</span>
+              </label>
+            </div>
             <p class="alg primary" data-alg-text data-alg-raw="${esc(c.primary)}">${esc(c.primary)}</p>
             ${tip}
           </div>
         </div>${altRow}
       </div>
       <div class="card-actions screen-only">
-        <button type="button" class="btn-add-alg" data-add-alg title="Add algorithm">+</button>
+        <button type="button" class="btn btn-show-hidden" data-show-hidden hidden title="Show hidden algorithms" aria-label="Show hidden algorithms">
+          <i class="fa-solid fa-eye" aria-hidden="true"></i>
+          <span class="n" data-hidden-count>0</span>
+        </button>
+        <button type="button" class="btn btn-add-alg" data-add-alg title="Add algorithm" aria-label="Add algorithm">+</button>
       </div>
     </article>
     <aside class="status-panel screen-only" aria-label="Learning status">
@@ -232,7 +241,16 @@ function cardHtml(c) {
 }
 
 const navLinks = groups
-  .map((g) => `<a class="nav-chip" href="#${g.slug}">${esc(g.label)}</a>`)
+  .map(
+    (g) =>
+      `<a class="nav-chip" href="#${g.slug}" data-group-nav="${g.slug}">` +
+      `<span class="nav-chip-label">${esc(g.label)}</span>` +
+      `<span class="nav-chip-bar" aria-hidden="true">` +
+      `<span class="nav-chip-seg red" data-seg="red"></span>` +
+      `<span class="nav-chip-seg orange" data-seg="orange"></span>` +
+      `<span class="nav-chip-seg green" data-seg="green"></span>` +
+      `</span></a>`
+  )
   .join("\n        ");
 
 const groupSections = groups
@@ -251,8 +269,8 @@ const groupSections = groups
       )
       .join("");
     return `
-  <section class="group-section" id="${g.slug}">
-    <h2 class="group-heading">${esc(g.label)} <span class="count">${g.cases.length}</span></h2>
+  <section class="group-section" id="${g.slug}" data-group="${g.slug}">
+    <h2 class="group-heading">${esc(g.label)}</h2>
     <div class="ref-list">${list}</div>
     <div class="cards">${g.cases.map(cardHtml).join("\n")}</div>
   </section>`;
@@ -268,11 +286,14 @@ const clientJs = `
     status: "red",
     favorite: "primary",
     custom: [],
+    hidden: [],
+    discarded: [],
   });
 
   let state = { version: 2, updatedAt: null, cases: {} };
   let modalCase = null;
   let modalEditIdx = null;
+  let hiddenModalCase = null;
   let practiceOn = false;
   let practiceIndex = 0;
   let practiceQueue = [];
@@ -306,6 +327,10 @@ const clientJs = `
       }
     }
     if (!c.favorite) c.favorite = "primary";
+    if (!Array.isArray(c.hidden)) c.hidden = [];
+    c.hidden = c.hidden.map(String).filter(Boolean);
+    if (!Array.isArray(c.discarded)) c.discarded = [];
+    c.discarded = c.discarded.map(String).filter(Boolean);
     if (c.status === "yellow") c.status = "orange";
     if (c.status !== "red" && c.status !== "orange" && c.status !== "green") c.status = "red";
     return c;
@@ -320,15 +345,6 @@ const clientJs = `
   function setStamp(text) {
     const stamp = document.getElementById("save-stamp");
     if (stamp) stamp.textContent = text || "";
-  }
-
-  function setSourceStamp(source) {
-    const el = document.getElementById("source-stamp");
-    if (!el) return;
-    const online = source === "online";
-    el.dataset.source = online ? "online" : "local";
-    el.textContent = online ? "online" : "local";
-    el.title = online ? "Progress from oll-progress.json" : "Progress from this device";
   }
 
   function applyParsedState(parsed) {
@@ -370,12 +386,8 @@ const clientJs = `
   }
 
   async function loadProgress() {
-    if (await loadRemoteProgress()) {
-      setSourceStamp("online");
-      return "online";
-    }
+    if (await loadRemoteProgress()) return "online";
     loadLocal();
-    setSourceStamp("local");
     return "local";
   }
 
@@ -413,13 +425,13 @@ const clientJs = `
         "</span></div>"
       : "";
     row.innerHTML =
+      '<div class="alg-body">' +
+      '<div class="alg-tools screen-only">' +
+      '<button type="button" class="btn-alg-tool" data-hide="' + slot + '" title="Hide algorithm" aria-label="Hide algorithm"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i></button>' +
+      '<button type="button" class="btn-alg-tool" data-edit="' + slot + '" title="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>' +
       '<label class="fav" title="Favorite">' +
       '<input type="checkbox" data-fav="' + slot + '" />' +
       "<span>★</span></label>" +
-      '<div class="alg-body">' +
-      '<div class="alg-label-row">' +
-      '<span class="alg-label" data-label>ALT</span>' +
-      '<button type="button" class="btn-edit-alg screen-only" data-edit="' + slot + '" title="Edit">Edit</button>' +
       "</div>" +
       '<p class="alg" data-alg-text></p>' +
       noteHtml +
@@ -580,15 +592,206 @@ const clientJs = `
     });
   }
 
+  function hiddenSet(data) {
+    return new Set(Array.isArray(data.hidden) ? data.hidden.map(String) : []);
+  }
+
+  function discardedSet(data) {
+    return new Set(Array.isArray(data.discarded) ? data.discarded.map(String) : []);
+  }
+
+  function absentSet(data) {
+    return new Set([...hiddenSet(data), ...discardedSet(data)]);
+  }
+
+  function applyHiddenUi(row) {
+    const data = ensure(row.dataset.case);
+    const absent = absentSet(data);
+    const hidden = hiddenSet(data);
+    const list = row.querySelector("[data-alg-list]");
+    if (list) {
+      list.querySelectorAll(".alg-row").forEach((r) => {
+        const isGone = absent.has(r.dataset.slot);
+        r.hidden = isGone;
+        r.classList.toggle("is-alg-hidden", isGone);
+      });
+    }
+    const showBtn = row.querySelector("[data-show-hidden]");
+    if (showBtn) {
+      const n = hidden.size;
+      showBtn.hidden = n === 0;
+      const count = showBtn.querySelector("[data-hidden-count]");
+      if (count) count.textContent = String(n);
+    }
+  }
+
+  function hideAlg(row, slot) {
+    const data = ensure(row.dataset.case);
+    if (!Array.isArray(data.hidden)) data.hidden = [];
+    const absent = absentSet(data);
+    if (absent.has(slot)) return;
+    const visible = [...row.querySelectorAll(".alg-row")].filter(
+      (r) => !absent.has(r.dataset.slot) && r.dataset.slot !== slot
+    );
+    if (!visible.length) return;
+    data.hidden.push(slot);
+    if (data.favorite === slot) data.favorite = visible[0].dataset.slot;
+    saveLocal();
+    applyAlgOrder(row, false);
+  }
+
+  function unhideAlg(caseNum, slot) {
+    const data = ensure(caseNum);
+    if (!Array.isArray(data.hidden)) data.hidden = [];
+    data.hidden = data.hidden.filter((s) => String(s) !== String(slot));
+    saveLocal();
+    const row = document.querySelector('.case-row[data-case="' + caseNum + '"]');
+    if (row) applyAlgOrder(row, false);
+    if (hiddenModalCase === caseNum) {
+      if (!data.hidden.length) closeHiddenModal();
+      else refreshHiddenModal();
+    }
+  }
+
+  function afterHiddenListChange(caseNum) {
+    const data = ensure(caseNum);
+    const row = document.querySelector('.case-row[data-case="' + caseNum + '"]');
+    if (row) {
+      syncCustomRows(row);
+      applyAlgOrder(row, false);
+    }
+    if (hiddenModalCase === caseNum) {
+      if (!Array.isArray(data.hidden) || !data.hidden.length) closeHiddenModal();
+      else refreshHiddenModal();
+    }
+  }
+
+  function deleteCustomAt(caseNum, idx) {
+    const data = ensure(caseNum);
+    if (!Array.isArray(data.custom) || idx < 0 || idx >= data.custom.length) return false;
+    data.custom.splice(idx, 1);
+    if (String(data.favorite).startsWith("custom-")) {
+      const remapped = remapCustomSlot(data.favorite, idx);
+      data.favorite = remapped || "primary";
+    }
+    if (Array.isArray(data.hidden)) {
+      data.hidden = data.hidden
+        .map((s) => remapCustomSlot(s, idx))
+        .filter(Boolean);
+    }
+    if (Array.isArray(data.discarded)) {
+      data.discarded = data.discarded
+        .map((s) => remapCustomSlot(s, idx))
+        .filter(Boolean);
+    }
+    saveLocal();
+    return true;
+  }
+
+  function discardBuiltin(caseNum, slot) {
+    if (slot !== "primary" && slot !== "secondary") return false;
+    const data = ensure(caseNum);
+    if (!Array.isArray(data.discarded)) data.discarded = [];
+    if (!data.discarded.includes(slot)) data.discarded.push(slot);
+    if (Array.isArray(data.hidden)) {
+      data.hidden = data.hidden.filter((s) => String(s) !== String(slot));
+    }
+    const row = document.querySelector('.case-row[data-case="' + caseNum + '"]');
+    if (data.favorite === slot && row) {
+      const absent = absentSet(data);
+      const next = [...row.querySelectorAll(".alg-row")].find(
+        (r) => !absent.has(r.dataset.slot)
+      );
+      data.favorite = next ? next.dataset.slot : "primary";
+    }
+    saveLocal();
+    return true;
+  }
+
+  function removeHiddenAlg(caseNum, slot) {
+    if (!confirm("Remove this algorithm permanently?")) return;
+    const m = /^custom-(\\d+)$/.exec(String(slot));
+    let ok = false;
+    if (m) ok = deleteCustomAt(caseNum, Number(m[1]));
+    else ok = discardBuiltin(caseNum, slot);
+    if (ok) afterHiddenListChange(caseNum);
+  }
+
+  function algTextForSlot(row, slot) {
+    const el = row.querySelector('.alg-row[data-slot="' + slot + '"] [data-alg-text]');
+    if (!el) return slot;
+    return el.dataset.algRaw || el.textContent.trim() || slot;
+  }
+
+  function openHiddenModal(caseNum) {
+    hiddenModalCase = caseNum;
+    const modal = document.getElementById("hidden-modal");
+    const title = document.getElementById("hidden-modal-title");
+    if (title) title.textContent = "Hidden algs · OLL #" + caseNum;
+    refreshHiddenModal();
+    modal?.classList.add("is-open");
+    modal?.setAttribute("aria-hidden", "false");
+  }
+
+  function refreshHiddenModal() {
+    const list = document.getElementById("hidden-modal-list");
+    if (!list || hiddenModalCase == null) return;
+    const data = ensure(hiddenModalCase);
+    const row = document.querySelector('.case-row[data-case="' + hiddenModalCase + '"]');
+    const hidden = Array.isArray(data.hidden) ? data.hidden.map(String) : [];
+    list.innerHTML = "";
+    if (!hidden.length) {
+      const empty = document.createElement("p");
+      empty.className = "hidden-modal-empty";
+      empty.textContent = "No hidden algorithms.";
+      list.appendChild(empty);
+      return;
+    }
+    hidden.forEach((slot) => {
+      const item = document.createElement("div");
+      item.className = "hidden-modal-item";
+      const text = document.createElement("p");
+      text.className = "alg";
+      text.textContent = row ? algTextForSlot(row, slot) : slot;
+      const actions = document.createElement("div");
+      actions.className = "hidden-modal-actions";
+      const showBtn = document.createElement("button");
+      showBtn.type = "button";
+      showBtn.className = "btn btn-ghost";
+      showBtn.innerHTML = '<i class="fa-solid fa-eye" aria-hidden="true"></i> Show';
+      showBtn.addEventListener("click", () => unhideAlg(hiddenModalCase, slot));
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "btn btn-danger";
+      removeBtn.innerHTML = '<i class="fa-solid fa-trash" aria-hidden="true"></i> Remove';
+      removeBtn.addEventListener("click", () => removeHiddenAlg(hiddenModalCase, slot));
+      actions.appendChild(showBtn);
+      actions.appendChild(removeBtn);
+      item.appendChild(text);
+      item.appendChild(actions);
+      list.appendChild(item);
+    });
+  }
+
+  function closeHiddenModal() {
+    hiddenModalCase = null;
+    const modal = document.getElementById("hidden-modal");
+    modal?.classList.remove("is-open");
+    modal?.setAttribute("aria-hidden", "true");
+  }
+
   function applyAlgOrder(row, animate) {
     const data = ensure(row.dataset.case);
     const list = row.querySelector("[data-alg-list]");
     if (!list) return;
 
+    const absent = absentSet(data);
     const items = [...list.querySelectorAll(".alg-row")];
     const slots = items.map((el) => el.dataset.slot);
+    const visibleSlots = slots.filter((s) => !absent.has(s));
     let fav = data.favorite;
-    if (!slots.includes(fav)) fav = "primary";
+    if (!visibleSlots.includes(fav)) fav = visibleSlots[0] || slots[0] || "primary";
+    if (data.favorite !== fav) data.favorite = fav;
 
     const ordered = [];
     const favEl = list.querySelector('[data-slot="' + fav + '"]');
@@ -608,24 +811,30 @@ const clientJs = `
     ordered.forEach((el) => list.appendChild(el));
 
     let favDeg = 0;
-    list.querySelectorAll(".alg-row").forEach((r, idx) => {
-      const isFav = r.dataset.slot === fav;
+    let visibleIdx = 0;
+    list.querySelectorAll(".alg-row").forEach((r) => {
+      const isHidden = absent.has(r.dataset.slot);
+      const isFav = !isHidden && r.dataset.slot === fav;
       r.classList.toggle("is-favorite", isFav);
       const cb = r.querySelector("[data-fav]");
       if (cb) cb.checked = isFav;
-      const label = r.querySelector("[data-label]");
       const text = r.querySelector("[data-alg-text]");
-      if (label) label.textContent = isFav ? "ALG" : "ALT";
       if (text) {
         if (!text.dataset.algRaw) text.dataset.algRaw = text.textContent.trim();
         const deg = renderAlgDisplay(text, text.dataset.algRaw, isFav);
         text.classList.toggle("primary", isFav);
         if (isFav) favDeg = deg;
       }
-      r.classList.toggle("is-first-alt", !isFav && idx === 1);
+      if (!isHidden) {
+        r.classList.toggle("is-first-alt", !isFav && visibleIdx === 1);
+        visibleIdx += 1;
+      } else {
+        r.classList.remove("is-first-alt");
+      }
     });
 
-    playAlgFlip(ordered, first);
+    applyHiddenUi(row);
+    playAlgFlip(ordered.filter((el) => !absent.has(el.dataset.slot)), first);
     applyDiagramRotation(row, favDeg);
     syncRefAlg(row);
   }
@@ -813,6 +1022,35 @@ const clientJs = `
       const el = document.querySelector('[data-count="' + k + '"]');
       if (el) el.textContent = String(v);
     });
+    updateGroupBars();
+  }
+
+  function updateGroupBars() {
+    document.querySelectorAll(".nav-chip[data-group-nav]").forEach((chip) => {
+      const slug = chip.dataset.groupNav;
+      const tallies = { red: 0, orange: 0, green: 0 };
+      document.querySelectorAll('.case-row[data-group="' + slug + '"]').forEach((row) => {
+        const st = caseStatus(row.dataset.case);
+        tallies[st === "orange" || st === "green" ? st : "red"]++;
+      });
+      const total = tallies.red + tallies.orange + tallies.green;
+      ["red", "orange", "green"].forEach((key) => {
+        const seg = chip.querySelector('[data-seg="' + key + '"]');
+        if (!seg) return;
+        const n = tallies[key];
+        seg.style.flex = n > 0 ? n + " 1 0%" : "0 0 0%";
+        seg.style.display = n > 0 ? "block" : "none";
+      });
+      const label = [
+        tallies.red ? tallies.red + " not learned" : "",
+        tallies.orange ? tallies.orange + " learning" : "",
+        tallies.green ? tallies.green + " learned" : "",
+      ]
+        .filter(Boolean)
+        .join(", ");
+      chip.title = (chip.querySelector(".nav-chip-label")?.textContent || slug) +
+        (total ? " · " + label : "");
+    });
   }
 
   const bound = new WeakSet();
@@ -863,6 +1101,16 @@ const clientJs = `
       const addBtn = e.target.closest("[data-add-alg]");
       if (addBtn) {
         openModal(row.dataset.case, null);
+        return;
+      }
+      const showHiddenBtn = e.target.closest("[data-show-hidden]");
+      if (showHiddenBtn) {
+        openHiddenModal(row.dataset.case);
+        return;
+      }
+      const hideBtn = e.target.closest("[data-hide]");
+      if (hideBtn) {
+        hideAlg(row, hideBtn.dataset.hide);
         return;
       }
       const editBtn = e.target.closest("[data-edit]");
@@ -943,17 +1191,18 @@ const clientJs = `
     closeModal();
   }
 
+  function remapCustomSlot(slot, removedIdx) {
+    const m = /^custom-(\\d+)$/.exec(String(slot));
+    if (!m) return slot;
+    const i = Number(m[1]);
+    if (i === removedIdx) return null;
+    if (i > removedIdx) return "custom-" + (i - 1);
+    return slot;
+  }
+
   function removeModalAlg() {
     if (modalCase == null || modalEditIdx == null) return;
-    const data = ensure(modalCase);
-    const idx = modalEditIdx;
-    data.custom.splice(idx, 1);
-    if (String(data.favorite).startsWith("custom-")) {
-      const favIdx = Number(String(data.favorite).replace("custom-", ""));
-      if (favIdx === idx) data.favorite = "primary";
-      else if (favIdx > idx) data.favorite = "custom-" + (favIdx - 1);
-    }
-    saveLocal();
+    if (!deleteCustomAt(modalCase, modalEditIdx)) return;
     const row = document.querySelector('.case-row[data-case="' + modalCase + '"]');
     if (row) {
       syncCustomRows(row);
@@ -1056,6 +1305,7 @@ const clientJs = `
         setActionsOpen(false);
         closeAllStatusPanels();
         closeModal();
+        closeHiddenModal();
         closeNotationModal();
         if (practiceOn) exitPractice();
         return;
@@ -1128,6 +1378,8 @@ const clientJs = `
     document.getElementById("alg-modal-backdrop")?.addEventListener("click", closeModal);
     document.getElementById("alg-modal-save")?.addEventListener("click", submitModal);
     document.getElementById("alg-modal-remove")?.addEventListener("click", removeModalAlg);
+    document.getElementById("hidden-modal-close")?.addEventListener("click", closeHiddenModal);
+    document.getElementById("hidden-modal-backdrop")?.addEventListener("click", closeHiddenModal);
     document.getElementById("alg-modal-input")?.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -1169,15 +1421,17 @@ const html = `<!DOCTYPE html>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="styles.css" />
+  <!-- Optional visual refresh — delete this line (and styles-spice.css) to undo -->
+  <link rel="stylesheet" href="styles-spice.css" />
 
 </head>
 <body>
   <header class="toolbar">
     <div class="toolbar-top">
-      <div class="brand"><img class="brand-mark" src="favicon.svg" width="27" height="27" alt="" /><span class="brand-text">Gabis OLL Trainer</span><span id="source-stamp" class="source-stamp" data-source="local" title="Progress source">local</span></div>
+      <div class="brand"><img class="brand-mark" src="favicon.svg" width="27" height="27" alt="" /><span class="brand-text">Gabis OLL Trainer</span></div>
       <span id="save-stamp"></span>
       <div class="actions" id="actions-menu">
-        <button type="button" class="mode-chip" id="btn-practice" aria-pressed="false" title="Practice filtered cases in random order">Practice</button>
+        <button type="button" class="btn" id="btn-practice" aria-pressed="false" title="Practice filtered cases in random order">Practice</button>
         <button type="button" class="icon-btn" id="btn-notation" aria-label="Cube notation" title="Notation">
           <i class="fa-solid fa-book" aria-hidden="true"></i>
         </button>
@@ -1193,9 +1447,9 @@ const html = `<!DOCTYPE html>
       </div>
     </div>
     <div class="filters" aria-label="Status filter">
-      <button type="button" class="filter-chip" data-filter="red"><span class="pip"></span><span class="lbl-full"> Not learned </span><span class="lbl-short"> Not </span><span class="n" data-count="red">0</span></button>
-      <button type="button" class="filter-chip" data-filter="orange"><span class="pip"></span><span class="lbl-full"> Learning </span><span class="lbl-short"> Learn </span><span class="n" data-count="orange">0</span></button>
-      <button type="button" class="filter-chip" data-filter="green"><span class="pip"></span><span class="lbl-full"> Learned </span><span class="lbl-short"> Done </span><span class="n" data-count="green">0</span></button>
+      <button type="button" class="btn filter-chip" data-filter="red"><span class="pip"></span><span class="lbl-full"> Not learned </span><span class="lbl-short"> Not </span><span class="n" data-count="red">0</span></button>
+      <button type="button" class="btn filter-chip" data-filter="orange"><span class="pip"></span><span class="lbl-full"> Learning </span><span class="lbl-short"> Learn </span><span class="n" data-count="orange">0</span></button>
+      <button type="button" class="btn filter-chip" data-filter="green"><span class="pip"></span><span class="lbl-full"> Learned </span><span class="lbl-short"> Done </span><span class="n" data-count="green">0</span></button>
     </div>
     <div class="anchors-wrap is-collapsed" id="anchors-wrap">
       <button type="button" class="anchors-toggle" id="btn-groups" aria-expanded="false" aria-controls="anchors-nav" aria-label="Groups" title="Groups">
@@ -1234,6 +1488,17 @@ ${groupSections}
         <span class="modal-actions-spacer"></span>
         <button type="button" class="btn btn-ghost" id="alg-modal-cancel">Cancel</button>
         <button type="button" class="btn btn-primary" id="alg-modal-save">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="hidden-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="hidden-modal-title">
+    <div class="modal-backdrop" id="hidden-modal-backdrop"></div>
+    <div class="modal-panel modal-panel-wide">
+      <h3 id="hidden-modal-title">Hidden algs</h3>
+      <div id="hidden-modal-list" class="hidden-modal-list"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-primary" id="hidden-modal-close">Close</button>
       </div>
     </div>
   </div>
