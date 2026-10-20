@@ -213,11 +213,11 @@ function cardHtml(c) {
         </div>${altRow}
       </div>
       <div class="card-actions screen-only">
-        <button type="button" class="btn btn-show-hidden" data-show-hidden hidden title="Show hidden algorithms" aria-label="Show hidden algorithms">
+        <button type="button" class="btn-card-quiet btn-show-hidden" data-show-hidden hidden title="Show hidden algorithms" aria-label="Show hidden algorithms">
           <i class="fa-solid fa-eye" aria-hidden="true"></i>
           <span class="n" data-hidden-count>0</span>
         </button>
-        <button type="button" class="btn btn-add-alg" data-add-alg title="Add algorithm" aria-label="Add algorithm">+</button>
+        <button type="button" class="btn-card-quiet btn-add-alg" data-add-alg title="Add algorithm" aria-label="Add algorithm">+</button>
       </div>
     </article>
     <aside class="status-panel screen-only" aria-label="Learning status">
@@ -252,6 +252,20 @@ const navLinks = groups
       `</span></a>`
   )
   .join("\n        ");
+
+const practiceGroupChecks = groups
+  .map(
+    (g) =>
+      `<label class="practice-check practice-check-group" data-practice-group-bar="${g.slug}">` +
+      `<input type="checkbox" data-practice-group="${g.slug}" />` +
+      `<span class="practice-check-label">${esc(g.label)}</span>` +
+      `<span class="nav-chip-bar" aria-hidden="true">` +
+      `<span class="nav-chip-seg red" data-seg="red"></span>` +
+      `<span class="nav-chip-seg orange" data-seg="orange"></span>` +
+      `<span class="nav-chip-seg green" data-seg="green"></span>` +
+      `</span></label>`
+  )
+  .join("\n          ");
 
 const groupSections = groups
   .map((g) => {
@@ -492,7 +506,13 @@ const clientJs = `
     if (aufDeg != null) row.dataset.aufRot = String(normDeg(aufDeg));
     const manual = getManualRot(row);
     const total = normDeg(Number(row.dataset.aufRot || 0) + manual);
-    svg.style.transform = "rotate(" + total + "deg)";
+    const rot = "rotate(" + total + "deg)";
+    svg.style.transform = rot;
+    document
+      .querySelectorAll('.ref-row[data-case="' + row.dataset.case + '"] .cube-thumb, .ref-row[data-case="' + row.dataset.case + '"] .thumb .cube-svg')
+      .forEach((thumb) => {
+        thumb.style.transform = rot;
+      });
     const twisted = manual !== 0;
     row.classList.toggle("diagram-twisted", twisted);
     if (figure) {
@@ -870,6 +890,20 @@ const clientJs = `
   }
 
   function applyFilter() {
+    if (practiceOn) {
+      document.querySelectorAll(".case-row, .ref-row").forEach((el) => {
+        const st = caseStatus(el.dataset.case);
+        el.setAttribute("data-status", st);
+        el.hidden = false;
+        el.classList.remove("is-filtered-out");
+      });
+      document.querySelectorAll(".group-section").forEach((sec) => {
+        sec.hidden = false;
+      });
+      rebuildPracticeQueue(true);
+      refreshPractice();
+      return;
+    }
     const activeBtn = document.querySelector("[data-filter].is-on");
     const filter = activeBtn ? activeBtn.dataset.filter : "";
     document.querySelectorAll(".case-row, .ref-row").forEach((el) => {
@@ -885,7 +919,6 @@ const clientJs = `
       );
       sec.hidden = !any;
     });
-    if (practiceOn) refreshPractice();
   }
 
   function visibleCaseRows() {
@@ -905,46 +938,88 @@ const clientJs = `
     return a;
   }
 
-  function syncPracticeQueue() {
-    const visibleIds = visibleCaseRows().map((r) => r.dataset.case);
-    const visibleSet = new Set(visibleIds);
-    const currentId = practiceQueue[practiceIndex];
-    practiceQueue = practiceQueue.filter((id) => visibleSet.has(id));
-    const inQueue = new Set(practiceQueue);
-    const missing = visibleIds.filter((id) => !inQueue.has(id));
-    if (missing.length) practiceQueue = practiceQueue.concat(shuffleIds(missing));
-    if (!practiceQueue.length && visibleIds.length) {
-      practiceQueue = shuffleIds(visibleIds);
+  function selectedPracticeStatuses() {
+    return new Set(
+      [...document.querySelectorAll("[data-practice-status]:checked")].map(
+        (el) => el.dataset.practiceStatus
+      )
+    );
+  }
+
+  function selectedPracticeGroups() {
+    return new Set(
+      [...document.querySelectorAll("[data-practice-group]:checked")].map(
+        (el) => el.dataset.practiceGroup
+      )
+    );
+  }
+
+  function practiceEligibleRows() {
+    const statuses = selectedPracticeStatuses();
+    const groups = selectedPracticeGroups();
+    if (!statuses.size && !groups.size) return [];
+    return [...document.querySelectorAll(".case-row")].filter((row) => {
+      const st = caseStatus(row.dataset.case);
+      const statusMatch = statuses.size > 0 && statuses.has(st);
+      const groupMatch = groups.size > 0 && groups.has(row.dataset.group);
+      return statusMatch || groupMatch;
+    });
+  }
+
+  function updatePracticePoolCount() {
+    const n = practiceEligibleRows().length;
+    const el = document.getElementById("practice-pool-count");
+    if (el) {
+      el.textContent = String(n);
+      el.title = n + (n === 1 ? " case" : " cases") + " in practice pool";
     }
+  }
+
+  function rebuildPracticeQueue(keepCurrent) {
+    const eligibleIds = practiceEligibleRows().map((r) => r.dataset.case);
+    const currentId = keepCurrent ? practiceQueue[practiceIndex] : null;
+    practiceQueue = shuffleIds(eligibleIds);
     if (currentId) {
       const idx = practiceQueue.indexOf(currentId);
       practiceIndex = idx >= 0 ? idx : 0;
     } else {
       practiceIndex = 0;
     }
+    updatePracticePoolCount();
   }
 
   function setPracticeUi(on) {
     practiceOn = on;
     document.body.classList.toggle("practice-mode", on);
     const btn = document.getElementById("btn-practice");
-    if (btn) btn.setAttribute("aria-pressed", on ? "true" : "false");
+    if (btn) {
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.textContent = on ? "Exit practice" : "Practice";
+    }
+    const picker = document.getElementById("practice-picker");
+    if (picker) {
+      picker.hidden = !on;
+    }
     if (!on) {
       practiceQueue = [];
       practiceIndex = 0;
       document.querySelectorAll(".case-row.is-practice-current").forEach((r) => {
         r.classList.remove("is-practice-current");
       });
+      setActionsOpen(false);
     }
   }
 
   function refreshPractice() {
     if (!practiceOn) return;
-    syncPracticeQueue();
+    updatePracticePoolCount();
     if (!practiceQueue.length) {
       document.querySelectorAll(".case-row").forEach((r) => r.classList.remove("is-practice-current"));
       const meta = document.getElementById("practice-meta");
-      if (meta) meta.textContent = "0 / 0";
+      if (meta) {
+        meta.textContent = "0 / 0";
+        meta.title = "No cases match the practice filters";
+      }
       return;
     }
     if (practiceIndex >= practiceQueue.length) practiceIndex = practiceQueue.length - 1;
@@ -955,6 +1030,8 @@ const clientJs = `
     );
     if (!current) return;
     current.classList.add("is-practice-current");
+    current.hidden = false;
+    current.classList.remove("is-filtered-out");
     const meta = document.getElementById("practice-meta");
     if (meta) meta.textContent = (practiceIndex + 1) + " / " + practiceQueue.length;
     const name = current.querySelector(".title")?.textContent?.trim() || ("#" + current.dataset.case);
@@ -964,24 +1041,30 @@ const clientJs = `
 
   function practiceStep(delta) {
     if (!practiceOn) return;
-    syncPracticeQueue();
-    if (!practiceQueue.length) return;
+    if (!practiceQueue.length) {
+      rebuildPracticeQueue(false);
+      refreshPractice();
+      return;
+    }
     practiceIndex = (practiceIndex + delta + practiceQueue.length) % practiceQueue.length;
     refreshPractice();
   }
 
+  function onPracticeFilterChange() {
+    if (!practiceOn) return;
+    rebuildPracticeQueue(true);
+    refreshPractice();
+  }
+
   function enterPractice(fromCase) {
-    const rows = visibleCaseRows();
-    if (!rows.length) return;
-    practiceQueue = shuffleIds(rows.map((r) => r.dataset.case));
-    if (fromCase != null) {
-      const idx = practiceQueue.indexOf(String(fromCase));
-      practiceIndex = idx >= 0 ? idx : 0;
-    } else {
-      practiceIndex = 0;
-    }
     setPracticeUi(true);
     setAnchorsCollapsed(true);
+    setActionsOpen(false);
+    rebuildPracticeQueue(false);
+    if (fromCase != null && practiceQueue.length) {
+      const idx = practiceQueue.indexOf(String(fromCase));
+      practiceIndex = idx >= 0 ? idx : 0;
+    }
     refreshPractice();
   }
 
@@ -989,6 +1072,7 @@ const clientJs = `
     const current = document.querySelector(".case-row.is-practice-current");
     const id = current?.id;
     setPracticeUi(false);
+    applyFilter();
     if (id) {
       requestAnimationFrame(() => scrollToId(id, 180));
     }
@@ -1025,31 +1109,46 @@ const clientJs = `
     updateGroupBars();
   }
 
+  function groupStatusTallies(slug) {
+    const tallies = { red: 0, orange: 0, green: 0 };
+    document.querySelectorAll('.case-row[data-group="' + slug + '"]').forEach((row) => {
+      const st = caseStatus(row.dataset.case);
+      tallies[st === "orange" || st === "green" ? st : "red"]++;
+    });
+    return tallies;
+  }
+
+  function applyBarTallies(el, tallies, titleBase) {
+    const total = tallies.red + tallies.orange + tallies.green;
+    ["red", "orange", "green"].forEach((key) => {
+      const seg = el.querySelector('[data-seg="' + key + '"]');
+      if (!seg) return;
+      const n = tallies[key];
+      seg.style.flex = n > 0 ? n + " 1 0%" : "0 0 0%";
+      seg.style.display = n > 0 ? "block" : "none";
+    });
+    const label = [
+      tallies.red ? tallies.red + " not learned" : "",
+      tallies.orange ? tallies.orange + " learning" : "",
+      tallies.green ? tallies.green + " learned" : "",
+    ]
+      .filter(Boolean)
+      .join(", ");
+    el.title = titleBase + (total ? " · " + label : "");
+  }
+
   function updateGroupBars() {
     document.querySelectorAll(".nav-chip[data-group-nav]").forEach((chip) => {
       const slug = chip.dataset.groupNav;
-      const tallies = { red: 0, orange: 0, green: 0 };
-      document.querySelectorAll('.case-row[data-group="' + slug + '"]').forEach((row) => {
-        const st = caseStatus(row.dataset.case);
-        tallies[st === "orange" || st === "green" ? st : "red"]++;
-      });
-      const total = tallies.red + tallies.orange + tallies.green;
-      ["red", "orange", "green"].forEach((key) => {
-        const seg = chip.querySelector('[data-seg="' + key + '"]');
-        if (!seg) return;
-        const n = tallies[key];
-        seg.style.flex = n > 0 ? n + " 1 0%" : "0 0 0%";
-        seg.style.display = n > 0 ? "block" : "none";
-      });
-      const label = [
-        tallies.red ? tallies.red + " not learned" : "",
-        tallies.orange ? tallies.orange + " learning" : "",
-        tallies.green ? tallies.green + " learned" : "",
-      ]
-        .filter(Boolean)
-        .join(", ");
-      chip.title = (chip.querySelector(".nav-chip-label")?.textContent || slug) +
-        (total ? " · " + label : "");
+      const tallies = groupStatusTallies(slug);
+      const base = chip.querySelector(".nav-chip-label")?.textContent || slug;
+      applyBarTallies(chip, tallies, base);
+    });
+    document.querySelectorAll(".practice-check-group[data-practice-group-bar]").forEach((chip) => {
+      const slug = chip.dataset.practiceGroupBar;
+      const tallies = groupStatusTallies(slug);
+      const base = chip.querySelector(".practice-check-label")?.textContent || slug;
+      applyBarTallies(chip, tallies, base);
     });
   }
 
@@ -1285,6 +1384,11 @@ const clientJs = `
     document.getElementById("practice-prev")?.addEventListener("click", () => practiceStep(-1));
     document.getElementById("practice-next")?.addEventListener("click", () => practiceStep(1));
     document.getElementById("practice-exit")?.addEventListener("click", () => exitPractice());
+    document.getElementById("practice-picker")?.addEventListener("change", (e) => {
+      if (e.target.matches("[data-practice-status], [data-practice-group]")) {
+        onPracticeFilterChange();
+      }
+    });
 
     document.getElementById("btn-menu")?.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -1431,14 +1535,14 @@ const html = `<!DOCTYPE html>
       <div class="brand"><img class="brand-mark" src="favicon.svg" width="27" height="27" alt="" /><span class="brand-text">Gabis OLL Trainer</span></div>
       <span id="save-stamp"></span>
       <div class="actions" id="actions-menu">
-        <button type="button" class="btn" id="btn-practice" aria-pressed="false" title="Practice filtered cases in random order">Practice</button>
-        <button type="button" class="icon-btn" id="btn-notation" aria-label="Cube notation" title="Notation">
+        <button type="button" class="btn" id="btn-practice" aria-pressed="false" title="Practice selected cases in random order">Practice</button>
+        <button type="button" class="icon-btn browse-only" id="btn-notation" aria-label="Cube notation" title="Notation">
           <i class="fa-solid fa-book" aria-hidden="true"></i>
         </button>
-        <button type="button" class="icon-btn" id="btn-menu" aria-expanded="false" aria-controls="actions-panel" aria-label="File actions" title="File">
+        <button type="button" class="icon-btn browse-only" id="btn-menu" aria-expanded="false" aria-controls="actions-panel" aria-label="File actions" title="File">
           <i class="fa-solid fa-file" aria-hidden="true"></i>
         </button>
-        <div class="actions-panel" id="actions-panel" role="menu">
+        <div class="actions-panel browse-only" id="actions-panel" role="menu">
           <button type="button" class="btn btn-ghost" id="btn-import" role="menuitem">Import</button>
           <button type="button" class="btn btn-ghost" id="btn-export" role="menuitem">Export JSON</button>
           <button type="button" class="btn btn-primary" id="btn-print" role="menuitem">Print / PDF</button>
@@ -1446,18 +1550,28 @@ const html = `<!DOCTYPE html>
         <input type="file" id="import-file" accept="application/json,.json" hidden />
       </div>
     </div>
-    <div class="filters" aria-label="Status filter">
+    <div class="filters browse-only" aria-label="Status filter">
       <button type="button" class="btn filter-chip" data-filter="red"><span class="pip"></span><span class="lbl-full"> Not learned </span><span class="lbl-short"> Not </span><span class="n" data-count="red">0</span></button>
       <button type="button" class="btn filter-chip" data-filter="orange"><span class="pip"></span><span class="lbl-full"> Learning </span><span class="lbl-short"> Learn </span><span class="n" data-count="orange">0</span></button>
       <button type="button" class="btn filter-chip" data-filter="green"><span class="pip"></span><span class="lbl-full"> Learned </span><span class="lbl-short"> Done </span><span class="n" data-count="green">0</span></button>
     </div>
-    <div class="anchors-wrap is-collapsed" id="anchors-wrap">
+    <div class="anchors-wrap browse-only is-collapsed" id="anchors-wrap">
       <button type="button" class="anchors-toggle" id="btn-groups" aria-expanded="false" aria-controls="anchors-nav" aria-label="Groups" title="Groups">
         <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
       </button>
       <nav class="anchors" id="anchors-nav" aria-label="Groups">
         ${navLinks}
       </nav>
+    </div>
+    <div class="practice-picker screen-only" id="practice-picker" hidden>
+      <div class="practice-picker-options">
+        <label class="practice-check practice-check-status" title="Not learned"><input type="checkbox" data-practice-status="red" /><span class="pip red" aria-hidden="true"></span></label>
+        <label class="practice-check practice-check-status" title="Learning"><input type="checkbox" data-practice-status="orange" /><span class="pip orange" aria-hidden="true"></span></label>
+        <label class="practice-check practice-check-status" title="Learned"><input type="checkbox" data-practice-status="green" /><span class="pip green" aria-hidden="true"></span></label>
+        <span class="practice-picker-sep" aria-hidden="true"></span>
+        ${practiceGroupChecks}
+        <span class="practice-picker-count" id="practice-pool-count">0</span>
+      </div>
     </div>
   </header>
   <main>
