@@ -9,6 +9,10 @@ const notes = JSON.parse(readFileSync(join(__dirname, "cubehead-notes.json"), "u
 const cacheDir = join(__dirname, "svg-cache");
 mkdirSync(cacheDir, { recursive: true });
 
+const algOrderLibJs = readFileSync(join(__dirname, "alg-order-lib.mjs"), "utf8")
+  .replace(/^export /gm, "")
+  .replace(/\nexport \{[\s\S]*?\}\s*$/m, "\n");
+
 /** Recolor VisualCube defaults to match the page palette. */
 const COLOR_MAP = {
   "#FEFE00": "#E8C20A", // yellow stickers (brighter gold)
@@ -151,20 +155,23 @@ const groups = [...new Set(cards.map((c) => c.slug))]
 
 function cardHtml(c) {
   const tip = c.tip
-    ? `<div class="inline-box tip-box alg-meta"><span class="inline-label">Tip</span><span class="inline-value">${esc(c.tip)}</span></div>`
+    ? `<div class="inline-box tip-box alg-meta" data-alg-tip-box><span class="inline-label" title="Tip"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span class="sr-only">Tip</span></span><span class="inline-value" data-alg-tip>${esc(c.tip)}</span></div>`
     : "";
   const altRow = c.secondary
     ? `
         <div class="alg-row" data-slot="secondary" data-builtin="1">
           <div class="alg-body">
             <div class="alg-tools screen-only">
-              <button type="button" class="btn-alg-tool" data-hide="secondary" title="Hide algorithm" aria-label="Hide algorithm"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i></button>
-              <label class="fav" title="Favorite">
+              <span class="alg-order" data-alg-order-wrap data-tooltip="Order of permutation — times to repeat this alg to return to start" aria-label="Order of permutation">
+                <span class="alg-order-n" data-alg-order>?</span>
+              </span>
+              <button type="button" class="btn-alg-tool" data-edit="secondary" data-tooltip="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
+              <label class="fav" data-tooltip="Favorite" aria-label="Favorite">
                 <input type="checkbox" data-fav="secondary" />
                 <span>★</span>
               </label>
             </div>
-            <p class="alg" data-alg-text data-alg-raw="${esc(c.secondary)}">${esc(c.secondary)}</p>
+            <p class="alg" data-alg-text data-alg-raw="${esc(c.secondary)}" data-alg-default="${esc(c.secondary)}" data-tip-default="">${esc(c.secondary)}</p>
           </div>
         </div>`
     : "";
@@ -201,13 +208,16 @@ function cardHtml(c) {
         <div class="alg-row" data-slot="primary" data-builtin="1">
           <div class="alg-body">
             <div class="alg-tools screen-only">
-              <button type="button" class="btn-alg-tool" data-hide="primary" title="Hide algorithm" aria-label="Hide algorithm"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i></button>
-              <label class="fav" title="Favorite">
+              <span class="alg-order" data-alg-order-wrap data-tooltip="Order of permutation — times to repeat this alg to return to start" aria-label="Order of permutation">
+                <span class="alg-order-n" data-alg-order>?</span>
+              </span>
+              <button type="button" class="btn-alg-tool" data-edit="primary" data-tooltip="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
+              <label class="fav" data-tooltip="Favorite" aria-label="Favorite">
                 <input type="checkbox" data-fav="primary" checked />
                 <span>★</span>
               </label>
             </div>
-            <p class="alg primary" data-alg-text data-alg-raw="${esc(c.primary)}">${esc(c.primary)}</p>
+            <p class="alg primary" data-alg-text data-alg-raw="${esc(c.primary)}" data-alg-default="${esc(c.primary)}" data-tip-default="${esc(c.tip)}">${esc(c.primary)}</p>
             ${tip}
           </div>
         </div>${altRow}
@@ -293,6 +303,8 @@ const groupSections = groups
 
 const clientJs = `
 (() => {
+  ${algOrderLibJs}
+
   const STORAGE_KEY = "oll-progress-v1";
   const FILE_NAME = "oll-progress.json";
 
@@ -302,11 +314,14 @@ const clientJs = `
     custom: [],
     hidden: [],
     discarded: [],
+    algs: {},
+    orders: {},
+    tips: {},
   });
 
   let state = { version: 2, updatedAt: null, cases: {} };
   let modalCase = null;
-  let modalEditIdx = null;
+  let modalEditSlot = null;
   let hiddenModalCase = null;
   let practiceOn = false;
   let practiceIndex = 0;
@@ -315,9 +330,20 @@ const clientJs = `
 
   function normalizeCustomEntry(item) {
     if (item && typeof item === "object" && typeof item.alg === "string") {
-      return { alg: item.alg, note: typeof item.note === "string" ? item.note : "" };
+      const entry = { alg: item.alg };
+      if (item.order != null && Number.isFinite(Number(item.order))) {
+        entry.order = Number(item.order);
+      }
+      const tip =
+        typeof item.tip === "string"
+          ? item.tip
+          : typeof item.note === "string"
+            ? item.note
+            : "";
+      if (tip.trim()) entry.tip = tip.trim();
+      return entry;
     }
-    return { alg: String(item || ""), note: "" };
+    return { alg: String(item || "") };
   }
 
   function migrateCase(raw) {
@@ -332,14 +358,10 @@ const clientJs = `
     delete c.notes;
     if (!Array.isArray(c.custom)) c.custom = [];
     c.custom = c.custom.map(normalizeCustomEntry);
-    if (legacyNote) {
-      if (String(c.favorite).startsWith("custom-")) {
-        const i = Number(String(c.favorite).replace("custom-", ""));
-        if (c.custom[i] && !c.custom[i].note) c.custom[i].note = legacyNote;
-      } else if (c.custom.length === 1 && !c.custom[0].note) {
-        c.custom[0].note = legacyNote;
-      }
-    }
+    if (!c.algs || typeof c.algs !== "object") c.algs = {};
+    if (!c.orders || typeof c.orders !== "object") c.orders = {};
+    if (!c.tips || typeof c.tips !== "object") c.tips = {};
+    if (legacyNote && !c.tips.primary) c.tips.primary = legacyNote;
     if (!c.favorite) c.favorite = "primary";
     if (!Array.isArray(c.hidden)) c.hidden = [];
     c.hidden = c.hidden.map(String).filter(Boolean);
@@ -433,27 +455,243 @@ const clientJs = `
     const row = document.createElement("div");
     row.className = "alg-row";
     row.dataset.slot = slot;
-    const noteHtml = entry.note
-      ? '<div class="inline-box note-box alg-meta"><span class="inline-label">Note</span><span class="inline-value">' +
-        escHtml(entry.note) +
-        "</span></div>"
-      : "";
     row.innerHTML =
       '<div class="alg-body">' +
       '<div class="alg-tools screen-only">' +
-      '<button type="button" class="btn-alg-tool" data-hide="' + slot + '" title="Hide algorithm" aria-label="Hide algorithm"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i></button>' +
-      '<button type="button" class="btn-alg-tool" data-edit="' + slot + '" title="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>' +
-      '<label class="fav" title="Favorite">' +
+      '<span class="alg-order" data-alg-order-wrap data-tooltip="Order of permutation — times to repeat this alg to return to start" aria-label="Order of permutation">' +
+      '<span class="alg-order-n" data-alg-order>?</span>' +
+      "</span>" +
+      '<button type="button" class="btn-alg-tool" data-edit="' + slot + '" data-tooltip="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>' +
+      '<label class="fav" data-tooltip="Favorite" aria-label="Favorite">' +
       '<input type="checkbox" data-fav="' + slot + '" />' +
       "<span>★</span></label>" +
       "</div>" +
       '<p class="alg" data-alg-text></p>' +
-      noteHtml +
       "</div>";
     const algEl = row.querySelector("[data-alg-text]");
     algEl.dataset.algRaw = entry.alg;
     algEl.textContent = entry.alg;
     return row;
+  }
+
+  function slotOrderKey(slot) {
+    return String(slot || "");
+  }
+
+  function readStoredOrder(data, slot) {
+    const key = slotOrderKey(slot);
+    if (data.orders && data.orders[key] != null && Number.isFinite(Number(data.orders[key]))) {
+      return Number(data.orders[key]);
+    }
+    const m = /^custom-(\\d+)$/.exec(key);
+    if (m) {
+      const entry = data.custom[Number(m[1])];
+      if (entry && entry.order != null && Number.isFinite(Number(entry.order))) {
+        return Number(entry.order);
+      }
+    }
+    return null;
+  }
+
+  function writeStoredOrder(data, slot, order) {
+    const key = slotOrderKey(slot);
+    if (!data.orders) data.orders = {};
+    if (order == null || !Number.isFinite(Number(order))) {
+      delete data.orders[key];
+    } else {
+      data.orders[key] = Number(order);
+    }
+    const m = /^custom-(\\d+)$/.exec(key);
+    if (m) {
+      const entry = data.custom[Number(m[1])];
+      if (entry) {
+        if (order == null || !Number.isFinite(Number(order))) delete entry.order;
+        else entry.order = Number(order);
+      }
+    }
+  }
+
+  function readStoredAlg(data, slot) {
+    if (slot === "primary" || slot === "secondary") {
+      const v = data.algs && data.algs[slot];
+      return typeof v === "string" && v.trim() ? v : null;
+    }
+    const m = /^custom-(\\d+)$/.exec(String(slot));
+    if (m) {
+      const entry = data.custom[Number(m[1])];
+      return entry && typeof entry.alg === "string" ? entry.alg : null;
+    }
+    return null;
+  }
+
+  function writeStoredAlg(data, slot, alg, defaultText) {
+    const text = String(alg || "").trim();
+    if (slot === "primary" || slot === "secondary") {
+      if (!data.algs) data.algs = {};
+      if (!text || (defaultText != null && text === String(defaultText))) delete data.algs[slot];
+      else data.algs[slot] = text;
+      return;
+    }
+    const m = /^custom-(\\d+)$/.exec(String(slot));
+    if (m && data.custom[Number(m[1])]) {
+      data.custom[Number(m[1])].alg = text;
+    }
+  }
+
+  function readStoredTip(data, slot) {
+    const key = slotOrderKey(slot);
+    if (data.tips && typeof data.tips[key] === "string") return data.tips[key];
+    const m = /^custom-(\\d+)$/.exec(key);
+    if (m) {
+      const entry = data.custom[Number(m[1])];
+      if (entry && typeof entry.tip === "string") return entry.tip;
+      if (entry && typeof entry.note === "string") return entry.note;
+    }
+    return null;
+  }
+
+  function writeStoredTip(data, slot, tip, defaultTip) {
+    const text = String(tip || "").trim();
+    const key = slotOrderKey(slot);
+    if (!data.tips) data.tips = {};
+    const m = /^custom-(\\d+)$/.exec(key);
+    if (slot === "primary" || slot === "secondary") {
+      if (!text || (defaultTip != null && text === String(defaultTip).trim())) {
+        delete data.tips[key];
+      } else {
+        data.tips[key] = text;
+      }
+      return;
+    }
+    if (m && data.custom[Number(m[1])]) {
+      const entry = data.custom[Number(m[1])];
+      if (!text) {
+        delete entry.tip;
+        delete entry.note;
+        delete data.tips[key];
+      } else {
+        entry.tip = text;
+        data.tips[key] = text;
+      }
+    }
+  }
+
+  function tipHtml(text) {
+    return (
+      '<div class="inline-box tip-box alg-meta" data-alg-tip-box>' +
+      '<span class="inline-label" title="Tip"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span class="sr-only">Tip</span></span>' +
+      '<span class="inline-value" data-alg-tip>' +
+      escHtml(text) +
+      "</span></div>"
+    );
+  }
+
+  function syncAlgTip(algRow, caseNum) {
+    const body = algRow.querySelector(".alg-body");
+    const text = algRow.querySelector("[data-alg-text]");
+    if (!body || !text) return;
+    const data = ensure(caseNum);
+    const slot = algRow.dataset.slot;
+    const stored = readStoredTip(data, slot);
+    const tipText =
+      stored != null ? String(stored).trim() : String(text.dataset.tipDefault || "").trim();
+    let box = body.querySelector("[data-alg-tip-box]");
+    if (!tipText) {
+      if (box) box.remove();
+      return;
+    }
+    if (!box) {
+      body.insertAdjacentHTML("beforeend", tipHtml(tipText));
+      return;
+    }
+    const val = box.querySelector("[data-alg-tip]");
+    if (val) val.textContent = tipText;
+  }
+
+  function ensureAlgLine(algRow) {
+    const body = algRow.querySelector(".alg-body");
+    const text = algRow.querySelector("[data-alg-text]");
+    if (!body || !text) return null;
+    body.querySelectorAll(".note-box, [data-alg-order-box]").forEach((el) => el.remove());
+    text.removeAttribute("contenteditable");
+    text.removeAttribute("spellcheck");
+    const tipLabel = body.querySelector(".tip-box .inline-label");
+    if (tipLabel && !tipLabel.querySelector("i")) {
+      tipLabel.title = "Tip";
+      tipLabel.innerHTML =
+        '<i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span class="sr-only">Tip</span>';
+    }
+    // Unwrap legacy .alg-line wrappers
+    const legacyLine = text.closest(".alg-line");
+    if (legacyLine && legacyLine.parentNode === body) {
+      while (legacyLine.firstChild) body.insertBefore(legacyLine.firstChild, legacyLine);
+      legacyLine.remove();
+    }
+    let tools = body.querySelector(".alg-tools");
+    if (!tools) {
+      tools = document.createElement("div");
+      tools.className = "alg-tools screen-only";
+      body.insertBefore(tools, body.firstChild);
+    }
+    let wrap = tools.querySelector("[data-alg-order-wrap]");
+    if (!wrap) {
+      wrap = body.querySelector("[data-alg-order-wrap]");
+      if (wrap) tools.insertBefore(wrap, tools.firstChild);
+    }
+    if (!wrap) {
+      wrap = document.createElement("span");
+      wrap.className = "alg-order";
+      wrap.dataset.algOrderWrap = "1";
+      wrap.dataset.tooltip =
+        "Order of permutation — times to repeat this alg to return to start";
+      wrap.setAttribute("aria-label", "Order of permutation");
+      wrap.innerHTML = '<span class="alg-order-n" data-alg-order>?</span>';
+      tools.insertBefore(wrap, tools.firstChild);
+    } else {
+      wrap.querySelectorAll("i, input").forEach((el) => el.remove());
+      if (!wrap.querySelector("[data-alg-order]")) {
+        wrap.innerHTML = '<span class="alg-order-n" data-alg-order>?</span>';
+      }
+    }
+    return wrap.querySelector("[data-alg-order]");
+  }
+
+  function ensureAlgOrderMeta(algRow, caseNum) {
+    const text = algRow.querySelector("[data-alg-text]");
+    const orderEl = ensureAlgLine(algRow);
+    if (!text || !orderEl) return;
+    const data = ensure(caseNum);
+    const slot = algRow.dataset.slot;
+    const stored = readStoredAlg(data, slot);
+    if (stored != null) {
+      text.dataset.algRaw = stored;
+    } else if (!text.dataset.algRaw) {
+      text.dataset.algRaw = text.textContent.trim();
+    }
+    const raw = text.dataset.algRaw || "";
+    const computed = computeAlgOrder(raw);
+    const storedOrder = readStoredOrder(data, slot);
+    const order = storedOrder != null ? storedOrder : computed;
+    orderEl.textContent = order != null ? String(order) : "?";
+    const title =
+      storedOrder != null
+        ? "Order of permutation: " +
+          storedOrder +
+          " (override · computed " +
+          (computed != null ? computed : "?") +
+          ") — times to repeat this alg to return to start"
+        : order != null
+          ? "Order of permutation: " +
+            order +
+            " — times to repeat this alg to return to start"
+          : "Order of permutation unknown — could not compute";
+    const wrap = orderEl.closest("[data-alg-order-wrap]");
+    if (wrap) {
+      wrap.dataset.tooltip = title;
+      wrap.setAttribute("aria-label", title);
+      wrap.classList.toggle("is-override", storedOrder != null);
+    }
+    syncAlgTip(algRow, caseNum);
   }
 
   function parseLeadingY(alg) {
@@ -777,13 +1015,17 @@ const clientJs = `
       actions.className = "hidden-modal-actions";
       const showBtn = document.createElement("button");
       showBtn.type = "button";
-      showBtn.className = "btn btn-ghost";
-      showBtn.innerHTML = '<i class="fa-solid fa-eye" aria-hidden="true"></i> Show';
+      showBtn.className = "btn btn-ghost btn-icon";
+      showBtn.title = "Show";
+      showBtn.setAttribute("aria-label", "Show algorithm");
+      showBtn.innerHTML = '<i class="fa-solid fa-eye" aria-hidden="true"></i>';
       showBtn.addEventListener("click", () => unhideAlg(hiddenModalCase, slot));
       const removeBtn = document.createElement("button");
       removeBtn.type = "button";
-      removeBtn.className = "btn btn-danger";
-      removeBtn.innerHTML = '<i class="fa-solid fa-trash" aria-hidden="true"></i> Remove';
+      removeBtn.className = "btn btn-danger btn-icon";
+      removeBtn.title = "Remove";
+      removeBtn.setAttribute("aria-label", "Remove algorithm");
+      removeBtn.innerHTML = '<i class="fa-solid fa-trash" aria-hidden="true"></i>';
       removeBtn.addEventListener("click", () => removeHiddenAlg(hiddenModalCase, slot));
       actions.appendChild(showBtn);
       actions.appendChild(removeBtn);
@@ -840,11 +1082,15 @@ const clientJs = `
       if (cb) cb.checked = isFav;
       const text = r.querySelector("[data-alg-text]");
       if (text) {
-        if (!text.dataset.algRaw) text.dataset.algRaw = text.textContent.trim();
+        const stored = readStoredAlg(data, r.dataset.slot);
+        if (stored != null) text.dataset.algRaw = stored;
+        else if (text.dataset.algDefault) text.dataset.algRaw = text.dataset.algDefault;
+        else if (!text.dataset.algRaw) text.dataset.algRaw = text.textContent.trim();
         const deg = renderAlgDisplay(text, text.dataset.algRaw, isFav);
         text.classList.toggle("primary", isFav);
         if (isFav) favDeg = deg;
       }
+      ensureAlgOrderMeta(r, row.dataset.case);
       if (!isHidden) {
         r.classList.toggle("is-first-alt", !isFav && visibleIdx === 1);
         visibleIdx += 1;
@@ -1207,40 +1453,81 @@ const clientJs = `
         openHiddenModal(row.dataset.case);
         return;
       }
-      const hideBtn = e.target.closest("[data-hide]");
-      if (hideBtn) {
-        hideAlg(row, hideBtn.dataset.hide);
-        return;
-      }
       const editBtn = e.target.closest("[data-edit]");
       if (editBtn) {
-        const m = /^custom-(\\d+)$/.exec(editBtn.dataset.edit);
-        if (!m) return;
-        openModal(row.dataset.case, Number(m[1]));
+        openModal(row.dataset.case, editBtn.dataset.edit);
       }
     });
   }
 
-  function openModal(caseNum, editIdx) {
+  function syncModalOrderFromAlg(force) {
+    const input = document.getElementById("alg-modal-input");
+    const orderInput = document.getElementById("alg-modal-order");
+    if (!input || !orderInput) return;
+    if (!force && orderInput.dataset.manual === "1") return;
+    const computed = computeAlgOrder((input.value || "").trim());
+    orderInput.value = computed != null ? String(computed) : "";
+    orderInput.dataset.manual = "0";
+  }
+
+  function openModal(caseNum, editSlot) {
     modalCase = caseNum;
-    modalEditIdx = editIdx == null ? null : editIdx;
+    modalEditSlot = editSlot == null || editSlot === "" ? null : String(editSlot);
     const modal = document.getElementById("alg-modal");
     const input = document.getElementById("alg-modal-input");
-    const note = document.getElementById("alg-modal-note");
+    const orderInput = document.getElementById("alg-modal-order");
+    const tipInput = document.getElementById("alg-modal-tip");
     const title = document.getElementById("alg-modal-title");
     const saveBtn = document.getElementById("alg-modal-save");
     const removeBtn = document.getElementById("alg-modal-remove");
-    const editing = modalEditIdx != null;
+    const hideBtn = document.getElementById("alg-modal-hide");
+    const editing = modalEditSlot != null;
     if (title) title.textContent = (editing ? "Edit alg" : "Add alg") + " · OLL #" + caseNum;
-    if (saveBtn) saveBtn.textContent = editing ? "Save" : "Add";
-    if (removeBtn) removeBtn.hidden = !editing;
+    if (saveBtn) {
+      const saveIcon = editing ? "fa-check" : "fa-plus";
+      const saveLabel = editing ? "Save" : "Add";
+      saveBtn.title = saveLabel;
+      saveBtn.setAttribute("aria-label", saveLabel);
+      saveBtn.innerHTML = '<i class="fa-solid ' + saveIcon + '" aria-hidden="true"></i>';
+    }
+    const canRemove = editing && /^custom-\\d+$/.test(modalEditSlot || "");
+    if (removeBtn) removeBtn.hidden = !canRemove;
+    if (hideBtn) hideBtn.hidden = !editing;
+    let algText = "";
     if (editing) {
-      const entry = normalizeCustomEntry(ensure(caseNum).custom[modalEditIdx] || { alg: "", note: "" });
-      if (input) input.value = entry.alg;
-      if (note) note.value = entry.note;
+      const data = ensure(caseNum);
+      const row = document.querySelector('.case-row[data-case="' + caseNum + '"]');
+      const fromDom = row
+        ? row.querySelector('.alg-row[data-slot="' + modalEditSlot + '"] [data-alg-text]')
+        : null;
+      const stored = readStoredAlg(data, modalEditSlot);
+      algText =
+        stored ||
+        fromDom?.dataset.algRaw ||
+        fromDom?.textContent?.trim() ||
+        "";
+      if (input) input.value = algText;
+      const computed = computeAlgOrder(algText);
+      const storedOrder = readStoredOrder(data, modalEditSlot);
+      if (orderInput) {
+        const shown = storedOrder != null ? storedOrder : computed;
+        orderInput.value = shown != null ? String(shown) : "";
+        orderInput.dataset.manual = storedOrder != null ? "1" : "0";
+      }
+      const storedTip = readStoredTip(data, modalEditSlot);
+      if (tipInput) {
+        tipInput.value =
+          storedTip != null
+            ? storedTip
+            : String(fromDom?.dataset.tipDefault || "").trim();
+      }
     } else {
       if (input) input.value = "";
-      if (note) note.value = "";
+      if (orderInput) {
+        orderInput.value = "";
+        orderInput.dataset.manual = "0";
+      }
+      if (tipInput) tipInput.value = "";
     }
     modal?.classList.add("is-open");
     modal?.setAttribute("aria-hidden", "false");
@@ -1249,7 +1536,7 @@ const clientJs = `
 
   function closeModal() {
     modalCase = null;
-    modalEditIdx = null;
+    modalEditSlot = null;
     const modal = document.getElementById("alg-modal");
     modal?.classList.remove("is-open");
     modal?.setAttribute("aria-hidden", "true");
@@ -1269,15 +1556,33 @@ const clientJs = `
 
   function submitModal() {
     const input = document.getElementById("alg-modal-input");
-    const noteEl = document.getElementById("alg-modal-note");
+    const orderInput = document.getElementById("alg-modal-order");
+    const tipInput = document.getElementById("alg-modal-tip");
     const alg = (input?.value || "").trim();
-    const note = (noteEl?.value || "").trim();
     if (!alg || modalCase == null) return;
     const data = ensure(modalCase);
-    const entry = { alg, note };
-    if (modalEditIdx != null) {
-      data.custom[modalEditIdx] = entry;
+    const tip = (tipInput?.value || "").trim();
+    const computed = computeAlgOrder(alg);
+    const orderVal = Number(orderInput?.value);
+    const hasOrder = Number.isFinite(orderVal) && orderVal >= 1;
+    // Store override only when it differs from the computed order.
+    let finalOrder = null;
+    if (hasOrder) {
+      finalOrder = Math.round(orderVal);
+      if (computed != null && finalOrder === computed) finalOrder = null;
+    }
+    if (modalEditSlot != null) {
+      const rowEl = document.querySelector('.case-row[data-case="' + modalCase + '"]');
+      const algEl = rowEl?.querySelector(
+        '.alg-row[data-slot="' + modalEditSlot + '"] [data-alg-text]'
+      );
+      writeStoredAlg(data, modalEditSlot, alg, algEl?.dataset.algDefault);
+      writeStoredOrder(data, modalEditSlot, finalOrder);
+      writeStoredTip(data, modalEditSlot, tip, algEl?.dataset.tipDefault);
     } else {
+      const entry = { alg };
+      if (finalOrder != null) entry.order = finalOrder;
+      if (tip) entry.tip = tip;
       data.custom.push(entry);
       data.favorite = "custom-" + (data.custom.length - 1);
     }
@@ -1300,12 +1605,28 @@ const clientJs = `
   }
 
   function removeModalAlg() {
-    if (modalCase == null || modalEditIdx == null) return;
-    if (!deleteCustomAt(modalCase, modalEditIdx)) return;
+    if (modalCase == null || modalEditSlot == null) return;
+    const m = /^custom-(\\d+)$/.exec(modalEditSlot);
+    if (!m) return;
+    if (!deleteCustomAt(modalCase, Number(m[1]))) return;
     const row = document.querySelector('.case-row[data-case="' + modalCase + '"]');
     if (row) {
       syncCustomRows(row);
       applyAlgOrder(row);
+    }
+    closeModal();
+  }
+
+  function hideModalAlg() {
+    if (modalCase == null || modalEditSlot == null) return;
+    const row = document.querySelector('.case-row[data-case="' + modalCase + '"]');
+    if (!row) return;
+    const slot = modalEditSlot;
+    hideAlg(row, slot);
+    const data = ensure(modalCase);
+    if (!hiddenSet(data).has(slot)) {
+      alert("Keep at least one algorithm visible.");
+      return;
     }
     closeModal();
   }
@@ -1482,6 +1803,7 @@ const clientJs = `
     document.getElementById("alg-modal-backdrop")?.addEventListener("click", closeModal);
     document.getElementById("alg-modal-save")?.addEventListener("click", submitModal);
     document.getElementById("alg-modal-remove")?.addEventListener("click", removeModalAlg);
+    document.getElementById("alg-modal-hide")?.addEventListener("click", hideModalAlg);
     document.getElementById("hidden-modal-close")?.addEventListener("click", closeHiddenModal);
     document.getElementById("hidden-modal-backdrop")?.addEventListener("click", closeHiddenModal);
     document.getElementById("alg-modal-input")?.addEventListener("keydown", (e) => {
@@ -1491,7 +1813,20 @@ const clientJs = `
       }
       if (e.key === "Escape") closeModal();
     });
-    document.getElementById("alg-modal-note")?.addEventListener("keydown", (e) => {
+    document.getElementById("alg-modal-input")?.addEventListener("input", () => {
+      syncModalOrderFromAlg(false);
+    });
+    document.getElementById("alg-modal-order")?.addEventListener("input", (e) => {
+      e.target.dataset.manual = "1";
+    });
+    document.getElementById("alg-modal-order")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitModal();
+      }
+      if (e.key === "Escape") closeModal();
+    });
+    document.getElementById("alg-modal-tip")?.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
         submitModal();
@@ -1594,14 +1929,19 @@ ${groupSections}
         <input type="text" id="alg-modal-input" placeholder="e.g. R U R' U R U2' R'" autocomplete="off" />
       </label>
       <label>
-        Note
-        <input type="text" id="alg-modal-note" placeholder="Optional note for this alg" autocomplete="off" />
+        Tip
+        <input type="text" id="alg-modal-tip" placeholder="Optional tip for this alg" autocomplete="off" />
+      </label>
+      <label>
+        Order of permutation
+        <input type="number" id="alg-modal-order" min="1" max="1260" inputmode="numeric" placeholder="Repeat count to return to start" autocomplete="off" />
       </label>
       <div class="modal-actions">
-        <button type="button" class="btn btn-danger" id="alg-modal-remove" hidden>Remove</button>
+        <button type="button" class="btn btn-ghost btn-icon" id="alg-modal-hide" hidden title="Hide" aria-label="Hide algorithm"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-danger btn-icon" id="alg-modal-remove" hidden title="Remove" aria-label="Remove algorithm"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
         <span class="modal-actions-spacer"></span>
-        <button type="button" class="btn btn-ghost" id="alg-modal-cancel">Cancel</button>
-        <button type="button" class="btn btn-primary" id="alg-modal-save">Add</button>
+        <button type="button" class="btn btn-ghost btn-icon" id="alg-modal-cancel" title="Cancel" aria-label="Cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-primary btn-icon" id="alg-modal-save" title="Add" aria-label="Add"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
       </div>
     </div>
   </div>
@@ -1612,7 +1952,7 @@ ${groupSections}
       <h3 id="hidden-modal-title">Hidden algs</h3>
       <div id="hidden-modal-list" class="hidden-modal-list"></div>
       <div class="modal-actions">
-        <button type="button" class="btn btn-primary" id="hidden-modal-close">Close</button>
+        <button type="button" class="btn btn-primary btn-icon" id="hidden-modal-close" title="Close" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
       </div>
     </div>
   </div>
@@ -1698,12 +2038,16 @@ const example = {
     "27": {
       status: "green",
       favorite: "custom-0",
-      custom: [{ alg: "R U R' U R U2 R'", note: "Muscle memory solid" }],
+      custom: [{ alg: "R U R' U R U2 R'", order: 6 }],
+      algs: {},
+      orders: {},
     },
     "26": {
       status: "orange",
       favorite: "secondary",
       custom: [],
+      algs: {},
+      orders: {},
     },
   },
 };

@@ -5,7 +5,9 @@
     "26": {
       "status": "orange",
       "favorite": "secondary",
-      "custom": []
+      "custom": [],
+      "algs": {},
+      "orders": {}
     },
     "27": {
       "status": "green",
@@ -13,9 +15,11 @@
       "custom": [
         {
           "alg": "R U R' U R U2 R'",
-          "note": "Muscle memory solid"
+          "order": 6
         }
-      ]
+      ],
+      "algs": {},
+      "orders": {}
     }
   }
 }

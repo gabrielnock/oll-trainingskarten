@@ -365,19 +365,17 @@ body::after {
   color: var(--spice-ink);
 }
 
-.tip-box,
-.note-box {
+.tip-box {
   border-color: var(--spice-blue-2);
 }
-.tip-box .inline-label,
-.note-box .inline-label {
+.tip-box .inline-label {
   background: var(--spice-blue-1);
 }
-.tip-box .inline-value,
-.note-box .inline-value {
+.tip-box .inline-value {
   background: #eef1f6;
   color: var(--spice-blue-0);
 }
+/* order pill stays as faded as idle pen tools */
 
 .nav-chip {
   border-width: 2px;
