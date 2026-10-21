@@ -4,8 +4,7 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const cases = JSON.parse(readFileSync(join(__dirname, "oll-cases.json"), "utf8"));
-const notes = JSON.parse(readFileSync(join(__dirname, "cubehead-notes.json"), "utf8"));
+const ollData = JSON.parse(readFileSync(join(__dirname, "all-data.json"), "utf8"));
 const cacheDir = join(__dirname, "svg-cache");
 mkdirSync(cacheDir, { recursive: true });
 
@@ -19,22 +18,9 @@ const COLOR_MAP = {
   "#404040": "#424656", // dark grey → slate
 };
 
-const GROUP_META = {
-  OCLL: { label: "OCLL", slug: "ocll", order: 0 },
-  "All Corners Oriented": { label: "Oriented Corners", slug: "oriented-corners", order: 1 },
-  "T Shapes": { label: "T", slug: "t-cases", order: 2 },
-  "Square Shapes": { label: "Square", slug: "square-cases", order: 3 },
-  "Lightning Shapes": { label: "Lightning", slug: "lightning-cases", order: 4 },
-  "P Shapes": { label: "P", slug: "p-cases", order: 5 },
-  "C Shapes": { label: "C", slug: "c-cases", order: 6 },
-  "Fish Shapes": { label: "Fish", slug: "fish-cases", order: 7 },
-  "W Shapes": { label: "W", slug: "w-cases", order: 8 },
-  "L Shapes": { label: "L", slug: "l-cases", order: 9 },
-  "Line Shapes": { label: "Line", slug: "line-cases", order: 10 },
-  "Knight Move Shapes": { label: "Knight Move", slug: "knight-cases", order: 11 },
-  "Awkward Shapes": { label: "Awkward", slug: "awkward-cases", order: 12 },
-  "Dot Case": { label: "Dot", slug: "dot-cases", order: 13 },
-};
+const GROUP_BY_ID = Object.fromEntries(
+  (ollData.groups || []).map((g) => [g.id, g])
+);
 
 function visualUrl(setup, size = 200) {
   const params = new URLSearchParams({
@@ -103,30 +89,47 @@ function esc(s) {
     .replace(/"/g, "&quot;");
 }
 
-function pickAlg(preferred, fallback) {
-  if (preferred !== undefined && preferred !== null && String(preferred).trim() !== "") {
-    return String(preferred).trim();
+function normalizeAlg(entry) {
+  if (!entry) return null;
+  if (typeof entry === "string") {
+    const alg = entry.trim();
+    return alg ? { alg, order: null, tip: "" } : null;
   }
-  return (fallback || "").trim();
+  const alg = String(entry.alg || "").trim();
+  if (!alg) return null;
+  const order =
+    entry.order != null && Number.isFinite(Number(entry.order))
+      ? Number(entry.order)
+      : null;
+  return {
+    alg,
+    order,
+    tip: String(entry.tip || "").trim(),
+  };
 }
 
-const cardsBase = cases.map((c) => {
-  const ch = notes[String(c.num)] || {};
-  const meta = GROUP_META[c.category] || {
-    label: c.category,
-    slug: c.category.toLowerCase().replace(/\s+/g, "-"),
+const cardsBase = (ollData.cases || []).map((c) => {
+  const meta = GROUP_BY_ID[c.group] || {
+    id: c.group,
+    label: c.group,
     order: 99,
   };
+  const primary = normalizeAlg(c.primary);
+  const secondary = normalizeAlg(c.secondary);
+  if (!primary) throw new Error("Case #" + c.num + " is missing primary.alg");
   return {
     num: c.num,
     group: meta.label,
-    slug: meta.slug,
+    slug: meta.id,
     order: meta.order,
-    name: ch.name || `OLL ${c.num}`,
+    name: c.name || `OLL ${c.num}`,
     setup: c.setup,
-    primary: pickAlg(ch.primary, c.primary),
-    secondary: pickAlg(ch.secondary, c.secondary),
-    tip: (ch.notes || "").trim(),
+    primary: primary.alg,
+    primaryOrder: primary.order,
+    tip: primary.tip,
+    secondary: secondary ? secondary.alg : "",
+    secondaryOrder: secondary ? secondary.order : null,
+    secondaryTip: secondary ? secondary.tip : "",
   };
 });
 
@@ -157,6 +160,10 @@ function cardHtml(c) {
   const tip = c.tip
     ? `<div class="inline-box tip-box alg-meta" data-alg-tip-box><span class="inline-label" title="Tip"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span class="sr-only">Tip</span></span><span class="inline-value" data-alg-tip>${esc(c.tip)}</span></div>`
     : "";
+  const primaryOrderAttr =
+    c.primaryOrder != null ? ` data-order-default="${esc(String(c.primaryOrder))}"` : "";
+  const secondaryOrderAttr =
+    c.secondaryOrder != null ? ` data-order-default="${esc(String(c.secondaryOrder))}"` : "";
   const altRow = c.secondary
     ? `
         <div class="alg-row" data-slot="secondary" data-builtin="1">
@@ -171,7 +178,7 @@ function cardHtml(c) {
                 <span>★</span>
               </label>
             </div>
-            <p class="alg" data-alg-text data-alg-raw="${esc(c.secondary)}" data-alg-default="${esc(c.secondary)}" data-tip-default="">${esc(c.secondary)}</p>
+            <p class="alg" data-alg-text data-alg-raw="${esc(c.secondary)}" data-alg-default="${esc(c.secondary)}" data-tip-default="${esc(c.secondaryTip || "")}"${secondaryOrderAttr}>${esc(c.secondary)}</p>
           </div>
         </div>`
     : "";
@@ -190,7 +197,7 @@ function cardHtml(c) {
         </button>
       </div>
       <div class="inline-box setup-box">
-        <span class="inline-label">Setup</span>
+        <span class="inline-label" title="Setup"><i class="fa-solid fa-shuffle" aria-hidden="true"></i><span class="sr-only">Setup</span></span>
         <span class="inline-value alg">${esc(c.setup)}</span>
       </div>
       <div class="diagram-tools screen-only">
@@ -217,7 +224,7 @@ function cardHtml(c) {
                 <span>★</span>
               </label>
             </div>
-            <p class="alg primary" data-alg-text data-alg-raw="${esc(c.primary)}" data-alg-default="${esc(c.primary)}" data-tip-default="${esc(c.tip)}">${esc(c.primary)}</p>
+            <p class="alg primary" data-alg-text data-alg-raw="${esc(c.primary)}" data-alg-default="${esc(c.primary)}" data-tip-default="${esc(c.tip)}"${primaryOrderAttr}>${esc(c.primary)}</p>
             ${tip}
           </div>
         </div>${altRow}
@@ -305,21 +312,11 @@ const clientJs = `
 (() => {
   ${algOrderLibJs}
 
-  const STORAGE_KEY = "oll-progress-v1";
-  const FILE_NAME = "oll-progress.json";
+  const STORAGE_KEY = "oll-all-data-v3";
+  const FILE_NAME = "all-data.json";
+  const EMBEDDED_ALL_DATA = ${JSON.stringify(ollData)};
 
-  const defaultCase = () => ({
-    status: "red",
-    favorite: "primary",
-    custom: [],
-    hidden: [],
-    discarded: [],
-    algs: {},
-    orders: {},
-    tips: {},
-  });
-
-  let state = { version: 2, updatedAt: null, cases: {} };
+  let state = cloneData(EMBEDDED_ALL_DATA);
   let modalCase = null;
   let modalEditSlot = null;
   let hiddenModalCase = null;
@@ -328,40 +325,44 @@ const clientJs = `
   let practiceQueue = [];
   let touchStartX = null;
 
-  function normalizeCustomEntry(item) {
-    if (item && typeof item === "object" && typeof item.alg === "string") {
-      const entry = { alg: item.alg };
-      if (item.order != null && Number.isFinite(Number(item.order))) {
-        entry.order = Number(item.order);
-      }
-      const tip =
-        typeof item.tip === "string"
-          ? item.tip
-          : typeof item.note === "string"
-            ? item.note
-            : "";
-      if (tip.trim()) entry.tip = tip.trim();
-      return entry;
-    }
-    return { alg: String(item || "") };
+  function cloneData(data) {
+    return JSON.parse(JSON.stringify(data));
   }
 
-  function migrateCase(raw) {
-    const c = { ...defaultCase(), ...(raw || {}) };
-    const legacyNote =
-      typeof c.note === "string"
-        ? c.note
-        : raw && raw.notes && typeof raw.notes === "object"
-          ? raw.notes.primary || raw.notes.secondary || ""
+  function normalizeAlgSide(entry) {
+    if (!entry) return null;
+    if (typeof entry === "string") {
+      const alg = entry.trim();
+      return alg ? { alg: alg, order: null } : null;
+    }
+    if (typeof entry !== "object") return null;
+    const alg = String(entry.alg || "").trim();
+    if (!alg) return null;
+    const out = { alg: alg };
+    if (entry.order != null && Number.isFinite(Number(entry.order))) {
+      out.order = Number(entry.order);
+    }
+    const tip =
+      typeof entry.tip === "string"
+        ? entry.tip.trim()
+        : typeof entry.note === "string"
+          ? entry.note.trim()
           : "";
-    delete c.note;
-    delete c.notes;
+    if (tip) out.tip = tip;
+    return out;
+  }
+
+  function normalizeCustomEntry(item) {
+    return normalizeAlgSide(item) || { alg: String(item || "") };
+  }
+
+  function normalizeCase(raw) {
+    const c = Object.assign({}, raw || {});
+    c.num = Number(c.num);
+    c.primary = normalizeAlgSide(c.primary) || { alg: "" };
+    c.secondary = normalizeAlgSide(c.secondary);
     if (!Array.isArray(c.custom)) c.custom = [];
-    c.custom = c.custom.map(normalizeCustomEntry);
-    if (!c.algs || typeof c.algs !== "object") c.algs = {};
-    if (!c.orders || typeof c.orders !== "object") c.orders = {};
-    if (!c.tips || typeof c.tips !== "object") c.tips = {};
-    if (legacyNote && !c.tips.primary) c.tips.primary = legacyNote;
+    c.custom = c.custom.map(normalizeCustomEntry).filter((e) => e && e.alg);
     if (!c.favorite) c.favorite = "primary";
     if (!Array.isArray(c.hidden)) c.hidden = [];
     c.hidden = c.hidden.map(String).filter(Boolean);
@@ -369,12 +370,141 @@ const clientJs = `
     c.discarded = c.discarded.map(String).filter(Boolean);
     if (c.status === "yellow") c.status = "orange";
     if (c.status !== "red" && c.status !== "orange" && c.status !== "green") c.status = "red";
+    // Drop legacy overlay maps if present
+    delete c.algs;
+    delete c.orders;
+    delete c.tips;
+    delete c.note;
+    delete c.notes;
     return c;
+  }
+
+  function casesToMap(cases) {
+    const map = {};
+    (cases || []).forEach((raw) => {
+      const c = normalizeCase(raw);
+      if (!Number.isFinite(c.num)) return;
+      map[String(c.num)] = c;
+    });
+    return map;
+  }
+
+  function casesToArray(map) {
+    return Object.keys(map)
+      .map((k) => map[k])
+      .sort((a, b) => a.num - b.num);
+  }
+
+  function exportableState() {
+    return {
+      version: 3,
+      updatedAt: state.updatedAt || null,
+      groups: state.groups || EMBEDDED_ALL_DATA.groups || [],
+      cases: casesToArray(state.cases),
+    };
+  }
+
+  function mergeLegacyProgress(baseData, progress) {
+    const merged = cloneData(baseData);
+    const map = casesToMap(merged.cases);
+    const src = progress && progress.cases ? progress.cases : {};
+    Object.keys(src).forEach((key) => {
+      const p = src[key] || {};
+      if (!map[key]) {
+        map[key] = normalizeCase({ num: Number(key), primary: { alg: "" }, ...p });
+        return;
+      }
+      const c = map[key];
+      if (p.status) c.status = p.status;
+      if (p.favorite) c.favorite = p.favorite;
+      if (Array.isArray(p.hidden)) c.hidden = p.hidden.map(String);
+      if (Array.isArray(p.discarded)) c.discarded = p.discarded.map(String);
+      if (Array.isArray(p.custom)) c.custom = p.custom.map(normalizeCustomEntry);
+      if (p.algs && typeof p.algs === "object") {
+        if (typeof p.algs.primary === "string" && p.algs.primary.trim()) {
+          c.primary = c.primary || { alg: "" };
+          c.primary.alg = p.algs.primary.trim();
+        }
+        if (typeof p.algs.secondary === "string" && p.algs.secondary.trim()) {
+          c.secondary = c.secondary || { alg: "" };
+          c.secondary.alg = p.algs.secondary.trim();
+        }
+      }
+      if (p.orders && typeof p.orders === "object") {
+        if (p.orders.primary != null && c.primary) c.primary.order = Number(p.orders.primary);
+        if (p.orders.secondary != null && c.secondary) {
+          c.secondary.order = Number(p.orders.secondary);
+        }
+      }
+      if (p.tips && typeof p.tips === "object") {
+        if (typeof p.tips.primary === "string" && c.primary) c.primary.tip = p.tips.primary;
+        if (typeof p.tips.secondary === "string") {
+          c.secondary = c.secondary || { alg: "" };
+          c.secondary.tip = p.tips.secondary;
+        }
+      }
+      if (typeof p.note === "string" && p.note.trim() && c.primary && !c.primary.tip) {
+        c.primary.tip = p.note.trim();
+      }
+      map[key] = normalizeCase(c);
+    });
+    merged.cases = casesToArray(map);
+    merged.version = 3;
+    merged.updatedAt = progress.updatedAt || null;
+    return merged;
+  }
+
+  function applyParsedState(parsed) {
+    if (!parsed) throw new Error("Invalid data file");
+    let next;
+    if (Array.isArray(parsed.cases) && parsed.groups) {
+      next = {
+        version: 3,
+        updatedAt: parsed.updatedAt || null,
+        groups: parsed.groups,
+        cases: casesToMap(parsed.cases),
+      };
+    } else if (parsed.cases && typeof parsed.cases === "object" && !Array.isArray(parsed.cases)) {
+      // Legacy progress-only file
+      const merged = mergeLegacyProgress(EMBEDDED_ALL_DATA, parsed);
+      next = {
+        version: 3,
+        updatedAt: merged.updatedAt || null,
+        groups: merged.groups,
+        cases: casesToMap(merged.cases),
+      };
+    } else {
+      throw new Error("Invalid data file");
+    }
+    // Ensure every embedded case exists
+    const baseMap = casesToMap(EMBEDDED_ALL_DATA.cases);
+    Object.keys(baseMap).forEach((k) => {
+      if (!next.cases[k]) next.cases[k] = baseMap[k];
+      else {
+        // Keep identity fields from base if missing
+        const b = baseMap[k];
+        const c = next.cases[k];
+        if (!c.name) c.name = b.name;
+        if (!c.setup) c.setup = b.setup;
+        if (!c.group) c.group = b.group;
+        if (!c.primary || !c.primary.alg) c.primary = b.primary;
+        if (c.secondary == null && b.secondary) c.secondary = b.secondary;
+        next.cases[k] = normalizeCase(c);
+      }
+    });
+    state = next;
   }
 
   function ensure(num) {
     const key = String(num);
-    state.cases[key] = migrateCase(state.cases[key]);
+    if (!state.cases[key]) {
+      const base = casesToMap(EMBEDDED_ALL_DATA.cases)[key];
+      state.cases[key] = normalizeCase(
+        base || { num: Number(num), primary: { alg: "" }, status: "red", favorite: "primary" }
+      );
+    } else {
+      state.cases[key] = normalizeCase(state.cases[key]);
+    }
     return state.cases[key];
   }
 
@@ -383,24 +513,23 @@ const clientJs = `
     if (stamp) stamp.textContent = text || "";
   }
 
-  function applyParsedState(parsed) {
-    if (!parsed || typeof parsed.cases !== "object") throw new Error("Invalid progress file");
-    state = { version: 2, updatedAt: parsed.updatedAt || null, cases: parsed.cases };
-    Object.keys(state.cases).forEach((k) => {
-      state.cases[k] = migrateCase(state.cases[k]);
-    });
-  }
-
   function saveLocal() {
     state.updatedAt = new Date().toISOString();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(exportableState()));
     setStamp("Saved · " + new Date().toLocaleTimeString());
   }
 
   function loadLocal() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return false;
+      if (!raw) {
+        // Migrate old progress key if present
+        const legacy = localStorage.getItem("oll-progress-v1");
+        if (!legacy) return false;
+        applyParsedState(JSON.parse(legacy));
+        saveLocal();
+        return true;
+      }
       applyParsedState(JSON.parse(raw));
       return true;
     } catch (_) {
@@ -408,13 +537,13 @@ const clientJs = `
     }
   }
 
-  async function loadRemoteProgress() {
+  async function loadRemoteData() {
     try {
       const res = await fetch(FILE_NAME, { cache: "no-store" });
       if (!res.ok) return false;
       const parsed = await res.json();
       applyParsedState(parsed);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(exportableState()));
       return true;
     } catch (_) {
       return false;
@@ -422,14 +551,17 @@ const clientJs = `
   }
 
   async function loadProgress() {
-    if (await loadRemoteProgress()) return "online";
-    loadLocal();
+    if (await loadRemoteData()) return "online";
+    if (loadLocal()) return "local";
+    applyParsedState(EMBEDDED_ALL_DATA);
     return "local";
   }
 
   function exportFile() {
     state.updatedAt = new Date().toISOString();
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(exportableState(), null, 2)], {
+      type: "application/json",
+    });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = FILE_NAME;
@@ -445,7 +577,7 @@ const clientJs = `
         saveLocal();
         applyAll();
       } catch (err) {
-        alert("Could not import progress file: " + err.message);
+        alert("Could not import data file: " + err.message);
       }
     };
     reader.readAsText(file);
@@ -474,106 +606,62 @@ const clientJs = `
     return row;
   }
 
-  function slotOrderKey(slot) {
-    return String(slot || "");
+  function slotAlgEntry(data, slot, create) {
+    if (slot === "primary") {
+      if (!data.primary && create) data.primary = { alg: "" };
+      return data.primary || null;
+    }
+    if (slot === "secondary") {
+      if (!data.secondary && create) data.secondary = { alg: "" };
+      return data.secondary || null;
+    }
+    const m = /^custom-(\\d+)$/.exec(String(slot));
+    if (!m) return null;
+    return data.custom[Number(m[1])] || null;
   }
 
   function readStoredOrder(data, slot) {
-    const key = slotOrderKey(slot);
-    if (data.orders && data.orders[key] != null && Number.isFinite(Number(data.orders[key]))) {
-      return Number(data.orders[key]);
-    }
-    const m = /^custom-(\\d+)$/.exec(key);
-    if (m) {
-      const entry = data.custom[Number(m[1])];
-      if (entry && entry.order != null && Number.isFinite(Number(entry.order))) {
-        return Number(entry.order);
-      }
+    const entry = slotAlgEntry(data, slot, false);
+    if (entry && entry.order != null && Number.isFinite(Number(entry.order))) {
+      return Number(entry.order);
     }
     return null;
   }
 
   function writeStoredOrder(data, slot, order) {
-    const key = slotOrderKey(slot);
-    if (!data.orders) data.orders = {};
-    if (order == null || !Number.isFinite(Number(order))) {
-      delete data.orders[key];
-    } else {
-      data.orders[key] = Number(order);
-    }
-    const m = /^custom-(\\d+)$/.exec(key);
-    if (m) {
-      const entry = data.custom[Number(m[1])];
-      if (entry) {
-        if (order == null || !Number.isFinite(Number(order))) delete entry.order;
-        else entry.order = Number(order);
-      }
-    }
+    const entry = slotAlgEntry(data, slot, true);
+    if (!entry) return;
+    if (order == null || !Number.isFinite(Number(order))) delete entry.order;
+    else entry.order = Number(order);
   }
 
   function readStoredAlg(data, slot) {
-    if (slot === "primary" || slot === "secondary") {
-      const v = data.algs && data.algs[slot];
-      return typeof v === "string" && v.trim() ? v : null;
-    }
-    const m = /^custom-(\\d+)$/.exec(String(slot));
-    if (m) {
-      const entry = data.custom[Number(m[1])];
-      return entry && typeof entry.alg === "string" ? entry.alg : null;
-    }
-    return null;
+    const entry = slotAlgEntry(data, slot, false);
+    return entry && typeof entry.alg === "string" && entry.alg.trim() ? entry.alg : null;
   }
 
-  function writeStoredAlg(data, slot, alg, defaultText) {
+  function writeStoredAlg(data, slot, alg) {
     const text = String(alg || "").trim();
-    if (slot === "primary" || slot === "secondary") {
-      if (!data.algs) data.algs = {};
-      if (!text || (defaultText != null && text === String(defaultText))) delete data.algs[slot];
-      else data.algs[slot] = text;
-      return;
-    }
-    const m = /^custom-(\\d+)$/.exec(String(slot));
-    if (m && data.custom[Number(m[1])]) {
-      data.custom[Number(m[1])].alg = text;
-    }
+    const entry = slotAlgEntry(data, slot, true);
+    if (!entry) return;
+    entry.alg = text;
   }
 
   function readStoredTip(data, slot) {
-    const key = slotOrderKey(slot);
-    if (data.tips && typeof data.tips[key] === "string") return data.tips[key];
-    const m = /^custom-(\\d+)$/.exec(key);
-    if (m) {
-      const entry = data.custom[Number(m[1])];
-      if (entry && typeof entry.tip === "string") return entry.tip;
-      if (entry && typeof entry.note === "string") return entry.note;
-    }
+    const entry = slotAlgEntry(data, slot, false);
+    if (!entry) return null;
+    if (typeof entry.tip === "string") return entry.tip;
+    if (typeof entry.note === "string") return entry.note;
     return null;
   }
 
-  function writeStoredTip(data, slot, tip, defaultTip) {
+  function writeStoredTip(data, slot, tip) {
     const text = String(tip || "").trim();
-    const key = slotOrderKey(slot);
-    if (!data.tips) data.tips = {};
-    const m = /^custom-(\\d+)$/.exec(key);
-    if (slot === "primary" || slot === "secondary") {
-      if (!text || (defaultTip != null && text === String(defaultTip).trim())) {
-        delete data.tips[key];
-      } else {
-        data.tips[key] = text;
-      }
-      return;
-    }
-    if (m && data.custom[Number(m[1])]) {
-      const entry = data.custom[Number(m[1])];
-      if (!text) {
-        delete entry.tip;
-        delete entry.note;
-        delete data.tips[key];
-      } else {
-        entry.tip = text;
-        data.tips[key] = text;
-      }
-    }
+    const entry = slotAlgEntry(data, slot, true);
+    if (!entry) return;
+    delete entry.note;
+    if (!text) delete entry.tip;
+    else entry.tip = text;
   }
 
   function tipHtml(text) {
@@ -671,7 +759,20 @@ const clientJs = `
     const raw = text.dataset.algRaw || "";
     const computed = computeAlgOrder(raw);
     const storedOrder = readStoredOrder(data, slot);
-    const order = storedOrder != null ? storedOrder : computed;
+    const defaultAlg = text.dataset.algDefault || "";
+    const defaultOrderRaw = text.dataset.orderDefault;
+    const defaultOrder =
+      defaultOrderRaw != null &&
+      defaultOrderRaw !== "" &&
+      Number.isFinite(Number(defaultOrderRaw))
+        ? Number(defaultOrderRaw)
+        : null;
+    const order =
+      storedOrder != null
+        ? storedOrder
+        : raw === defaultAlg && defaultOrder != null
+          ? defaultOrder
+          : computed;
     orderEl.textContent = order != null ? String(order) : "?";
     const title =
       storedOrder != null
@@ -1479,7 +1580,6 @@ const clientJs = `
     const tipInput = document.getElementById("alg-modal-tip");
     const title = document.getElementById("alg-modal-title");
     const saveBtn = document.getElementById("alg-modal-save");
-    const removeBtn = document.getElementById("alg-modal-remove");
     const hideBtn = document.getElementById("alg-modal-hide");
     const editing = modalEditSlot != null;
     if (title) title.textContent = (editing ? "Edit alg" : "Add alg") + " · OLL #" + caseNum;
@@ -1490,8 +1590,6 @@ const clientJs = `
       saveBtn.setAttribute("aria-label", saveLabel);
       saveBtn.innerHTML = '<i class="fa-solid ' + saveIcon + '" aria-hidden="true"></i>';
     }
-    const canRemove = editing && /^custom-\\d+$/.test(modalEditSlot || "");
-    if (removeBtn) removeBtn.hidden = !canRemove;
     if (hideBtn) hideBtn.hidden = !editing;
     let algText = "";
     if (editing) {
@@ -1509,8 +1607,20 @@ const clientJs = `
       if (input) input.value = algText;
       const computed = computeAlgOrder(algText);
       const storedOrder = readStoredOrder(data, modalEditSlot);
+      const defaultAlg = fromDom?.dataset.algDefault || "";
+      const defaultOrder =
+        fromDom?.dataset.orderDefault != null &&
+        fromDom.dataset.orderDefault !== "" &&
+        Number.isFinite(Number(fromDom.dataset.orderDefault))
+          ? Number(fromDom.dataset.orderDefault)
+          : null;
       if (orderInput) {
-        const shown = storedOrder != null ? storedOrder : computed;
+        const shown =
+          storedOrder != null
+            ? storedOrder
+            : algText === defaultAlg && defaultOrder != null
+              ? defaultOrder
+              : computed;
         orderInput.value = shown != null ? String(shown) : "";
         orderInput.dataset.manual = storedOrder != null ? "1" : "0";
       }
@@ -1602,19 +1712,6 @@ const clientJs = `
     if (i === removedIdx) return null;
     if (i > removedIdx) return "custom-" + (i - 1);
     return slot;
-  }
-
-  function removeModalAlg() {
-    if (modalCase == null || modalEditSlot == null) return;
-    const m = /^custom-(\\d+)$/.exec(modalEditSlot);
-    if (!m) return;
-    if (!deleteCustomAt(modalCase, Number(m[1]))) return;
-    const row = document.querySelector('.case-row[data-case="' + modalCase + '"]');
-    if (row) {
-      syncCustomRows(row);
-      applyAlgOrder(row);
-    }
-    closeModal();
   }
 
   function hideModalAlg() {
@@ -1802,7 +1899,6 @@ const clientJs = `
     document.getElementById("alg-modal-cancel")?.addEventListener("click", closeModal);
     document.getElementById("alg-modal-backdrop")?.addEventListener("click", closeModal);
     document.getElementById("alg-modal-save")?.addEventListener("click", submitModal);
-    document.getElementById("alg-modal-remove")?.addEventListener("click", removeModalAlg);
     document.getElementById("alg-modal-hide")?.addEventListener("click", hideModalAlg);
     document.getElementById("hidden-modal-close")?.addEventListener("click", closeHiddenModal);
     document.getElementById("hidden-modal-backdrop")?.addEventListener("click", closeHiddenModal);
@@ -1938,7 +2034,6 @@ ${groupSections}
       </label>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost btn-icon" id="alg-modal-hide" hidden title="Hide" aria-label="Hide algorithm"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i></button>
-        <button type="button" class="btn btn-danger btn-icon" id="alg-modal-remove" hidden title="Remove" aria-label="Remove algorithm"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
         <span class="modal-actions-spacer"></span>
         <button type="button" class="btn btn-ghost btn-icon" id="alg-modal-cancel" title="Cancel" aria-label="Cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
         <button type="button" class="btn btn-primary btn-icon" id="alg-modal-save" title="Add" aria-label="Add"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
@@ -2030,27 +2125,5 @@ ${groupSections}
 </html>`;
 
 writeFileSync(join(__dirname, "index.html"), html, "utf8");
-
-const example = {
-  version: 2,
-  updatedAt: null,
-  cases: {
-    "27": {
-      status: "green",
-      favorite: "custom-0",
-      custom: [{ alg: "R U R' U R U2 R'", order: 6 }],
-      algs: {},
-      orders: {},
-    },
-    "26": {
-      status: "orange",
-      favorite: "secondary",
-      custom: [],
-      algs: {},
-      orders: {},
-    },
-  },
-};
-writeFileSync(join(__dirname, "oll-progress.example.json"), JSON.stringify(example, null, 2) + "\n", "utf8");
 
 console.log(`Wrote index.html · ${cards.length} cases · ${groups.length} groups`);

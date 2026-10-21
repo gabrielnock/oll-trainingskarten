@@ -644,7 +644,18 @@ main { padding: 1.25rem 1rem 3.5rem; max-width: 1140px; margin: 0 auto; }
   padding-bottom: 1.1mm;
 }
 .setup-box { border-color: var(--gold); }
-.setup-box .inline-label { background: var(--brown); }
+.setup-box .inline-label {
+  background: var(--brown);
+  justify-content: center;
+  min-width: 0;
+  padding: 0 1.6mm;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.setup-box .inline-label i {
+  font-size: 0.7rem;
+  line-height: 1;
+}
 .setup-box .inline-value {
   background: var(--cream);
   font-size: 9pt;

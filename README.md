@@ -1,6 +1,6 @@
 # Gabis OLL Trainer
 
-Interactive A6 flashcards for all **57 OLL cases** (CubeHead nicknames), with learning status, favorite algs, per-alg notes, and JSON progress export.
+Interactive A6 flashcards for all **57 OLL cases** (CubeHead nicknames), with learning status, favorite algs, tips, permutation order, and a single JSON file for everything.
 
 ## Quick start
 
@@ -16,45 +16,51 @@ npm start
 - Case thumbnails in each group submenu
 - Status beside each card (not learned / learning / learned) — default is not learned
 - ★ favorite toggle per alg — favorite is bold and shown first (also in Print/PDF)
-- **+ Alg** opens a modal to add your own algorithms (with optional note)
-- **Edit** on custom algs to change alg/note or remove
-- Tips shown with the default primary algorithm
-- **Export JSON** / **Import** for backup & migration (`oll-progress.json`)
+- **+ Alg** opens a modal to add your own algorithms (tip + order of permutation)
+- **Edit** to change alg / tip / order, or **Hide** (permanent remove only from Hidden algs)
+- Setup scramble + tip icons; order pill with tooltip
+- **Export / Import** of the full `all-data.json`
 - Progress auto-saved in `localStorage`
-- On load: if `oll-progress.json` exists next to the app, that file is used; otherwise `localStorage`
+- On load: `all-data.json` if present, else `localStorage`, else embedded defaults
 - Practice mode: filtered cases in random order
 
-## Progress file format
+## Data file (`all-data.json`)
 
-Put an exported `oll-progress.json` in the same folder as `index.html` (e.g. commit it for GitHub Pages) to share progress across devices. Edits in the browser still only update `localStorage` until you export and replace that file.
-
-See `oll-progress.example.json`:
+One file holds **defaults and learning state**:
 
 ```json
 {
-  "version": 2,
-  "updatedAt": "…",
-  "cases": {
-    "27": {
-      "status": "green",
-      "favorite": "custom-0",
-      "custom": [
-        { "alg": "R U R' U R U2 R'", "note": "…" }
-      ]
+  "version": 3,
+  "updatedAt": null,
+  "groups": [{ "id": "ocll", "label": "OCLL", "order": 0 }],
+  "cases": [
+    {
+      "num": 25,
+      "group": "ocll",
+      "name": "Chameleon",
+      "setup": "…",
+      "status": "red",
+      "favorite": "primary",
+      "hidden": [],
+      "discarded": [],
+      "custom": [],
+      "primary": { "alg": "(r U R' U') (r' F R F')", "order": 3, "tip": "…" },
+      "secondary": { "alg": "…", "order": 3 }
     }
-  }
+  ]
 }
 ```
+
+Edit `all-data.json`, then `npm run build`. Export/import use the same format so one file is a full snapshot of the app.
 
 ## Rebuild
 
 ```bash
-npm run parse
-npm run build   # fetches VisualCube SVGs (cached in svg-cache/), recolors, writes index.html
+npm run build   # reads all-data.json, fetches VisualCube SVGs (cached), writes index.html
 ```
 
 ## Styles
 
-Edit **`styles.css`** for layout/colors. Linked from `index.html` (no rebuild needed for CSS-only tweaks — just refresh). Run `npm run build` after changing `generate-html.mjs`.
+Edit **`styles.css`** for layout/colors. Linked from `index.html` (no rebuild needed for CSS-only tweaks — just refresh). Run `npm run build` after changing `generate-html.mjs` or `all-data.json`.
 
 Cube diagrams are **inline SVGs**. Yellow `#FEFE00` → `#E8C20A`, grey `#404040` → `#424656`.

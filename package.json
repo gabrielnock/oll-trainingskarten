@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node generate-html.mjs",
-    "parse": "node parse-speedcubedb.mjs",
+    "test:order": "node test-alg-order.mjs",
     "start": "npx --yes serve . -p 4173",
     "open": "start index.html"
   },
