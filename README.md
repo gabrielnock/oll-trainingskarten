@@ -21,7 +21,7 @@ npm start
 - Setup scramble + tip icons; order pill with tooltip
 - **Export / Import** of the full `all-data.json`
 - Progress auto-saved in `localStorage`
-- On load: `all-data.json` if present, else `localStorage`, else embedded defaults
+- On load: saved browser data (`localStorage`) first, else `all-data.json` / embedded defaults (first visit only)
 - Practice mode: filtered cases in random order
 
 ## Data file (`all-data.json`)

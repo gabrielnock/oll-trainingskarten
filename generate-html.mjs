@@ -543,7 +543,10 @@ const clientJs = `
       if (!res.ok) return false;
       const parsed = await res.json();
       applyParsedState(parsed);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(exportableState()));
+      // Seed only — do not overwrite an existing local save on later visits.
+      if (!localStorage.getItem(STORAGE_KEY)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(exportableState()));
+      }
       return true;
     } catch (_) {
       return false;
@@ -551,10 +554,12 @@ const clientJs = `
   }
 
   async function loadProgress() {
-    if (await loadRemoteData()) return "online";
+    // Prefer browser storage so imports / learning survive reopen.
+    // Remote / embedded all-data.json is only the first-visit default.
     if (loadLocal()) return "local";
+    if (await loadRemoteData()) return "online";
     applyParsedState(EMBEDDED_ALL_DATA);
-    return "local";
+    return "embedded";
   }
 
   function exportFile() {
@@ -1425,12 +1430,19 @@ const clientJs = `
     }
   }
 
+  let lastScrollY = window.scrollY;
+  let anchorsScrollLockUntil = 0;
+
   function setAnchorsCollapsed(collapsed) {
     const wrap = document.getElementById("anchors-wrap");
     const btn = document.getElementById("btn-groups");
     if (!wrap || !btn) return;
     wrap.classList.toggle("is-collapsed", collapsed);
     btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+    // Expanding the sticky header shifts layout / URL-bar chrome on phones and
+    // can fire a scroll event; ignore that so the toggle does not instantly close.
+    lastScrollY = window.scrollY;
+    if (!collapsed) anchorsScrollLockUntil = Date.now() + 600;
   }
 
   function closeAllStatusPanels(exceptRow) {
@@ -1844,13 +1856,16 @@ const clientJs = `
       }
     });
 
-    let lastScrollY = window.scrollY;
     window.addEventListener(
       "scroll",
       () => {
         if (!window.matchMedia("(max-width: 720px)").matches) return;
         const y = window.scrollY;
-        if (y > lastScrollY + 24) setAnchorsCollapsed(true);
+        if (Date.now() < anchorsScrollLockUntil) {
+          lastScrollY = y;
+          return;
+        }
+        if (y > lastScrollY + 48) setAnchorsCollapsed(true);
         lastScrollY = y;
       },
       { passive: true }
