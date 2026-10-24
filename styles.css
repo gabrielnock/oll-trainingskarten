@@ -1312,13 +1312,86 @@ body.practice-mode main {
   border-color: var(--anthracite);
   opacity: 1;
 }
-.practice-picker-count {
+.practice-picker-end {
   margin-left: auto;
-  font-size: 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+.practice-picker-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  padding: 0 0.55rem;
+  border: 2px solid var(--dove);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--anthracite);
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--muted);
   font-variant-numeric: tabular-nums;
-  padding: 0 0.15rem;
+  line-height: 1;
+  box-shadow: 2px 2px 3px rgba(42, 46, 51, 0.08);
+  user-select: none;
+}
+.practice-order-switch {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  height: 2.1rem;
+  width: 4.3rem;
+  padding: 2px;
+  border: 2px solid var(--dove);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 2px 2px 3px rgba(42, 46, 51, 0.08);
+  flex-shrink: 0;
+}
+.practice-order-thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc(50% - 2px);
+  border-radius: 7px;
+  background: var(--mist);
+  border: 1.5px solid var(--anthracite);
+  box-shadow: 1px 1px 2px rgba(42, 46, 51, 0.08);
+  transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+.practice-order-switch[data-mode="fixed"] .practice-order-thumb {
+  transform: translateX(100%);
+}
+.practice-order-opt {
+  appearance: none;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--anthracite);
+  cursor: pointer;
+  font-size: 0.78rem;
+  line-height: 1;
+  opacity: 0.38;
+  transition: opacity 0.18s ease;
+}
+.practice-order-opt[aria-pressed="true"] {
+  opacity: 1;
+}
+.practice-order-opt:focus-visible {
+  outline: 2px solid var(--main);
+  outline-offset: 1px;
+  border-radius: 6px;
 }
 
 @media (max-width: 720px) {

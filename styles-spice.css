@@ -419,7 +419,26 @@ body::after {
   background: rgba(255, 255, 255, 0.16);
 }
 .toolbar .practice-picker-count {
-  color: rgba(232, 236, 245, 0.72);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.22);
+}
+.toolbar .practice-order-switch {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.22);
+}
+.toolbar .practice-order-thumb {
+  background: #fff;
+  border-color: var(--spice-ink);
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.18);
+}
+.toolbar .practice-order-opt {
+  color: rgba(238, 242, 248, 0.7);
+}
+.toolbar .practice-order-opt[aria-pressed="true"] {
+  color: var(--spice-blue-0);
 }
 
 .practice-bar {

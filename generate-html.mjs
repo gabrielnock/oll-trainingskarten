@@ -323,6 +323,7 @@ const clientJs = `
   let practiceOn = false;
   let practiceIndex = 0;
   let practiceQueue = [];
+  let practiceShuffle = true;
   let touchStartX = null;
 
   function cloneData(data) {
@@ -1327,10 +1328,20 @@ const clientJs = `
     }
   }
 
+  function syncPracticeOrderSwitch() {
+    const sw = document.getElementById("practice-order-switch");
+    if (!sw) return;
+    sw.dataset.mode = practiceShuffle ? "shuffle" : "fixed";
+    sw.querySelectorAll("[data-practice-order]").forEach((btn) => {
+      const on = btn.dataset.practiceOrder === (practiceShuffle ? "shuffle" : "fixed");
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
   function rebuildPracticeQueue(keepCurrent) {
     const eligibleIds = practiceEligibleRows().map((r) => r.dataset.case);
     const currentId = keepCurrent ? practiceQueue[practiceIndex] : null;
-    practiceQueue = shuffleIds(eligibleIds);
+    practiceQueue = practiceShuffle ? shuffleIds(eligibleIds) : eligibleIds.slice();
     if (currentId) {
       const idx = practiceQueue.indexOf(currentId);
       practiceIndex = idx >= 0 ? idx : 0;
@@ -1387,7 +1398,9 @@ const clientJs = `
     const meta = document.getElementById("practice-meta");
     if (meta) meta.textContent = (practiceIndex + 1) + " / " + practiceQueue.length;
     const name = current.querySelector(".title")?.textContent?.trim() || ("#" + current.dataset.case);
-    if (meta) meta.title = name + " · random order";
+    if (meta) {
+      meta.title = name + (practiceShuffle ? " · shuffled" : " · fixed order");
+    }
     current.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
 
@@ -1819,6 +1832,18 @@ const clientJs = `
         onPracticeFilterChange();
       }
     });
+    document.getElementById("practice-order-switch")?.addEventListener("click", (e) => {
+      const opt = e.target.closest("[data-practice-order]");
+      if (!opt) return;
+      const nextShuffle = opt.dataset.practiceOrder === "shuffle";
+      if (nextShuffle === practiceShuffle) return;
+      practiceShuffle = nextShuffle;
+      syncPracticeOrderSwitch();
+      if (!practiceOn) return;
+      rebuildPracticeQueue(true);
+      refreshPractice();
+    });
+    syncPracticeOrderSwitch();
 
     document.getElementById("btn-menu")?.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -2016,7 +2041,18 @@ const html = `<!DOCTYPE html>
         <label class="practice-check practice-check-status" title="Learned"><input type="checkbox" data-practice-status="green" /><span class="pip green" aria-hidden="true"></span></label>
         <span class="practice-picker-sep" aria-hidden="true"></span>
         ${practiceGroupChecks}
-        <span class="practice-picker-count" id="practice-pool-count">0</span>
+        <div class="practice-picker-end">
+          <span class="practice-picker-count" id="practice-pool-count" title="Cases in practice pool">0</span>
+          <div class="practice-order-switch" id="practice-order-switch" data-mode="shuffle" role="group" aria-label="Practice order">
+            <span class="practice-order-thumb" aria-hidden="true"></span>
+            <button type="button" class="practice-order-opt" data-practice-order="shuffle" aria-pressed="true" title="Shuffled" aria-label="Shuffled">
+              <i class="fa-solid fa-shuffle" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="practice-order-opt" data-practice-order="fixed" aria-pressed="false" title="Fixed order" aria-label="Fixed order">
+              <i class="fa-solid fa-arrow-down-short-wide" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
