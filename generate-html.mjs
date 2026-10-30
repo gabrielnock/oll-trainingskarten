@@ -169,10 +169,10 @@ function cardHtml(c) {
         <div class="alg-row" data-slot="secondary" data-builtin="1">
           <div class="alg-body">
             <div class="alg-tools screen-only">
+              <button type="button" class="btn-alg-tool" data-edit="secondary" data-tooltip="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
               <span class="alg-order" data-alg-order-wrap data-tooltip="Order of permutation — times to repeat this alg to return to start" aria-label="Order of permutation">
                 <span class="alg-order-n" data-alg-order>?</span>
               </span>
-              <button type="button" class="btn-alg-tool" data-edit="secondary" data-tooltip="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
               <label class="fav" data-tooltip="Favorite" aria-label="Favorite">
                 <input type="checkbox" data-fav="secondary" />
                 <span>★</span>
@@ -215,10 +215,10 @@ function cardHtml(c) {
         <div class="alg-row" data-slot="primary" data-builtin="1">
           <div class="alg-body">
             <div class="alg-tools screen-only">
+              <button type="button" class="btn-alg-tool" data-edit="primary" data-tooltip="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
               <span class="alg-order" data-alg-order-wrap data-tooltip="Order of permutation — times to repeat this alg to return to start" aria-label="Order of permutation">
                 <span class="alg-order-n" data-alg-order>?</span>
               </span>
-              <button type="button" class="btn-alg-tool" data-edit="primary" data-tooltip="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
               <label class="fav" data-tooltip="Favorite" aria-label="Favorite">
                 <input type="checkbox" data-fav="primary" checked />
                 <span>★</span>
@@ -596,10 +596,10 @@ const clientJs = `
     row.innerHTML =
       '<div class="alg-body">' +
       '<div class="alg-tools screen-only">' +
+      '<button type="button" class="btn-alg-tool" data-edit="' + slot + '" data-tooltip="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>' +
       '<span class="alg-order" data-alg-order-wrap data-tooltip="Order of permutation — times to repeat this alg to return to start" aria-label="Order of permutation">' +
       '<span class="alg-order-n" data-alg-order>?</span>' +
       "</span>" +
-      '<button type="button" class="btn-alg-tool" data-edit="' + slot + '" data-tooltip="Edit" aria-label="Edit algorithm"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>' +
       '<label class="fav" data-tooltip="Favorite" aria-label="Favorite">' +
       '<input type="checkbox" data-fav="' + slot + '" />' +
       "<span>★</span></label>" +
@@ -730,7 +730,6 @@ const clientJs = `
     let wrap = tools.querySelector("[data-alg-order-wrap]");
     if (!wrap) {
       wrap = body.querySelector("[data-alg-order-wrap]");
-      if (wrap) tools.insertBefore(wrap, tools.firstChild);
     }
     if (!wrap) {
       wrap = document.createElement("span");
@@ -740,13 +739,16 @@ const clientJs = `
         "Order of permutation — times to repeat this alg to return to start";
       wrap.setAttribute("aria-label", "Order of permutation");
       wrap.innerHTML = '<span class="alg-order-n" data-alg-order>?</span>';
-      tools.insertBefore(wrap, tools.firstChild);
     } else {
       wrap.querySelectorAll("i, input").forEach((el) => el.remove());
       if (!wrap.querySelector("[data-alg-order]")) {
         wrap.innerHTML = '<span class="alg-order-n" data-alg-order>?</span>';
       }
     }
+    // Keep order between edit pen and favorite star
+    const fav = tools.querySelector(".fav");
+    if (fav) tools.insertBefore(wrap, fav);
+    else tools.appendChild(wrap);
     return wrap.querySelector("[data-alg-order]");
   }
 
